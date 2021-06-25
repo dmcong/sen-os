@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 import { loremIpsum } from 'lorem-ipsum';
+
+import { getUser } from 'store/wallet.reducer';
 
 import {
   Row, Col, Button, Typography, Input,
@@ -11,7 +15,8 @@ const { FcFaq } = Icons;
 const { Title, Text } = Typography;
 
 
-function Contents() {
+function Contents(props) {
+  const { onClick } = props;
   return <Row gutter={[16, 16]} align="middle">
     <Col span={24}>
       <Title level={3}>{loremIpsum({ count: 5, units: 'word' })}</Title>
@@ -35,7 +40,7 @@ function Contents() {
           <Button>Default</Button>
         </Col>
         <Col >
-          <Button type="primary">Primary</Button>
+          <Button type="primary" onClick={onClick}>Primary</Button>
         </Col>
       </Row>
     </Col>
@@ -45,12 +50,18 @@ function Contents() {
 
 class Home extends Component {
 
+  fetchData = () => {
+    const { getUser } = this.props;
+    return getUser('Tu Phan')
+  }
+
   render() {
+
     return <Row gutter={[16, 16]} align="center" justify="center">
       <Col span={24} style={{ height: 64 }} />
       {/* Row 0 */}
       <Widget variant="default" size="large">
-        <Contents />
+        <Contents onClick={this.fetchData} />
       </Widget>
       {/* Row 1 */}
       <Widget variant="solid" size="small">
@@ -74,4 +85,15 @@ class Home extends Component {
   }
 }
 
-export default withRouter(Home);
+const mapStateToProps = state => ({
+  wallet: state.wallet,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  getUser,
+}, dispatch);
+
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home));
