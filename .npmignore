@@ -1,0 +1,8 @@
+/node_modules
+.npmrc
+/src
+/build
+/public
+/Dockerfile
+/.github
+jsconfig.json
