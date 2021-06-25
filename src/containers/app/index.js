@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 
-import { Layout, Row, Col, Brand } from 'sen-kit';
+import { Layout, Row, Col } from 'sen-kit';
 
+import UiUx from 'containers/uiux';
+import Header from 'containers/header';
 import Home from 'containers/home';
 
 
@@ -10,13 +12,7 @@ class App extends Component {
 
   render() {
     return <Layout style={{ backgroundColor: '#00000000' }}>
-      <Layout.Header style={{ backgroundColor: '#00000000' }}>
-        <Row gutter={[16, 16]}>
-          <Col>
-            <Brand />
-          </Col>
-        </Row>
-      </Layout.Header>
+      <Header />
       <Layout.Content style={{ padding: 8 }}>
         <Row gutter={[16, 16]} justify="center">
           <Col span={24} style={{ maxWidth: 1400 }}>
@@ -27,7 +23,7 @@ class App extends Component {
           </Col>
         </Row>
       </Layout.Content>
-      <Layout.Footer style={{ backgroundColor: '#00000000' }}>Footer</Layout.Footer>
+      <UiUx />
     </Layout>
   }
 }

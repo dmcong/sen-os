@@ -29,10 +29,7 @@ const slice = createSlice({
   name: NAME,
   initialState,
   extraReducers: builder => builder
-    .addCase(getUser.fulfilled, (state, { payload }) => {
-      state = { ...state, ...payload }
-      return state;
-    })
+    .addCase(getUser.fulfilled, (state, { payload }) => ({ ...state, ...payload }))
 });
 
 export default slice.reducer;

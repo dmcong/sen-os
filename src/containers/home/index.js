@@ -11,25 +11,22 @@ import {
   Widget, Icons
 } from 'sen-kit';
 
-const { FcFaq } = Icons;
-const { Title, Text } = Typography;
-
 
 function Contents(props) {
   const { onClick } = props;
   return <Row gutter={[16, 16]} align="middle">
     <Col span={24}>
-      <Title level={3}>{loremIpsum({ count: 5, units: 'word' })}</Title>
+      <Typography.Title level={3}>{loremIpsum({ count: 5, units: 'word' })}</Typography.Title>
     </Col>
     <Col span={24}>
-      <Text>{loremIpsum({ count: 1, units: 'paragraphs' })}</Text>
+      <Typography.Text>{loremIpsum({ count: 1, units: 'paragraphs' })}</Typography.Text>
     </Col>
     <Col span={24}>
       <Input
         suffix={<Button
           type="text"
           shape="circle"
-          icon={<FcFaq style={{ verticalAlign: 'middle' }} />}
+          icon={<Icons.HiThumbUp style={{ verticalAlign: 'middle' }} />}
           style={{ marginRight: -7 }}
         />}
       />
@@ -52,33 +49,21 @@ class Home extends Component {
 
   fetchData = () => {
     const { getUser } = this.props;
-    return getUser('Tu Phan')
+    return getUser('11111111111111111111111111111111')
   }
 
   render() {
 
     return <Row gutter={[16, 16]} align="center" justify="center">
       <Col span={24} style={{ height: 64 }} />
-      {/* Row 0 */}
-      <Widget variant="default" size="large">
+      <Widget variant="glass" size="small">
         <Contents onClick={this.fetchData} />
       </Widget>
-      {/* Row 1 */}
-      <Widget variant="solid" size="small">
-        <Contents />
-      </Widget>
       <Widget variant="glass" size="small">
-        <Contents />
+        <Contents onClick={this.fetchData} />
       </Widget>
-      <Widget variant="glass" size="small">
-        <Contents />
-      </Widget>
-      {/* Row 2 */}
-      <Widget variant="glass" size="small">
-        <Contents />
-      </Widget>
-      <Widget variant="solid" size="medium">
-        <Contents />
+      <Widget variant="glass" size="large">
+        <Contents onClick={this.fetchData} />
       </Widget>
       <Col span={24} style={{ height: 64 }} />
     </Row>
