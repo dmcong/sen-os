@@ -5,9 +5,10 @@ import { withRouter } from 'react-router-dom';
 import ssjs, { SecretKeyWallet, Coin98Wallet } from 'senswapjs';
 import numeral from 'numeral';
 
-import { Row, Col, Typography, Widget } from 'sen-kit';
+import { Row, Col, Typography, Widget, Tooltip } from 'sen-kit';
 
 import configs from 'configs';
+import util from 'helpers/util';
 import session from 'helpers/session';
 import ConnectWalletButton from './plugin/connectWalletButton';
 import { connectWallet } from 'store/wallet.reducer';
@@ -47,10 +48,12 @@ class Wallet extends Component {
           <Typography.Title level={1}>Wallet</Typography.Title>
         </Col>
         <Col span={24}>
-          <Typography.Text>{address}</Typography.Text>
+          <Typography.Link href={util.explorer(address)} target="_blank">{address}</Typography.Link>
         </Col>
         <Col span={24}>
-          <Typography.Text>{numeral(ssjs.undecimalize(lamports, 9)).format('0.[000000]')}</Typography.Text>
+          <Tooltip title={`${ssjs.undecimalize(lamports, 9)} SOL`}>
+            <Typography.Text>{numeral(ssjs.undecimalize(lamports, 9)).format('0.[0000]')} SOL</Typography.Text>
+          </Tooltip>
         </Col>
         <Col span={24}>
           <ConnectWalletButton />
