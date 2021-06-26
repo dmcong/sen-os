@@ -1,6 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 const NAME = 'wallet';
+const initialState = {
+  visible: false,
+  address: '',
+  lamports: 0,
+}
 
 /**
  * Actions
@@ -16,20 +21,22 @@ export const closeWallet = createAsyncThunk(`${NAME}/closeWallet`, async () => {
 
 export const connectWallet = createAsyncThunk(`${NAME}/connectWallet`, async (wallet, { rejectWithValue }) => {
   if (!wallet) return rejectWithValue('Invalid wallet instance');
+  window.senos.wallet = wallet;
   const address = await wallet.getAccount();
   const lamports = await window.senos.lamports.get(address);
   return { address, lamports, visible: false }
 });
 
+export const disconnectWallet = createAsyncThunk(`${NAME}/disconnectWallet`, async () => {
+  if (!window.senos || !window.senos.wallet) return { ...initialState }
+  window.senos.wallet.disconnect();
+  window.senos.wallet = null;
+  return { ...initialState }
+});
+
 /**
  * Usual procedure
  */
-
-const initialState = {
-  visible: false,
-  address: '',
-  lamports: 0,
-}
 
 const slice = createSlice({
   name: NAME,
@@ -38,6 +45,7 @@ const slice = createSlice({
     .addCase(openWallet.fulfilled, (state, { payload }) => ({ ...state, ...payload }))
     .addCase(closeWallet.fulfilled, (state, { payload }) => ({ ...state, ...payload }))
     .addCase(connectWallet.fulfilled, (state, { payload }) => ({ ...state, ...payload }))
+    .addCase(disconnectWallet.fulfilled, (state, { payload }) => ({ ...state, ...payload }))
 });
 
 export default slice.reducer;

@@ -27,7 +27,7 @@ class ControlCenter extends Component {
           <Button
             type="text"
             className="btn"
-            icon={<Icons.HiMenuAlt3 className="anticon" />}
+            icon={<Icons.HiViewGrid className="anticon" />}
           />
         </Col>
       </Row>

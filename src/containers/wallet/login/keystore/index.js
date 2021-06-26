@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, createRef } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
@@ -18,13 +18,14 @@ class KeyStore extends Component {
       password: '',
       filename: '',
       keystore: {},
-      loading: false,
       visible: false,
     }
+
+    this.file = createRef();
   }
 
   onUpload = () => {
-    return document.getElementById('keystore-file').click();
+    return this.file.current.click();
   }
 
   onKeystore = (e) => {
@@ -32,12 +33,10 @@ class KeyStore extends Component {
     if (!file) return;
     const reader = new FileReader();
     reader.readAsText(file);
-    reader.onloadend = () => {
-      return this.setState({
-        filename: file.name,
-        keystore: JSON.parse(reader.result)
-      });
-    }
+    reader.onloadend = () => this.setState({
+      filename: file.name,
+      keystore: JSON.parse(reader.result)
+    });
   }
 
   onPassword = (e) => {
@@ -51,17 +50,15 @@ class KeyStore extends Component {
     if (!keystore) return setError('Please upload your keystore');
     if (!password) return setError('Please enter your password to unlock your wallet');
     const wallet = new KeystoreWallet(keystore, password);
-    this.setState({ loading: true });
     const { error } = await connectWallet(wallet);
     if (error) setError(error.message);
-    return this.setState({ loading: false });
   }
 
   onOpen = () => this.setState({ visible: true });
   onClose = () => this.setState({ visible: false });
 
   render() {
-    const { loading, visible, password, filename } = this.state;
+    const { visible, password, filename } = this.state;
 
     return <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -86,11 +83,11 @@ class KeyStore extends Component {
           readOnly
         />
         <input
-          id="keystore-file"
+          ref={this.file}
           type="file"
           accept="application/json"
           onChange={this.onKeystore}
-          style={{ "display": "none" }}
+          style={{ display: 'none' }}
         />
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 12 }}>
@@ -104,7 +101,6 @@ class KeyStore extends Component {
             onClick={this.connect}
             icon={<Icons.HiLockOpen className="anticon" />}
             style={{ marginRight: -8 }}
-            loading={loading}
           />}
         />
       </Col>
@@ -114,10 +110,7 @@ class KeyStore extends Component {
           <Typography.Link onClick={this.onOpen}>Create a keystore</Typography.Link>
         </Space>
       </Col>
-      <NewKeyStore
-        visible={visible}
-        onClose={this.onClose}
-      />
+      <NewKeyStore visible={visible} onClose={this.onClose} />
     </Row >
   }
 }

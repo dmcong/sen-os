@@ -4,11 +4,10 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 import ssjs from 'senswapjs';
 
-import { Row, Col, Button, Typography, Widget } from 'sen-kit';
+import { Row, Col, Typography, Widget } from 'sen-kit';
 
 import configs from 'configs';
-import Login from './login';
-import { openWallet } from 'store/wallet.reducer';
+import ConnectWalletButton from './plugin/connectWalletButton';
 
 class Wallet extends Component {
   constructor() {
@@ -21,21 +20,15 @@ class Wallet extends Component {
   }
 
   render() {
-    const { openWallet } = this.props;
     return <Widget variant="glass" size="small">
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Typography.Title level={1}>Wallet</Typography.Title>
         </Col>
         <Col span={24}>
-          <Button
-            type="primary"
-            onClick={openWallet}
-            block
-          >Connect Wallet</Button>
+          <ConnectWalletButton />
         </Col>
       </Row>
-      <Login />
     </Widget>
   }
 }
@@ -45,7 +38,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  openWallet,
 }, dispatch);
 
 export default withRouter(connect(

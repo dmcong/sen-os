@@ -1,11 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-const NAME = 'ui';
-
-/**
- * Utility
- */
-
 const getInfix = () => {
   const width = window.innerWidth;
   if (width < 576) return 'xs';
@@ -14,6 +8,13 @@ const getInfix = () => {
   if (width < 1200) return 'lg';
   if (width < 1400) return 'xl';
   return 'xxl';
+}
+
+const NAME = 'ui';
+const initialState = {
+  width: window.innerWidth,
+  infix: getInfix(),
+  spacing: 32,
 }
 
 /**
@@ -29,12 +30,6 @@ export const resize = createAsyncThunk(`${NAME}/resize`, async () => {
 /**
  * Usual procedure
  */
-
-const initialState = {
-  width: window.innerWidth,
-  infix: getInfix(),
-  spacing: 32,
-}
 
 const slice = createSlice({
   name: NAME,

@@ -14,7 +14,6 @@ class SecretKey extends Component {
     super();
 
     this.state = {
-      loading: false,
       secretKey: '',
     }
   }
@@ -29,10 +28,8 @@ class SecretKey extends Component {
     const { secretKey } = this.state;
     if (!secretKey) return setError('The secret key cannot be empty');
     const wallet = new SecretKeyWallet(secretKey);
-    this.setState({ loading: true });
     const { error } = await connectWallet(wallet);
     if (error) setError(error.message);
-    return this.setState({ loading: false });
   }
 
   onGen = () => {
@@ -42,7 +39,7 @@ class SecretKey extends Component {
   }
 
   render() {
-    const { loading, secretKey } = this.state;
+    const { secretKey } = this.state;
 
     return <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -65,7 +62,6 @@ class SecretKey extends Component {
             onClick={this.connect}
             icon={<Icons.HiLockOpen className="anticon" />}
             style={{ marginRight: -8 }}
-            loading={loading}
           />}
         />
       </Col>

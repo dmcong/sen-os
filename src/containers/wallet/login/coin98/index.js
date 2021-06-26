@@ -14,28 +14,17 @@ import { connectWallet } from 'store/wallet.reducer';
 
 
 class Coin98 extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      loading: false,
-    }
-  }
 
   connect = async () => {
     const { connectWallet, setError } = this.props;
     const { coin98 } = window;
     if (!coin98) return console.log('Coin98 Wallet is not installed. If this is the first time you install Coin98 wallet, please restart your browser to finish the setup.');
-    this.setState({ loading: true });
     const wallet = new Coin98Wallet();
     const { error } = await connectWallet(wallet);
     if (error) setError(error.message);
-    return this.setState({ loading: false });
   }
 
   render() {
-    const { loading } = this.state;
-
     return <Row gutter={[16, 16]}>
       <Col span={24}>
         <Space align="baseline">
@@ -51,7 +40,6 @@ class Coin98 extends Component {
           type="primary"
           onClick={this.connect}
           icon={<Icons.HiLockOpen className="anticon" />}
-          loading={loading}
           block
         >Connect Coin98 Wallet</Button>
       </Col>
