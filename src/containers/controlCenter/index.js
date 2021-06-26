@@ -9,9 +9,9 @@ import {
 } from 'sen-kit';
 import './style.less';
 
-class Header extends Component {
+class ControlCenter extends Component {
   render() {
-    return <Layout.Header className="header">
+    return <Layout.Footer className="footer">
       <Row gutter={[16, 16]}>
         <Col flex="auto">
           <Brand />
@@ -31,7 +31,7 @@ class Header extends Component {
           />
         </Col>
       </Row>
-    </Layout.Header>
+    </Layout.Footer>
   }
 }
 
@@ -45,4 +45,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Header));
+)(ControlCenter));

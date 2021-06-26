@@ -55,7 +55,6 @@ class Home extends Component {
   render() {
 
     return <Row gutter={[16, 16]} align="center" justify="center">
-      <Col span={24} style={{ height: 64 }} />
       <Widget variant="glass" size="small">
         <Contents onClick={this.fetchData} />
       </Widget>
@@ -65,7 +64,6 @@ class Home extends Component {
       <Widget variant="glass" size="large">
         <Contents onClick={this.fetchData} />
       </Widget>
-      <Col span={24} style={{ height: 64 }} />
     </Row>
   }
 }
