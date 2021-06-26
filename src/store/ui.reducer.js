@@ -20,14 +20,11 @@ const getInfix = () => {
  * Actions
  */
 
-export const resize = createAsyncThunk(
-  `${NAME}/resize`,
-  async () => {
-    const width = window.innerWidth;
-    const infix = getInfix();
-    return { width, infix }
-  }
-)
+export const resize = createAsyncThunk(`${NAME}/resize`, async () => {
+  const width = window.innerWidth;
+  const infix = getInfix();
+  return { width, infix }
+});
 
 /**
  * Usual procedure
@@ -36,6 +33,7 @@ export const resize = createAsyncThunk(
 const initialState = {
   width: window.innerWidth,
   infix: getInfix(),
+  spacing: 32,
 }
 
 const slice = createSlice({

@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from '@reduxjs/toolkit';
 import { Route, Switch, Redirect, withRouter } from 'react-router-dom';
 
 import { Layout, Row, Col } from 'sen-kit';
@@ -9,11 +11,12 @@ import Home from 'containers/home';
 
 
 class App extends Component {
-
   render() {
+    const { ui: { spacing } } = this.props;
+
     return <Layout style={{ backgroundColor: '#00000000' }}>
-      <Layout.Content style={{ padding: 8 }}>
-        <Row gutter={[16, 16]} justify="center">
+      <Layout.Content style={{ padding: spacing / 2 }}>
+        <Row gutter={[spacing, spacing]} justify="center">
           <Col span={24} style={{ maxWidth: 1400 }}>
             <Switch>
               <Redirect exact from="/" to="/home" />
@@ -29,4 +32,14 @@ class App extends Component {
   }
 }
 
-export default withRouter(App);
+const mapStateToProps = state => ({
+  ui: state.ui,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+}, dispatch);
+
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(App));

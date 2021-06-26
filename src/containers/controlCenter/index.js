@@ -12,22 +12,22 @@ import './style.less';
 class ControlCenter extends Component {
   render() {
     return <Layout.Footer className="footer">
-      <Row gutter={[16, 16]}>
+      <Row gutter={[16, 16]} align="middle">
         <Col flex="auto">
-          <Brand />
+          <Brand size={32} />
         </Col>
         <Col>
           <Button
             type="text"
             className="btn"
-            icon={<Icons.FcShop style={{ verticalAlign: 'middle' }} />}
+            icon={<Icons.FcShop className="anticon" />}
           />
         </Col>
         <Col>
           <Button
             type="text"
             className="btn"
-            icon={<Icons.HiMenuAlt3 style={{ verticalAlign: 'middle' }} />}
+            icon={<Icons.HiMenuAlt3 className="anticon" />}
           />
         </Col>
       </Row>

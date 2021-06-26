@@ -4,12 +4,12 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 import { loremIpsum } from 'lorem-ipsum';
 
-import { getUser } from 'store/wallet.reducer';
-
 import {
   Row, Col, Button, Typography, Input,
   Widget, Icons
 } from 'sen-kit';
+
+import Wallet from 'containers/wallet';
 
 
 function Contents(props) {
@@ -26,7 +26,7 @@ function Contents(props) {
         suffix={<Button
           type="text"
           shape="circle"
-          icon={<Icons.HiThumbUp style={{ verticalAlign: 'middle' }} />}
+          icon={<Icons.HiThumbUp className="anticon" />}
           style={{ marginRight: -7 }}
         />}
       />
@@ -47,33 +47,24 @@ function Contents(props) {
 
 class Home extends Component {
 
-  fetchData = () => {
-    const { getUser } = this.props;
-    return getUser('11111111111111111111111111111111')
-  }
-
   render() {
 
     return <Row gutter={[16, 16]} align="center" justify="center">
+      <Wallet />
       <Widget variant="glass" size="small">
-        <Contents onClick={this.fetchData} />
-      </Widget>
-      <Widget variant="glass" size="small">
-        <Contents onClick={this.fetchData} />
+        <Contents />
       </Widget>
       <Widget variant="glass" size="large">
-        <Contents onClick={this.fetchData} />
+        <Contents />
       </Widget>
     </Row>
   }
 }
 
 const mapStateToProps = state => ({
-  wallet: state.wallet,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  getUser,
 }, dispatch);
 
 export default withRouter(connect(
