@@ -11,8 +11,7 @@ import Wallet from 'containers/wallet';
 class Home extends Component {
 
   render() {
-
-    return <Row gutter={[16, 16]} align="center" justify="center">
+    return <Row gutter={[16, 16]}>
       <Wallet />
     </Row>
   }
