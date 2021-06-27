@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import ssjs, { SecretKeyWallet } from 'senswapjs';
 
-import { Row, Col, Typography, Input, Icons, Button, Space } from 'sen-kit';
+import { Row, Col, Typography, Input, Icon, Button, Space } from 'sen-kit';
 
 import { connectWallet } from 'store/wallet.reducer';
 
@@ -44,7 +44,7 @@ class SecretKey extends Component {
     return <Row gutter={[16, 16]}>
       <Col span={24}>
         <Space align="center">
-          <Icons.HiKey className="anticon" />
+          <Icon name="key" />
           <Typography.Text>Secret Key</Typography.Text>
         </Space>
       </Col>
@@ -60,16 +60,18 @@ class SecretKey extends Component {
           suffix={<Button
             type="primary"
             onClick={this.connect}
-            icon={<Icons.HiLockOpen className="anticon" />}
+            icon={<Icon name="lock-open" />}
             style={{ marginRight: -8 }}
           />}
         />
       </Col>
       <Col span={24} style={{ marginTop: -8 }}>
-        <Space>
-          <Icons.HiDocumentAdd color="#F9575E" className="anticon" />
-          <Typography.Link onClick={this.onGen}>Create a secret key</Typography.Link>
-        </Space>
+        <Typography.Link onClick={this.onGen}>
+          <Space>
+            <Icon name="add-circle-outline" />
+            <span>Create a secret key</span>
+          </Space>
+        </Typography.Link>
       </Col>
     </Row>
   }

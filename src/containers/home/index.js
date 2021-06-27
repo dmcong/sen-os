@@ -1,18 +1,21 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense, lazy } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 
-import { Row } from 'sen-kit';
+import { Row, Spin } from 'sen-kit';
 
-import Wallet from 'containers/wallet';
+// import Wallet from 'containers/wallet';
+const Wallet = lazy(() => import('containers/wallet'));
 
 
 class Home extends Component {
 
   render() {
     return <Row gutter={[16, 16]}>
-      <Wallet />
+      <Suspense fallback={<Spin />}>
+        <Wallet />
+      </Suspense>
     </Row>
   }
 }

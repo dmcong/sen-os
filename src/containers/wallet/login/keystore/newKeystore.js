@@ -3,10 +3,7 @@ import PropTypes from 'prop-types';
 import fileDownload from 'js-file-download';
 import ssjs from 'senswapjs';
 
-import {
-  Row, Col, Icons, Button, Typography,
-  Input, Modal,
-} from 'sen-kit';
+import { Row, Col, Icon, Button, Typography, Input, Modal } from 'sen-kit';
 
 
 class NewKeyStore extends Component {
@@ -46,7 +43,7 @@ class NewKeyStore extends Component {
     return <Modal
       visible={visible}
       onCancel={onClose}
-      closeIcon={<Icons.HiX className="anticon" />}
+      closeIcon={<Icon name="close" />}
       footer={null}
     >
       <Row gutter={[16, 16]}>
@@ -65,7 +62,7 @@ class NewKeyStore extends Component {
               type="text"
               onClick={this.onVisiblePassword}
               style={{ marginRight: -8 }}
-              icon={visiblePassword ? <Icons.HiEyeOff className="anticon" /> : <Icons.HiEye className="anticon" />}
+              icon={visiblePassword ? <Icon name="eye-off" /> : <Icon name="eye" />}
             />}
           />
         </Col>
@@ -74,7 +71,7 @@ class NewKeyStore extends Component {
             <Col>
               <Button
                 type="primary"
-                icon={<Icons.HiDownload className="anticon" />}
+                icon={<Icon name="cloud-download" />}
                 onClick={this.onDownload}
                 disabled={!keystore || !keystore.publicKey}
               >Download</Button>

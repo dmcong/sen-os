@@ -4,10 +4,7 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { Coin98Wallet } from 'senswapjs';
 
-import {
-  Row, Col, Button, Typography, Icons,
-  Avatar, Space,
-} from 'sen-kit';
+import { Row, Col, Button, Typography, Icon, Avatar, Space } from 'sen-kit';
 
 import COIN98 from 'static/images/coin98.png';
 import { connectWallet } from 'store/wallet.reducer';
@@ -39,7 +36,7 @@ class Coin98 extends Component {
         <Button
           type="primary"
           onClick={this.connect}
-          icon={<Icons.HiLockOpen className="anticon" />}
+          icon={<Icon name="lock-open" />}
           block
         >Connect Coin98 Wallet</Button>
       </Col>

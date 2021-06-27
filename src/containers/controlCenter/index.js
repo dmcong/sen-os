@@ -3,10 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 
-import {
-  Layout, Row, Col, Brand,
-  Button, Icons,
-} from 'sen-kit';
+import { Layout, Row, Col, Brand, Button, Icon, Tooltip } from 'sen-kit';
 import './style.less';
 
 class ControlCenter extends Component {
@@ -17,18 +14,22 @@ class ControlCenter extends Component {
           <Brand size={32} />
         </Col>
         <Col>
-          <Button
-            type="text"
-            className="btn"
-            icon={<Icons.FcShop className="anticon" />}
-          />
+          <Tooltip title="Market">
+            <Button
+              type="text"
+              className="btn"
+              icon={<Icon name="storefront-outline" />}
+            />
+          </Tooltip>
         </Col>
         <Col>
-          <Button
-            type="text"
-            className="btn"
-            icon={<Icons.HiViewGrid className="anticon" />}
-          />
+          <Tooltip title="Home">
+            <Button
+              type="text"
+              className="btn"
+              icon={<Icon name="grid-outline" />}
+            />
+          </Tooltip>
         </Col>
       </Row>
     </Layout.Footer>

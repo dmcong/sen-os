@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { KeystoreWallet } from 'senswapjs';
 
-import { Row, Col, Space, Icons, Button, Typography, Input } from 'sen-kit';
+import { Row, Col, Space, Icon, Button, Typography, Input } from 'sen-kit';
 
 import NewKeyStore from './newKeystore';
 import { connectWallet } from 'store/wallet.reducer';
@@ -63,7 +63,7 @@ class KeyStore extends Component {
     return <Row gutter={[16, 16]}>
       <Col span={24}>
         <Space align="center">
-          <Icons.HiDocumentText className="anticon" />
+          <Icon name="document-lock" />
           <Typography.Text>Keystore</Typography.Text>
         </Space>
       </Col>
@@ -76,7 +76,7 @@ class KeyStore extends Component {
           value={filename}
           suffix={<Button
             type="text"
-            icon={<Icons.HiUpload className="anticon" />}
+            icon={<Icon name="cloud-upload" />}
             style={{ marginRight: -8 }}
             onClick={this.onUpload}
           >Upload</Button>}
@@ -99,16 +99,18 @@ class KeyStore extends Component {
           suffix={<Button
             type="primary"
             onClick={this.connect}
-            icon={<Icons.HiLockOpen className="anticon" />}
+            icon={<Icon name="lock-open" />}
             style={{ marginRight: -8 }}
           />}
         />
       </Col>
       <Col span={24} style={{ marginTop: -8 }}>
-        <Space>
-          <Icons.HiDocumentAdd color="#F9575E" className="anticon" />
-          <Typography.Link onClick={this.onOpen}>Create a keystore</Typography.Link>
-        </Space>
+        <Typography.Link onClick={this.onOpen}>
+          <Space>
+            <Icon name="add-circle-outline" />
+            <span>Create a keystore</span>
+          </Space>
+        </Typography.Link>
       </Col>
       <NewKeyStore visible={visible} onClose={this.onClose} />
     </Row >

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 
-import { Row, Col, Modal, Icons, Tooltip, Switch, Divider, Animate } from 'sen-kit';
+import { Row, Col, Modal, Icon, Tooltip, Switch, Divider, Animate } from 'sen-kit';
 
 import Coin98 from './coin98';
 import Keystore from './keystore';
@@ -32,7 +32,7 @@ class Login extends Component {
     return <Modal
       visible={visible}
       onCancel={closeWallet}
-      closeIcon={<Icons.HiX className="anticon" />}
+      closeIcon={<Icon name="close" />}
       footer={null}
     >
       <Row gutter={[16, 16]}>
@@ -51,8 +51,8 @@ class Login extends Component {
                   size="small"
                   checked={advance}
                   onChange={this.onAdvance}
-                  checkedChildren={<Icons.HiExclamation className="anticon" />}
-                  unCheckedChildren={<Icons.HiQuestionMarkCircle className="anticon" />}
+                  checkedChildren={<Icon name="alert-circle" />}
+                  unCheckedChildren={<Icon name="help-circle" />}
                 />
               </Tooltip>
             </Col>
