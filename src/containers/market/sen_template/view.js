@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 
-import { Row, Col, Widget, Typography, Button } from 'sen-kit';
+import { Row, Col, Widget, Typography, Button, Icon } from 'sen-kit';
 import { updateTime } from './controller';
 
 
@@ -20,7 +20,12 @@ class View extends Component {
           <Typography.Text>Updated at: {(new Date(time)).toString()}</Typography.Text>
         </Col>
         <Col span={24}>
-          <Button type="primary" onClick={updateTime} block>Update</Button>
+          <Button
+            type="primary"
+            onClick={updateTime}
+            icon={<Icon name="reload-outline" />}
+            block
+          >Update</Button>
         </Col>
       </Row>
     </Widget>

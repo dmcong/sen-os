@@ -14,12 +14,12 @@ class Home extends Component {
     super();
 
     this.state = {
-      appNames: ['Sen Template', 'Clock']
+      appNames: ['Sen Template', 'Pokemon Deck']
     }
   }
 
   add = () => {
-    return this.setState({ appNames: ['Sen Template', 'Clock'] });
+    return this.setState({ appNames: ['Sen Template', 'Pokemon Deck'] });
   }
 
   remove = () => {

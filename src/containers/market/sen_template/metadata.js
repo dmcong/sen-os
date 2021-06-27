@@ -11,7 +11,7 @@
 
 const metadata = {
   appName: 'Sen Template',
-  appVersion: '0.0.1',
+  appVersion: '1.0.0',
   authorName: 'Tu Phan',
   authorEmail: 'tuphan@descartes.network'
 }

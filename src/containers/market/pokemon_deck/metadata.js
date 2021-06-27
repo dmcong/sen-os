@@ -10,8 +10,8 @@
  */
 
 const metadata = {
-  appName: 'Clock',
-  appVersion: '0.0.1',
+  appName: 'Pokemon Deck',
+  appVersion: '1.0.0',
   authorName: 'Tu Phan',
   authorEmail: 'tuphan@descartes.network'
 }
