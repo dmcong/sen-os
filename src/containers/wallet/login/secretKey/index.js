@@ -54,7 +54,6 @@ class SecretKey extends Component {
       <Col span={24}>
         <Input
           placeholder="Secret Key"
-          variant="contained"
           onChange={this.onSecretKey}
           value={secretKey}
           suffix={<Button

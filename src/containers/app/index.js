@@ -8,6 +8,7 @@ import { Layout, Row, Col } from 'sen-kit';
 import UiUx from 'containers/uiux';
 import ControlCenter from 'containers/controlCenter';
 import Home from 'containers/home';
+import Market from 'containers/market';
 
 
 class App extends Component {
@@ -19,8 +20,9 @@ class App extends Component {
         <Row gutter={[spacing, spacing]} justify="center">
           <Col span={24} style={{ maxWidth: 1400 }}>
             <Switch>
-              <Redirect exact from="/" to="/home" />
-              <Route path='/home' component={Home} />
+              <Route exact path='/' component={Home} />
+              <Route exact path='/market' component={Market} />
+              <Redirect from='*' to={'/'} />
             </Switch>
           </Col>
           <Col span={24} style={{ height: 64 }} /> {/* Safe space */}

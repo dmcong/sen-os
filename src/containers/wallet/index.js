@@ -42,7 +42,7 @@ class Wallet extends Component {
     const { wallet: { address, lamports } } = this.props;
 
 
-    return <Widget variant="glass" size="small">
+    return <Widget type="glass" size="small">
       <Row gutter={[16, 16]}>
         <Col span={24}>
           <Typography.Title level={1}>Wallet</Typography.Title>

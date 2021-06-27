@@ -51,7 +51,7 @@ class Login extends Component {
                   size="small"
                   checked={advance}
                   onChange={this.onAdvance}
-                  checkedChildren={<Icon name="alert-circle" />}
+                  checkedChildren={<Icon name="warning" />}
                   unCheckedChildren={<Icon name="help-circle" />}
                 />
               </Tooltip>

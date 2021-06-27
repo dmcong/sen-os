@@ -7,6 +7,12 @@ import { Layout, Row, Col, Brand, Button, Icon, Tooltip } from 'sen-kit';
 import './style.less';
 
 class ControlCenter extends Component {
+
+  to = (route = '#') => {
+    const { history } = this.props;
+    return history.push(route);
+  }
+
   render() {
     return <Layout.Footer className="footer">
       <Row gutter={[16, 16]} align="middle">
@@ -18,6 +24,7 @@ class ControlCenter extends Component {
             <Button
               type="text"
               className="btn"
+              onClick={() => this.to('/market')}
               icon={<Icon name="storefront-outline" />}
             />
           </Tooltip>
@@ -27,6 +34,7 @@ class ControlCenter extends Component {
             <Button
               type="text"
               className="btn"
+              onClick={() => this.to('/')}
               icon={<Icon name="grid-outline" />}
             />
           </Tooltip>
