@@ -23,7 +23,7 @@ class ControlCenter extends Component {
           <Tooltip title="Market">
             <Button
               type="text"
-              className="btn"
+              className="btnContained"
               onClick={() => this.to('/market')}
               icon={<Icon name="storefront-outline" />}
             />
@@ -33,7 +33,7 @@ class ControlCenter extends Component {
           <Tooltip title="Home">
             <Button
               type="text"
-              className="btn"
+              className="btnContained"
               onClick={() => this.to('/')}
               icon={<Icon name="grid-outline" />}
             />

@@ -7,7 +7,6 @@ import { Row, Col, Space, Button, Icon } from 'sen-kit';
 
 import { load } from './loader';
 import Wallet from 'containers/wallet';
-import './style.less';
 
 
 class Home extends Component {
@@ -38,13 +37,13 @@ class Home extends Component {
             <Space>
               <Button
                 type="text"
-                className="btn"
+                className="btnContained"
                 onClick={this.add}
                 icon={<Icon name="add" />}
               />
               <Button
                 type="text"
-                className="btn"
+                className="btnContained"
                 onClick={this.remove}
                 icon={<Icon name="remove" />}
               />
