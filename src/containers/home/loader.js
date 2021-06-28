@@ -1,37 +1,8 @@
 import React, { Component, Suspense, lazy } from 'react';
 import { nanoid } from '@reduxjs/toolkit';
-import { Row, Col, Spin, Widget, Typography, Button, Icon } from 'sen-kit';
+import { Row, Col, Spin, Widget } from 'sen-kit';
 
-/**
- * Removed Application
- */
-const RemovedApplication = ({ appName }) => {
-  const remove = () => {
-    // Not yet
-  }
-  return <Widget type="glass">
-    <Row gutter={[16, 16]} >
-      <Col span={24} style={{ height: 80 }} />
-      <Col span={24}>
-        <Typography.Title level={3} align="center">{appName}</Typography.Title>
-      </Col>
-      <Col span={24}>
-        <Typography.Title level={5} align="center">Oops! The application had been removed from the market</Typography.Title>
-      </Col>
-      <Col span={24}>
-        <Row gutter={[16, 16]} justify="center" align="middle" >
-          <Col>
-            <Button
-              type="primary"
-              icon={<Icon name="trash-outline" />}
-              onClick={remove}
-            >Remove</Button>
-          </Col>
-        </Row>
-      </Col>
-    </Row>
-  </Widget>
-}
+import util from 'helpers/util';
 
 /**
  * Lazy Loading
@@ -54,13 +25,19 @@ class Loading extends Component {
  */
 const load = (appName) => {
   try {
-    const folderName = appName.replace(' ', '_').toLowerCase();
-    const Application = lazy(() => import(`containers/market/${folderName}`));
+    const folderName = util.normalizeAppName(appName);
+    const Application = lazy(async () => {
+      try {
+        return await import(`applications/${folderName}`);
+      } catch (er) {
+        return await import('./guard');
+      }
+    });
     return <Suspense key={nanoid()} fallback={<Loading />}>
-      <Application />
+      <Application appName={appName} />
     </Suspense>
   } catch (er) {
-    return <RemovedApplication appName={appName} />
+    return
   }
 }
 

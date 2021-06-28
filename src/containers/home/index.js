@@ -14,7 +14,7 @@ class Home extends Component {
     super();
 
     this.state = {
-      appNames: ['Sen Template', 'Pokemon Deck']
+      appNames: ['Sen Template', 'Pokemon Decks']
     }
   }
 

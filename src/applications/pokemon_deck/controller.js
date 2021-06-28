@@ -1,8 +1,10 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import pokemon from 'pokemon';
+
+import util from 'helpers/util';
 import metadata from './metadata';
 
-const NAME = metadata.appName.replace(' ', '_').toLowerCase();
+const NAME = util.normalizeAppName(metadata.appName);
 const initialState = {
   name: pokemon.random(),
 }
