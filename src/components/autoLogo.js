@@ -9,20 +9,24 @@ import util from 'helpers/util';
  * Logo Auto Generator
  */
 const AutoLogo = ({ name }) => {
-  const color = util.randomColor(util.normalizeAppName(name));
+  const bgColor = util.randomColor(util.normalizeAppName(name), 'light');
   const symbol = name.substring(0, 2);
+  const txtColor = util.randomColor(symbol, 'dark', bgColor);
   return <Row
     style={{
       width: 64,
       height: 64,
-      backgroundColor: color,
+      backgroundColor: bgColor,
       borderRadius: 16
     }}
     justify="center"
     align="middle"
   >
     <Col>
-      <Typography.Title level={1} style={{ marginBottom: 4 }}>{symbol}</Typography.Title>
+      <Typography.Title
+        level={1}
+        style={{ marginBottom: 4, color: txtColor, }}
+      >{symbol}</Typography.Title>
     </Col>
   </Row>
 }

@@ -3,10 +3,13 @@ import PropTypes from 'prop-types';
 
 import { Tag } from 'sen-kit';
 
+import util from 'helpers/util';
+
 const Keyword = ({ title, onClick }) => {
   return <Tag
     onClick={onClick}
     style={{ cursor: 'pointer' }}
+    color={util.randomColor(title)}
   >{title}</Tag>
 }
 

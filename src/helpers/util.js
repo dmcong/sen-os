@@ -5,8 +5,8 @@ import configs from 'configs';
 
 const util = {}
 
-util.randomColor = (seed) => {
-  return randomColor({ luminosity: 'dark', seed });
+util.randomColor = (seed, luminosity = 'dark', hue = null) => {
+  return randomColor({ luminosity, hue, seed });
 }
 
 util.normalizeAppName = (appName) => {

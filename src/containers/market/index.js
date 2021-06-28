@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 
-import { Row, Col, Typography } from 'sen-kit';
+import { Row, Col } from 'sen-kit';
 
 import { loadLogo } from 'helpers/loader'
 import Search from './search';
