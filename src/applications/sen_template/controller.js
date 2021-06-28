@@ -1,9 +1,9 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import util from 'helpers/util';
-import metadata from './metadata';
+import metadata from './package.json';
 
-const NAME = util.normalizeAppName(metadata.appName);
+const NAME = util.normalizeAppName(metadata.name);
 const initialState = {
   time: Number(new Date()),
 }

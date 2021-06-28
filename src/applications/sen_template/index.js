@@ -1,22 +1,13 @@
 import React, { Component } from 'react';
 import { Provider, connect } from 'react-redux';
-import { configureStore, bindActionCreators } from '@reduxjs/toolkit';
+import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 
 import { Row, Col, Typography, Widget, Button, Icon } from 'sen-kit';
 
-import metadata from './metadata';
-import controller from './controller';
+import metadata from './package.json';
 import View from './view';
-
-/**
- * Isolated store
- */
-const store = configureStore({
-  reducer: {
-    main: controller,
-  },
-});
+import model from './model';
 
 /**
  * Error Boundary
@@ -40,20 +31,20 @@ class ErrorBoundary extends Component {
   }
 
   support = () => {
-    const { authorEmail, appName } = metadata;
-    return window.open(`mailto:${authorEmail}?subject=${appName} has failed`, '_blank');
+    const { email, name } = metadata;
+    return window.open(`mailto:${email}?subject=${name} has failed`, '_blank');
   }
 
   render() {
     const { error } = this.state;
-    const { appName, appVersion } = metadata;
+    const { name, version } = metadata;
 
     if (error) return <Widget type="glass">
       <Row gutter={[16, 16]} >
         <Col span={24} style={{ height: 80 }} />
         <Col span={24}>
-          <Typography.Title level={3} align="center">{appName}</Typography.Title>
-          <p align="center">Version {appVersion}</p>
+          <Typography.Title level={3} align="center">{name}</Typography.Title>
+          <p align="center">Version {version}</p>
         </Col>
         <Col span={24}>
           <Typography.Title level={5} align="center">Oops! The application couldn't load properly</Typography.Title>
@@ -89,7 +80,7 @@ class Main extends Component {
 
   render() {
     const { ui, wallet } = this.props;
-    return <Provider store={store}>
+    return <Provider store={model}>
       <ErrorBoundary>
         <View ui={ui} wallet={wallet} />
       </ErrorBoundary>

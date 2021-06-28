@@ -5,7 +5,7 @@ import { Row, Col, Widget, Typography, Button, Icon } from 'sen-kit';
 /**
  * Removed Application
  */
-const Gaurd = ({ appName }) => {
+const AppGaurd = ({ appName }) => {
   const remove = () => {
     return console.log(appName);
   }
@@ -17,7 +17,7 @@ const Gaurd = ({ appName }) => {
         <Typography.Title level={3} align="center">{appName}</Typography.Title>
       </Col>
       <Col span={24}>
-        <Typography.Title level={5} align="center">Oops! The application possibly had been removed from the market</Typography.Title>
+        <p align="center">Oops! The application possibly had been removed from the market</p>
       </Col>
       <Col span={24}>
         <Row gutter={[16, 16]} justify="center" align="middle" >
@@ -34,8 +34,8 @@ const Gaurd = ({ appName }) => {
   </Widget>
 }
 
-Gaurd.propTypes = {
+AppGaurd.propTypes = {
   appName: PropTypes.string.isRequired
 }
 
-export default Gaurd;
+export default AppGaurd;
