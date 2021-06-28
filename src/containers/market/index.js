@@ -5,6 +5,9 @@ import { withRouter } from 'react-router-dom';
 
 import { Row, Col, Typography } from 'sen-kit';
 
+import { loadLogo } from 'helpers/loader'
+import Search from './search';
+
 
 class Market extends Component {
   render() {
@@ -12,7 +15,10 @@ class Market extends Component {
 
     return <Row gutter={[spacing, spacing]}>
       <Col span={24}>
-        <Typography.Title level={1}>Market</Typography.Title>
+        <Search />
+      </Col>
+      <Col span={24}>
+        {loadLogo('Sen Template')}
       </Col>
     </Row>
   }

@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "The application default template",
   "main": "index.js",
+  "keywords": [
+    "template"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

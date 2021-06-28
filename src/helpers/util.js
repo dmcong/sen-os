@@ -1,8 +1,13 @@
 import ssjs from 'senswapjs';
+import randomColor from 'randomcolor';
 
 import configs from 'configs';
 
 const util = {}
+
+util.randomColor = (seed) => {
+  return randomColor({ luminosity: 'dark', seed });
+}
 
 util.normalizeAppName = (appName) => {
   if (!appName) throw new Error('Application name is empty');

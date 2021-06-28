@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import { Row, Col, Space, Button, Icon } from 'sen-kit';
 
-import { load } from './loader';
+import { loadApp } from 'helpers/loader';
 import Wallet from 'containers/wallet';
 
 
@@ -52,7 +52,7 @@ class Home extends Component {
         </Row>
       </Col>
       <Wallet />
-      {appNames.map(appName => load(appName))}
+      {appNames.map(appName => loadApp(appName))}
     </Row>
   }
 }
