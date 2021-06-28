@@ -3,23 +3,16 @@ import { nanoid } from '@reduxjs/toolkit';
 
 import util from 'helpers/util';
 import AppLoading from 'components/appLoading';
-import LogoLoading from 'components/logoLoading';
+import AppLogo from 'components/appLogo';
 
 /**
  * Logo Loader
  */
-const loadLogo = (name) => {
+const loadLogo = (name, props) => {
   const folderName = util.normalizeAppName(name);
-  const Logo = lazy(async () => {
-    try {
-      return await import(`applications/${folderName}/icon.png`);
-    } catch (er) {
-      return await import('components/autoLogo');
-    }
-  });
-  return <Suspense key={nanoid()} fallback={<LogoLoading />}>
-    <Logo name={nanoid()} />
-  </Suspense>
+  let src = '';
+  try { src = require(`applications/${folderName}/icon.png`).default } catch (er) { /* Nothing */ }
+  return <AppLogo name={name} src={src} {...props} />
 }
 
 /**
