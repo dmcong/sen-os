@@ -1,21 +1,24 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { Tag } from 'sen-kit';
 
 import util from 'helpers/util';
 
-const Keyword = ({ title, onClick }) => {
+
+const Keyword = forwardRef(({ title, onClick, ...others }, ref) => {
   const bgColor = util.randomColor(title, 'light');
-  const txtColor = util.randomColor(bgColor);
+  const txtColor = util.randomColor(title);
   return <Tag
     onClick={onClick}
     style={{ cursor: 'pointer' }}
     color={bgColor}
+    ref={ref}
+    {...others}
   >
     <span style={{ color: txtColor }}>{title}</span>
   </Tag>
-}
+})
 
 Keyword.defaultProps = {
   onClick: () => { }
