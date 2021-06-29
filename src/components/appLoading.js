@@ -6,8 +6,12 @@ import { Row, Col, Spin, Widget } from 'sen-kit';
  */
 const AppLoading = () => {
   return <Widget type="glass">
-    <Row gutter={[16, 16]} justify="center" >
-      <Col span={24} style={{ height: 160 }} />
+    <Row
+      gutter={[8, 8]}
+      style={{ height: '100%' }}
+      align="middle"
+      justify="center"
+    >
       <Col>
         <Spin size="large" />
       </Col>

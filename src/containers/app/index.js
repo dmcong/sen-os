@@ -16,19 +16,19 @@ class App extends Component {
     const { ui: { spacing } } = this.props;
 
     return <Layout style={{ backgroundColor: '#00000000' }}>
+      <ControlCenter />
       <Layout.Content style={{ padding: spacing / 2 }}>
         <Row gutter={[spacing, spacing]} justify="center">
-          <Col span={24} style={{ maxWidth: 1400 }}>
+          <Col span={24} style={{ height: 64 }} /> {/* Safe space */}
+          <Col span={24} style={{ maxWidth: 1440 }}>
             <Switch>
               <Route exact path='/' component={Home} />
               <Route exact path='/market' component={Market} />
               <Redirect from='*' to={'/'} />
             </Switch>
           </Col>
-          <Col span={24} style={{ height: 64 }} /> {/* Safe space */}
         </Row>
       </Layout.Content>
-      <ControlCenter />
       <UiUx />
     </Layout>
   }

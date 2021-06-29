@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 
 import { Row, Col, Typography, Widget, Button, Icon } from 'sen-kit';
 
+import { loadLogo } from 'helpers/loader';
+
 
 /**
  * Error Boundary
@@ -35,32 +37,32 @@ class ErrorBoundary extends Component {
     const { name, version } = this.props;
 
     if (error) return <Widget type="glass">
-      <Row gutter={[16, 16]} >
-        <Col span={24} style={{ height: 80 }} />
+      <Row gutter={[8, 8]} style={{ height: '100%' }} align="middle" justify="center" >
+        <Col>
+          {loadLogo(name, { title: false })}
+        </Col>
         <Col span={24}>
-          <Typography.Title level={3} align="center">{name}</Typography.Title>
+          <Typography.Title level={4} align="center">{name}</Typography.Title>
           <p align="center">Version {version}</p>
         </Col>
         <Col span={24}>
-          <Typography.Title level={5} align="center">Oops! The application couldn't load properly</Typography.Title>
+          <p align="center">Oops! The application couldn't load properly</p>
         </Col>
-        <Col span={24}>
-          <Row gutter={[16, 16]} justify="center" align="middle" >
-            <Col>
-              <Button
-                type="primary"
-                icon={<Icon name="trash-outline" />}
-                onClick={this.remove}
-              >Remove</Button>
-            </Col>
-            <Col>
-              <Button
-                type="text"
-                icon={<Icon name="help-buoy-outline" />}
-                onClick={this.support}
-              >Support</Button>
-            </Col>
-          </Row>
+        <Col span={12}>
+          <Button
+            type="primary"
+            icon={<Icon name="trash-outline" />}
+            onClick={this.remove}
+            block
+          >Remove</Button>
+        </Col>
+        <Col span={12}>
+          <Button
+            type="text"
+            icon={<Icon name="help-buoy-outline" />}
+            onClick={this.support}
+            block
+          >Support</Button>
         </Col>
       </Row>
     </Widget>

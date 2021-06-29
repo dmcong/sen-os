@@ -13,7 +13,7 @@ import model from './model';
 class Main extends Component {
   render() {
     const { ui, wallet } = this.props;
-    const { name, version, email } = metadata;
+    const { name, version, author: { email } } = metadata;
     return <Provider store={model}>
       <ErrorBoundary name={name} version={version} email={email}>
         <View ui={ui} wallet={wallet} />

@@ -9,7 +9,7 @@ import util from 'helpers/util';
 /**
  * Application Logo
  */
-const AppLogo = ({ name, src, ...others }) => {
+const AppLogo = ({ name, src, title, ...others }) => {
   // Infer color
   const bgColor = util.randomColor(util.normalizeAppName(name), 'light');
   const symbol = name.substring(0, 2);
@@ -41,13 +41,18 @@ const AppLogo = ({ name, src, ...others }) => {
         </Col>}
       </Row>
     </Col>
-    <Col span={24}>
+    {title ? <Col span={24}>
       <p align="center" style={{ fontSize: 10, margin: 0 }}>{name}</p>
-    </Col>
+    </Col> : null}
   </Row>
 }
 
+AppLogo.defaultProps = {
+  title: true,
+}
+
 AppLogo.propTypes = {
+  title: PropTypes.bool,
   src: PropTypes.string,
   name: PropTypes.string.isRequired
 }

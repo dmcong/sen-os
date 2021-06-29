@@ -17,10 +17,12 @@ class ControlCenter extends Component {
   }
 
   render() {
-    return <Layout.Footer className="footer">
+    const { ui: { infix } } = this.props;
+
+    return <Layout.Header className="header">
       <Row gutter={[16, 16]} align="middle" justify="space-between">
         <Col>
-          <Brand size={32} />
+          <Brand size={32} lite={infix === 'xs'} />
         </Col>
         <Col>
           <Space size="middle">
@@ -50,7 +52,7 @@ class ControlCenter extends Component {
           />
         </Col>
       </Row>
-    </Layout.Footer>
+    </Layout.Header>
   }
 }
 
