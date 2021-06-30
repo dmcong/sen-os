@@ -12,6 +12,7 @@ import Market from 'containers/market';
 
 
 class App extends Component {
+
   render() {
     const { ui: { spacing } } = this.props;
 

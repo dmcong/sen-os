@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import localForage from 'localforage';
 
 import util from 'helpers/util';
+import { SenOsProvider } from 'helpers/context';
 import ErrorBoundary from 'components/errorBoundary';
 
 import metadata from './package.json';
@@ -27,11 +28,14 @@ class Main extends Component {
     const { ui, wallet } = this.props;
     const { name, version, author: { email } } = metadata;
     const db = this.db(name);
-    return <Provider store={model}>
-      <ErrorBoundary name={name} version={version} email={email}>
-        <View ui={ui} wallet={wallet} db={db} />
-      </ErrorBoundary>
-    </Provider>
+    const context = { ui, wallet, db }
+    return <ErrorBoundary name={name} version={version} email={email}>
+      <Provider store={model}>
+        <SenOsProvider {...context}>
+          <View />
+        </SenOsProvider>
+      </Provider>
+    </ErrorBoundary>
   }
 }
 

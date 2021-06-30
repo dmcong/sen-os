@@ -4,6 +4,8 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 
 import { Row, Col, Widget, Typography, Button, Icon } from 'sen-kit';
+
+import { withSenOs } from 'helpers/context';
 import { updateTime } from './controller';
 
 
@@ -43,4 +45,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(View));
+)(withSenOs(View)));

@@ -3,7 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 
-import { Row, Col, Typography, Button, Icon, Space, Tooltip } from 'sen-kit';
+import { Row, Col, Button, Icon, Space, Tooltip } from 'sen-kit';
+import { withSenOs } from 'helpers/context';
 
 import Pokemon from './pokemon';
 import { choosePokemon } from '../controller';
@@ -22,6 +23,15 @@ class App extends Component {
     const { db, wallet: { address } } = this.props;
     this.collection = db.createInstance({ storeName: address });
     this.updatePokemon();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { wallet: { address: prevAddress } } = prevProps;
+    const { db, wallet: { address } } = this.props;
+    if (prevAddress !== address) {
+      this.collection = db.createInstance({ storeName: address });
+      this.updatePokemon();
+    }
   }
 
   updatePokemon = async () => {
@@ -102,4 +112,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(App));
+)(withSenOs(App)));

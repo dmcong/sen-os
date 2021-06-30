@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Row, Col, Avatar } from 'sen-kit';
 
 const Pokemon = ({ name, onClick, ...others }) => {
-  let code = name.replace(/[^a-zA-Z ]/g, '').toLowerCase();
+  let code = name.replace('\'', '').toLowerCase();
   const src = `https://raw.githubusercontent.com/itsjavi/pokemon-assets/master/assets/img/pokemon/${code}.png`;
   return <Row justify="center">
     <Col>

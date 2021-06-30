@@ -10,11 +10,10 @@ import App from './src';
 
 class View extends Component {
   render() {
-    const { wallet, ui, db } = this.props
     return <Widget size="medium" type="glass">
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <App wallet={wallet} ui={ui} db={db} />
+          <App />
         </Col>
       </Row>
     </Widget>
