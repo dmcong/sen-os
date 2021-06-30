@@ -7,10 +7,10 @@ import { Row, Col, Button, Icon, Space, Tooltip } from 'sen-kit';
 import { withSenOs } from 'helpers/context';
 
 import Pokemon from './pokemon';
-import { choosePokemon } from '../controller';
+import { choosePokemon } from '../controller/main.controller';
 
 
-class App extends Component {
+class Deck extends Component {
   constructor() {
     super();
 
@@ -112,4 +112,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(withSenOs(App)));
+)(withSenOs(Deck)));

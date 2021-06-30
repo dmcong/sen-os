@@ -14,7 +14,6 @@ const NAME = 'ui';
 const initialState = {
   width: window.innerWidth,
   infix: getInfix(),
-  spacing: 16,
 }
 
 /**

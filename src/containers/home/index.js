@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import { Row, Col, Space, Button, Icon } from 'sen-kit';
 
-import { loadApp } from 'helpers/loader';
+import { DynamicApp } from 'helpers/loader';
 import Wallet from 'containers/wallet';
 
 
@@ -27,10 +27,9 @@ class Home extends Component {
   }
 
   render() {
-    const { ui: { spacing } } = this.props;
     const { appNames } = this.state;
 
-    return <Row gutter={[spacing, spacing]}>
+    return <Row gutter={[16, 16]}>
       <Col span={24}>
         <Row gutter={[16, 16]} justify="end">
           <Col>
@@ -52,13 +51,13 @@ class Home extends Component {
         </Row>
       </Col>
       <Wallet />
-      {appNames.map(appName => loadApp(appName))}
+      {appNames.map((appName, index) => <DynamicApp key={index} name={appName} />)}
     </Row>
   }
 }
 
 const mapStateToProps = state => ({
-  ui: state.ui,
+  ui: state.ui
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

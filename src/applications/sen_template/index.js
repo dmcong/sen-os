@@ -9,8 +9,8 @@ import { SenOsProvider } from 'helpers/context';
 import ErrorBoundary from 'components/errorBoundary';
 
 import metadata from './package.json';
-import View from './view';
-import model from './model';
+import View from './src/view';
+import model from './src/model';
 
 
 class Main extends Component {

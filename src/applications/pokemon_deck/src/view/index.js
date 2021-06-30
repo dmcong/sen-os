@@ -5,15 +5,15 @@ import { withRouter } from 'react-router-dom';
 
 import { Row, Col, Widget } from 'sen-kit';
 
-import App from './src';
+import Deck from './deck';
 
 
 class View extends Component {
   render() {
     return <Widget size="medium" type="glass">
-      <Row gutter={[16, 16]}>
+      <Row gutter={[8, 8]}>
         <Col span={24}>
-          <App />
+          <Deck />
         </Col>
       </Row>
     </Widget>

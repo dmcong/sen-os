@@ -1,13 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import controller from './controller';
+import main from '../controller/main.controller';
 
 /**
  * Isolated store
  */
 const model = configureStore({
   reducer: {
-    main: controller,
+    main,
   },
 });
 

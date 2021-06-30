@@ -1,5 +1,4 @@
-import React, { Suspense, lazy } from 'react';
-import { nanoid } from '@reduxjs/toolkit';
+import React, { Suspense, lazy, useMemo } from 'react';
 
 import util from 'helpers/util';
 import AppLoading from 'components/appLoading';
@@ -8,28 +7,28 @@ import AppLogo from 'components/appLogo';
 /**
  * Logo Loader
  */
-const loadLogo = (name, props) => {
+const DynamicLogo = ({ name, ...others }) => {
   const folderName = util.normalizeAppName(name);
   let src = '';
   try { src = require(`applications/${folderName}/icon.png`).default } catch (er) { /* Nothing */ }
-  return <AppLogo name={name} src={src} {...props} />
+  return <AppLogo name={name} src={src} {...others} />
 }
 
 /**
  * App Loader
  */
-const loadApp = (name) => {
+const DynamicApp = ({ name }) => {
   const folderName = util.normalizeAppName(name);
-  const Application = lazy(async () => {
+  const Application = useMemo(() => lazy(async () => {
     try {
       return await import(`applications/${folderName}/index`);
     } catch (er) {
       return await import('components/appGuard');
     }
-  });
-  return <Suspense key={nanoid()} fallback={<AppLoading />}>
+  }), [folderName]);
+  return <Suspense fallback={<AppLoading />}>
     <Application name={name} />
   </Suspense>
 }
 
-export { loadApp, loadLogo }
+export { DynamicApp, DynamicLogo }

@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import { Row, Col } from 'sen-kit';
 
-import { loadLogo } from 'helpers/loader'
+import { DynamicLogo } from 'helpers/loader';
 import Search from './search';
 
 
@@ -23,10 +23,9 @@ class Market extends Component {
   }
 
   render() {
-    const { ui: { spacing } } = this.props;
     const { appNames } = this.state;
 
-    return <Row gutter={[spacing, spacing]}>
+    return <Row gutter={[16, 16]}>
       <Col span={24}>
         <Search />
       </Col>
@@ -34,7 +33,7 @@ class Market extends Component {
       <Col span={24}>
         <Row gutter={[16, 16]}>
           {appNames.map((name, i) => <Col key={i}>
-            {loadLogo(name, { onClick: this.onLogo })}
+            <DynamicLogo name={name} onClick={this.onLogo} />
           </Col>)}
         </Row>
       </Col>

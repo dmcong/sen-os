@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Row, Col, Widget, Typography, Button, Icon } from 'sen-kit';
 
-import { loadLogo } from 'helpers/loader';
+import { DynamicLogo } from 'helpers/loader';
 
 
 /**
@@ -18,7 +18,7 @@ const AppGaurd = ({ name }) => {
   return <Widget type="glass">
     <Row gutter={[8, 8]} style={{ height: '100%' }} align="middle" justify="center">
       <Col>
-        {loadLogo(name, { title: false })}
+        <DynamicLogo name={name} title={false} />
       </Col>
       <Col span={24}>
         <Typography.Title level={4} align="center">{name}</Typography.Title>

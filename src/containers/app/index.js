@@ -12,14 +12,11 @@ import Market from 'containers/market';
 
 
 class App extends Component {
-
   render() {
-    const { ui: { spacing } } = this.props;
-
     return <Layout style={{ backgroundColor: '#00000000' }}>
       <ControlCenter />
-      <Layout.Content style={{ padding: spacing / 2 }}>
-        <Row gutter={[spacing, spacing]} justify="center">
+      <Layout.Content style={{ padding: 8 }}>
+        <Row gutter={[16, 16]} justify="center">
           <Col span={24} style={{ height: 64 }} /> {/* Safe space */}
           <Col span={24} style={{ maxWidth: 1440 }}>
             <Switch>
@@ -36,7 +33,6 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-  ui: state.ui,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

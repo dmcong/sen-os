@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 import { Row, Col, Widget, Typography, Button, Icon } from 'sen-kit';
 
 import { withSenOs } from 'helpers/context';
-import { updateTime } from './controller';
+import { updateTime } from '../controller/main.controller';
 
 
 class View extends Component {
@@ -14,7 +14,7 @@ class View extends Component {
     const { main: { time }, updateTime } = this.props;
 
     return <Widget type="glass">
-      <Row gutter={[16, 16]}>
+      <Row gutter={[8, 8]}>
         <Col span={24}>
           <Typography.Title level={1}>Template</Typography.Title>
         </Col>
