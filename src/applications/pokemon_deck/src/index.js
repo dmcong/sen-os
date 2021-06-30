@@ -67,9 +67,6 @@ class App extends Component {
 
     return <Row gutter={[16, 16]} justify="center">
       <Col span={24}>
-        <Typography.Title level={1} align="center">Pokemon Deck</Typography.Title>
-      </Col>
-      <Col span={24}>
         <Pokemon name={name} />
       </Col>
       <Col span={12}>

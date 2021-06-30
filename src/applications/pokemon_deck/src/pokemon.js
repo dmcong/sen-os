@@ -8,7 +8,7 @@ const Pokemon = ({ name, onClick, ...others }) => {
   const src = `https://raw.githubusercontent.com/itsjavi/pokemon-assets/master/assets/img/pokemon/${code}.png`;
   return <Row justify="center">
     <Col>
-      <Avatar src={src} size={64} onClick={onClick} {...others} />
+      <Avatar src={src} size={72} onClick={onClick} {...others} />
     </Col>
     <Col span={24} />
     <Col>
