@@ -20,18 +20,19 @@ class Deck extends Component {
   }
 
   componentDidMount() {
-    const { db, wallet: { address } } = this.props;
-    this.collection = db.createInstance({ storeName: address });
-    this.updatePokemon();
+    this.buildPersistentStorage();
   }
 
   componentDidUpdate(prevProps) {
     const { wallet: { address: prevAddress } } = prevProps;
+    const { wallet: { address } } = this.props;
+    if (prevAddress !== address) this.buildPersistentStorage();
+  }
+
+  buildPersistentStorage = () => {
     const { db, wallet: { address } } = this.props;
-    if (prevAddress !== address) {
-      this.collection = db.createInstance({ storeName: address });
-      this.updatePokemon();
-    }
+    this.collection = db.createInstance({ storeName: address });
+    return this.updatePokemon();
   }
 
   updatePokemon = async () => {
