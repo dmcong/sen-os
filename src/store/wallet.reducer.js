@@ -41,11 +41,11 @@ export const disconnectWallet = createAsyncThunk(`${NAME}/disconnectWallet`, asy
 const slice = createSlice({
   name: NAME,
   initialState,
-  extraReducers: builder => builder
-    .addCase(openWallet.fulfilled, (state, { payload }) => ({ ...state, ...payload }))
-    .addCase(closeWallet.fulfilled, (state, { payload }) => ({ ...state, ...payload }))
-    .addCase(connectWallet.fulfilled, (state, { payload }) => ({ ...state, ...payload }))
-    .addCase(disconnectWallet.fulfilled, (state, { payload }) => ({ ...state, ...payload }))
+  extraReducers: builder => void builder
+    .addCase(openWallet.fulfilled, (state, { payload }) => void Object.assign(state, payload))
+    .addCase(closeWallet.fulfilled, (state, { payload }) => void Object.assign(state, payload))
+    .addCase(connectWallet.fulfilled, (state, { payload }) => void Object.assign(state, payload))
+    .addCase(disconnectWallet.fulfilled, (state, { payload }) => void Object.assign(state, payload))
 });
 
 export default slice.reducer;

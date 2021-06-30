@@ -33,8 +33,8 @@ export const resize = createAsyncThunk(`${NAME}/resize`, async () => {
 const slice = createSlice({
   name: NAME,
   initialState,
-  extraReducers: builder => builder
-    .addCase(resize.fulfilled, (state, { payload }) => ({ ...state, ...payload }))
+  extraReducers: builder => void builder
+    .addCase(resize.fulfilled, (state, { payload }) => void Object.assign(state, payload))
 });
 
 export default slice.reducer;

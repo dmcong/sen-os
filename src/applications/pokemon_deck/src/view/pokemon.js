@@ -7,6 +7,7 @@ import { Row, Col, Avatar } from 'sen-kit';
 const Pokemon = ({ name, onClick, ...others }) => {
   let code = name
     .replace('\'', '')
+    .replace('`', '')
     .replace('.', '')
     .replace(' ', '-')
     .replace('♂', '-m')
