@@ -20,7 +20,10 @@ class ControlCenter extends Component {
 
   toggle = () => {
     const { visible } = this.state;
-    return this.setState({ visible: !visible });
+    return this.setState({ visible: !visible }, () => {
+      if (!visible) return document.body.style.overflow = 'hidden';
+      return document.body.style.overflow = 'scroll';
+    });
   }
 
   to = (route = '#') => {
@@ -34,7 +37,7 @@ class ControlCenter extends Component {
 
     return <Drawer
       placement="bottom"
-      className={`drawer ${!visible ? 'lite' : 'full'}`}
+      className={`glass drawer ${!visible ? 'lite' : 'full'}`}
       height="100%"
       bodyStyle={{ padding: 16 }}
       closable={false}
