@@ -24,7 +24,7 @@ export const connectWallet = createAsyncThunk(`${NAME}/connectWallet`, async (wa
   window.senos.wallet = wallet;
   const address = await wallet.getAccount();
   const lamports = await window.senos.lamports.get(address);
-  return { address, lamports, visible: false }
+  return { address, lamports: global.BigInt(lamports), visible: false }
 });
 
 export const disconnectWallet = createAsyncThunk(`${NAME}/disconnectWallet`, async () => {
