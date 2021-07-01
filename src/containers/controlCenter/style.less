@@ -1,21 +1,18 @@
-.glass {
+.controll-center {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   background: #ffffff22;
-}
-
-.drawer {
   .ant-drawer-content-wrapper {
     box-shadow: none !important;
   }
-  &.full {
+  &.open {
     border-radius: none !important;
     transform: translateY(0px) !important;
     .ant-drawer-content {
       border-radius: none !important;
     }
   }
-  &.lite {
+  &.close {
     border-radius: 16px 16px 0px 0px;
     transform: translateY(calc(100% - 64px)) !important;
     .ant-drawer-content {

@@ -37,7 +37,7 @@ class ControlCenter extends Component {
 
     return <Drawer
       placement="bottom"
-      className={`glass drawer ${!visible ? 'lite' : 'full'}`}
+      className={`controll-center ${visible ? 'open' : 'close'}`}
       height="100%"
       bodyStyle={{ padding: 16 }}
       closable={false}
