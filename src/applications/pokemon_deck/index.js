@@ -28,10 +28,9 @@ class Main extends Component {
     const { ui, wallet } = this.props;
     const { name, version, author: { email } } = metadata;
     const db = this.db(name);
-    const context = { ui, wallet, db }
     return <ErrorBoundary name={name} version={version} email={email}>
       <Provider store={model}>
-        <SenOsProvider {...context}>
+        <SenOsProvider senos={{ ui, wallet, db }}>
           <View />
         </SenOsProvider>
       </Provider>

@@ -10,7 +10,7 @@ import AppLogo from 'components/appLogo';
 const DynamicLogo = ({ name, ...others }) => {
   const folderName = util.normalizeAppName(name);
   let src = '';
-  try { src = require(`applications/${folderName}/icon.png`).default } catch (er) { /* Nothing */ }
+  try { src = require(`applications/${folderName}/assets/icon.png`).default } catch (er) { /* Nothing */ }
   return <AppLogo name={name} src={src} {...others} />
 }
 
