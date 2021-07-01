@@ -14,10 +14,8 @@ import Market from 'containers/market';
 class App extends Component {
   render() {
     return <Layout style={{ backgroundColor: '#00000000' }}>
-      <ControlCenter />
       <Layout.Content style={{ padding: 8 }}>
         <Row gutter={[16, 16]} justify="center">
-          <Col span={24} style={{ height: 64 }} /> {/* Safe space */}
           <Col span={24} style={{ maxWidth: 1440 }}>
             <Switch>
               <Route exact path='/' component={Home} />
@@ -25,8 +23,10 @@ class App extends Component {
               <Redirect from='*' to={'/'} />
             </Switch>
           </Col>
+          <Col span={24} style={{ height: 64 }} /> {/* Safe space */}
         </Row>
       </Layout.Content>
+      <ControlCenter />
       <UiUx />
     </Layout>
   }

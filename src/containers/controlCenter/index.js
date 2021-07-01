@@ -4,12 +4,24 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 
 import {
-  Layout, Row, Col, Brand, Button, Icon, Tooltip,
-  Switch, Space,
+  Row, Col, Brand, Button, Icon, Tooltip,
+  Switch, Space, Drawer,
 } from 'sen-kit';
 import './style.less';
 
 class ControlCenter extends Component {
+  constructor() {
+    super();
+
+    this.state = {
+      visible: false
+    }
+  }
+
+  toggle = () => {
+    const { visible } = this.state;
+    return this.setState({ visible: !visible });
+  }
 
   to = (route = '#') => {
     const { history } = this.props;
@@ -18,8 +30,17 @@ class ControlCenter extends Component {
 
   render() {
     const { ui: { infix } } = this.props;
+    const { visible } = this.state;
 
-    return <Layout.Header className="header">
+    return <Drawer
+      placement="bottom"
+      className={`drawer ${!visible ? 'lite' : 'full'}`}
+      height="100%"
+      bodyStyle={{ padding: 16 }}
+      closable={false}
+      mask={visible}
+      visible
+    >
       <Row gutter={[16, 16]} align="middle" justify="space-between">
         <Col>
           <Brand size={32} lite={infix === 'xs'} />
@@ -39,9 +60,15 @@ class ControlCenter extends Component {
                 type="text"
                 className="btnContained"
                 onClick={() => this.to('/')}
-                icon={<Icon name="grid-outline" />}
+                icon={<Icon name="tv-outline" />}
               />
             </Tooltip>
+            <Button
+              type="text"
+              className="btnContained"
+              onClick={this.toggle}
+              icon={<Icon name={visible ? 'close-outline' : 'grid-outline'} />}
+            />
           </Space>
         </Col>
         <Col>
@@ -52,7 +79,7 @@ class ControlCenter extends Component {
           />
         </Col>
       </Row>
-    </Layout.Header>
+    </Drawer>
   }
 }
 
