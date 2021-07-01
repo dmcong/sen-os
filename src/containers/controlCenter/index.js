@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import {
   Row, Col, Brand, Button, Icon, Tooltip,
-  Switch, Space, Drawer,
+  Switch, Space, Drawer, Typography,
 } from 'sen-kit';
 import './style.less';
 
@@ -77,6 +77,9 @@ class ControlCenter extends Component {
             checkedChildren={<Icon name="sunny-outline" />}
             unCheckedChildren={<Icon name="moon-outline" />}
           />
+        </Col>
+        <Col span={24}>
+          <Typography.Title level={1}>Controll Center</Typography.Title>
         </Col>
       </Row>
     </Drawer>
