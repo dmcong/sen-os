@@ -4,6 +4,7 @@ import devTools from './devTools';
 
 import ui from './ui.reducer';
 import wallet from './wallet.reducer';
+import installer from './installer.reducer';
 
 const store = configureStore({
   middleware,
@@ -11,6 +12,7 @@ const store = configureStore({
   reducer: {
     ui,
     wallet,
+    installer,
   },
 });
 

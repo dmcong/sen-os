@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
+import ssjs from 'senswapjs';
 
 import { Row, Col } from 'sen-kit';
+import Search from './search';
 
 import { DynamicLogo } from 'helpers/loader';
-import Search from './search';
+import { updateApps } from 'store/installer.reducer';
 
 
 class Market extends Component {
@@ -18,8 +20,12 @@ class Market extends Component {
     }
   }
 
-  onLogo = (e) => {
-    console.log(e);
+  installApp = async (appName) => {
+    const { installer: { address, apps }, updateApps } = this.props;
+    if (!ssjs.isAddress(address) || apps.includes(appName)) return;
+    const newApps = [...apps];
+    newApps.push(appName);
+    return await updateApps(newApps);
   }
 
   render() {
@@ -32,8 +38,8 @@ class Market extends Component {
       <Col span={24} style={{ height: 32 }} />
       <Col span={24}>
         <Row gutter={[16, 16]}>
-          {appNames.map((name, i) => <Col key={i}>
-            <DynamicLogo name={name} onClick={this.onLogo} />
+          {appNames.map((appName, i) => <Col key={i}>
+            <DynamicLogo name={appName} onClick={() => this.installApp(appName)} />
           </Col>)}
         </Row>
       </Col>
@@ -42,10 +48,11 @@ class Market extends Component {
 }
 
 const mapStateToProps = state => ({
-  ui: state.ui,
+  installer: state.installer,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
+  updateApps,
 }, dispatch);
 
 export default withRouter(connect(

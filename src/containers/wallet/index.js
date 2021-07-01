@@ -48,7 +48,7 @@ class Wallet extends Component {
           <Typography.Title level={1}>Wallet</Typography.Title>
         </Col>
         <Col span={24}>
-          <Typography.Link href={util.explorer(address)} target="_blank">{address}</Typography.Link>
+          <Typography.Link href={util.explorer(address)} target="_blank" ellipsis>{address.substring(0, 20) + '...'}</Typography.Link>
         </Col>
         <Col span={24}>
           <Tooltip title={`${ssjs.undecimalize(lamports, 9)} SOL`}>

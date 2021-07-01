@@ -2,37 +2,51 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
+import isEqual from 'react-fast-compare';
+import ssjs from 'senswapjs';
 
 import { Row } from 'sen-kit';
+import Wallet from 'containers/wallet';
 
 import { DynamicApp } from 'helpers/loader';
-import Wallet from 'containers/wallet';
+import { loadApps } from 'store/installer.reducer';
 
 
 class Home extends Component {
-  constructor() {
-    super();
 
-    this.state = {
-      appNames: ['Sen Template', 'Pokemon Deck']
-    }
+  componentDidMount() {
+    this.loadMyApps();
+  }
+
+  componentDidUpdate(prevProps) {
+    const { wallet: { address: prevAddress } } = prevProps;
+    const { wallet: { address } } = this.props;
+    if (!isEqual(prevAddress, address)) this.loadMyApps();
+  }
+
+  loadMyApps = async () => {
+    const { wallet: { address }, loadApps } = this.props;
+    if (!ssjs.isAddress(address)) return;
+    return await loadApps(address);
   }
 
   render() {
-    const { appNames } = this.state;
+    const { installer: { apps } } = this.props;
 
     return <Row gutter={[16, 16]}>
       <Wallet />
-      {appNames.map((appName, index) => <DynamicApp key={index} name={appName} />)}
+      {apps.map(appName => <DynamicApp key={appName} name={appName} />)}
     </Row>
   }
 }
 
 const mapStateToProps = state => ({
-  ui: state.ui
+  wallet: state.wallet,
+  installer: state.installer,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
+  loadApps,
 }, dispatch);
 
 export default withRouter(connect(

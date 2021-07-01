@@ -14,6 +14,7 @@ const NAME = 'ui';
 const initialState = {
   width: window.innerWidth,
   infix: getInfix(),
+  visibleControlCenter: false,
 }
 
 /**
@@ -26,6 +27,16 @@ export const resize = createAsyncThunk(`${NAME}/resize`, async () => {
   return { width, infix }
 });
 
+export const openControlCenter = createAsyncThunk(`${NAME}/openControlCenter`, async () => {
+  document.body.style.overflow = 'hidden';
+  return { visibleControlCenter: true }
+});
+
+export const closeControlCenter = createAsyncThunk(`${NAME}/closeControlCenter`, async () => {
+  document.body.style.overflow = 'scroll';
+  return { visibleControlCenter: false }
+});
+
 /**
  * Usual procedure
  */
@@ -35,6 +46,8 @@ const slice = createSlice({
   initialState,
   extraReducers: builder => void builder
     .addCase(resize.fulfilled, (state, { payload }) => void Object.assign(state, payload))
+    .addCase(openControlCenter.fulfilled, (state, { payload }) => void Object.assign(state, payload))
+    .addCase(closeControlCenter.fulfilled, (state, { payload }) => void Object.assign(state, payload))
 });
 
 export default slice.reducer;
