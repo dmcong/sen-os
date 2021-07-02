@@ -8,7 +8,8 @@ import { Row, Col } from 'sen-kit';
 import Search from './search';
 
 import { DynamicLogo } from 'helpers/loader';
-import { updateApps } from 'store/installer.reducer';
+import { updateApps } from 'store/babysitter.reducer';
+import universe from 'universe.json';
 
 
 class Market extends Component {
@@ -16,12 +17,12 @@ class Market extends Component {
     super();
 
     this.state = {
-      appNames: ['Sen Template', 'Pokemon Deck']
+      appNames: Object.keys(universe).map(id => universe[id].name)
     }
   }
 
   installApp = async (appName) => {
-    const { installer: { address, apps }, updateApps } = this.props;
+    const { babysitter: { address, apps }, updateApps } = this.props;
     if (!ssjs.isAddress(address) || apps.includes(appName)) return;
     const newApps = [...apps];
     newApps.push(appName);
@@ -48,7 +49,7 @@ class Market extends Component {
 }
 
 const mapStateToProps = state => ({
-  installer: state.installer,
+  babysitter: state.babysitter,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

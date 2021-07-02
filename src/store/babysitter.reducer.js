@@ -4,7 +4,7 @@ import { createPDB } from 'helpers/pdb';
 
 const db = createPDB('senos');
 
-const NAME = 'installer';
+const NAME = 'babysitter';
 const initialState = {
   address: '',
   apps: [],
@@ -26,7 +26,7 @@ export const loadApps = createAsyncThunk(`${NAME}/loadApps`, async (address, { r
 });
 
 export const updateApps = createAsyncThunk(`${NAME}/updateApps`, async (apps, { getState, rejectWithValue }) => {
-  const { installer: { address } } = getState();
+  const { babysitter: { address } } = getState();
   if (!ssjs.isAddress(address)) return rejectWithValue('You need to load apps first');
   try {
     const collection = db.createInstance({ storeName: address });

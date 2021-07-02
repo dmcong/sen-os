@@ -9,7 +9,7 @@ import { Row } from 'sen-kit';
 import Wallet from 'containers/wallet';
 
 import { DynamicApp } from 'helpers/loader';
-import { loadApps } from 'store/installer.reducer';
+import { loadApps } from 'store/babysitter.reducer';
 
 
 class Home extends Component {
@@ -31,7 +31,7 @@ class Home extends Component {
   }
 
   render() {
-    const { installer: { apps } } = this.props;
+    const { babysitter: { apps } } = this.props;
 
     return <Row gutter={[16, 16]}>
       <Wallet />
@@ -42,7 +42,7 @@ class Home extends Component {
 
 const mapStateToProps = state => ({
   wallet: state.wallet,
-  installer: state.installer,
+  babysitter: state.babysitter,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
