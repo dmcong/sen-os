@@ -22,7 +22,17 @@ const DraggbleLogo = ({ page, index, name, onClick, onHover, onDrop }) => {
     const hoveredBoundingRect = ref.current.getBoundingClientRect();
     const hoveredMiddleX = (hoveredBoundingRect.right + hoveredBoundingRect.left) / 2;
     const { x: pointerX } = monitor.getClientOffset();
-    const sign = pointerX > hoveredMiddleX ? 1 : 0;
+    let sign = 0;
+    // Drag left to right
+    if (draggedIndex < hoveredIndex) {
+      if (pointerX > hoveredMiddleX) sign = 0;
+      if (pointerX < hoveredMiddleX) sign = -1;
+    }
+    // Drag right to left
+    if (draggedIndex > hoveredIndex) {
+      if (pointerX > hoveredMiddleX) sign = 1;
+      if (pointerX < hoveredMiddleX) sign = 0;
+    }
     return {
       current: { index: draggedIndex, page: draggedPage },
       next: { index: hoveredIndex + sign, page: hoveredPage }
@@ -41,10 +51,6 @@ const DraggbleLogo = ({ page, index, name, onClick, onHover, onDrop }) => {
     hover: (item, monitor) => {
       if (!ref.current) return;
       return onHover(inferPosition(item, monitor));
-    },
-    drop: (item, monitor) => {
-      if (!ref.current) return;
-      return onDrop(inferPosition(item, monitor));
     },
     collect: monitor => ({ isOver: monitor.isOver() }),
   }));

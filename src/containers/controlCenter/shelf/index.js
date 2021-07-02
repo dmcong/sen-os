@@ -13,13 +13,17 @@ import Spot from './spot';
 import { dropPDB } from 'helpers/pdb';
 import { updateApps } from 'store/babysitter.reducer';
 
+const DEFAULT_ITEM = {
+  current: { index: -1, page: -1 },
+  next: { index: -1, page: -1 },
+}
 
 class Shelf extends Component {
   constructor() {
     super();
 
     this.state = {
-      draftIndex: [-1, -1],
+      draftItem: { ...DEFAULT_ITEM },
       apps: []
     }
   }
@@ -42,25 +46,28 @@ class Shelf extends Component {
     return await dropPDB(appName);
   }
 
-  onHover = ({ current: { index: oldIndex }, next: { index: newIndex } }) => {
+  onHover = (item) => {
     const { apps } = this.state;
-    newIndex = Math.min(Math.max(newIndex, 0), apps.length - 1);
-    return this.setState({ draftIndex: [oldIndex, newIndex] });
+    const draftItem = JSON.parse(JSON.stringify(item));
+    let { next: { index } } = draftItem;
+    index = Math.min(Math.max(index, 0), apps.length - 1);
+    draftItem.next.index = index;
+    return this.setState({ draftItem });
   }
 
-  onDrop = ({ current: { index: oldIndex }, next: { index: newIndex } }) => {
+  onDrop = () => {
     const { updateApps } = this.props;
-    const { apps: prevApps } = this.state;
-    newIndex = Math.min(Math.max(newIndex, 0), prevApps.length - 1);
+    const { apps: prevApps, draftItem } = this.state;
+    const { current: { index: oldIndex }, next: { index: newIndex } } = draftItem;
     const apps = [...prevApps];
     apps.splice(newIndex, 0, apps.splice(oldIndex, 1)[0]);
-    return this.setState({ apps, draftIndex: [-1, -1] }, () => {
+    return this.setState({ apps, draftItem: { ...DEFAULT_ITEM } }, () => {
       return updateApps(apps);
     });
   }
 
   render() {
-    const { apps, draftIndex: [oldIndex, newIndex] } = this.state;
+    const { apps, draftItem: { current: { index: oldIndex }, next: { index: newIndex } } } = this.state;
     return <DndProvider backend={HTML5Backend}>
       <Row gutter={[16, 16]}>
         {apps.map((appName, i) => <Fragment key={i}>

@@ -51,12 +51,15 @@ const updateUniverse = (dir, unlink = false) => {
 }
 
 /**
+ * Start for the first time
+ */
+
+
+/**
  * Watcher
  */
 const fileWatchee = path.join(__dirname, '../src/applications') + '/*/package.json';
-const fileWatcher = chokidar.watch(fileWatchee, {
-  ignored: /node_modules/,
-});
+const fileWatcher = chokidar.watch(fileWatchee, { ignored: /node_modules/ });
 fileWatcher
   .on('add', dir => updateUniverse(dir))
   .on('change', dir => updateUniverse(dir))
@@ -67,7 +70,7 @@ fileWatcher
  * chokidar cannot detect package.json unlink when deleleting parent folders
  */
 const dirWatchee = path.join(__dirname, '../src/applications') + '/*';
-const dirWatcher = chokidar.watch(dirWatchee);
+const dirWatcher = chokidar.watch(dirWatchee, { ignoreInitial: true });
 dirWatcher
   .on('addDir', dir => updateUniverse(dir))
   .on('unlinkDir', dir => updateUniverse(dir, true));
