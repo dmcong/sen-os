@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { Row, Col, Typography } from 'sen-kit';
@@ -9,7 +9,7 @@ import util from 'helpers/util';
 /**
  * Application Logo
  */
-const AppLogo = ({ name, src, title, ...others }) => {
+const AppLogo = forwardRef(({ name, src, title, style: userStyle, ...others }, ref) => {
   // Infer color
   const bgColor = util.randomColor(util.normalizeAppName(name), 'light');
   const symbol = name.substring(0, 2);
@@ -23,9 +23,10 @@ const AppLogo = ({ name, src, title, ...others }) => {
   } : { backgroundColor: bgColor }
   // Render
   return <Row
-    style={{ width: 64, cursor: 'pointer' }}
+    style={{ width: 64, cursor: 'pointer', ...userStyle }}
     gutter={[0, 8]}
     {...others}
+    ref={ref}
   >
     <Col span={24}>
       <Row
@@ -45,7 +46,7 @@ const AppLogo = ({ name, src, title, ...others }) => {
       <p align="center" style={{ fontSize: 10, margin: 0 }}>{name}</p>
     </Col> : null}
   </Row>
-}
+});
 
 AppLogo.defaultProps = {
   title: true,

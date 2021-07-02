@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useMemo } from 'react';
+import React, { Suspense, lazy, useMemo, forwardRef } from 'react';
 
 import util from 'helpers/util';
 import AppLoading from 'components/appLoading';
@@ -7,17 +7,17 @@ import AppLogo from 'components/appLogo';
 /**
  * Logo Loader
  */
-const DynamicLogo = ({ name, ...others }) => {
+const DynamicLogo = forwardRef(({ name, ...others }, ref) => {
   const folderName = util.normalizeAppName(name);
   let src = '';
   try { src = require(`applications/${folderName}/assets/icon.png`).default } catch (er) { /* Nothing */ }
-  return <AppLogo name={name} src={src} {...others} />
-}
+  return <AppLogo name={name} src={src} {...others} ref={ref} />
+});
 
 /**
  * App Loader
  */
-const DynamicApp = ({ name }) => {
+const DynamicApp = forwardRef(({ name }, ref) => {
   const folderName = util.normalizeAppName(name);
   const Application = useMemo(() => lazy(async () => {
     try {
@@ -27,8 +27,8 @@ const DynamicApp = ({ name }) => {
     }
   }), [folderName]);
   return <Suspense fallback={<AppLoading />}>
-    <Application name={name} />
+    <Application name={name} ref={ref} />
   </Suspense>
-}
+});
 
 export { DynamicApp, DynamicLogo }

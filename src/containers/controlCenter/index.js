@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 
-import { Row, Col, Brand, Button, Icon, Tooltip, Switch, Space, Drawer } from 'sen-kit';
-import MyApplications from './myApplications';
+import { Row, Col, Brand, Button, Icon, Switch, Space, Drawer } from 'sen-kit';
+import Shelf from './shelf';
 
 import { openControlCenter, closeControlCenter } from 'store/ui.reducer';
 import './style.less';
@@ -36,30 +36,24 @@ class ControlCenter extends Component {
         </Col>
         <Col>
           <Space size="middle">
-            <Tooltip title="Home">
-              <Button
-                type="text"
-                className="btnContained"
-                onClick={() => this.to('/')}
-                icon={<Icon name="tv-outline" />}
-              />
-            </Tooltip>
-            <Tooltip title={visibleControlCenter ? 'Close' : 'Controll Center'}>
-              <Button
-                type="text"
-                className="btnContained"
-                onClick={visibleControlCenter ? closeControlCenter : openControlCenter}
-                icon={<Icon name={visibleControlCenter ? 'close-outline' : 'grid-outline'} />}
-              />
-            </Tooltip>
-            <Tooltip title="Market">
-              <Button
-                type="text"
-                className="btnContained"
-                onClick={() => this.to('/market')}
-                icon={<Icon name="storefront-outline" />}
-              />
-            </Tooltip>
+            <Button
+              type="text"
+              className="btnContained"
+              onClick={() => this.to('/')}
+              icon={<Icon name="tv-outline" />}
+            />
+            <Button
+              type="text"
+              className="btnContained"
+              onClick={visibleControlCenter ? closeControlCenter : openControlCenter}
+              icon={<Icon name={visibleControlCenter ? 'close-outline' : 'grid-outline'} />}
+            />
+            <Button
+              type="text"
+              className="btnContained"
+              onClick={() => this.to('/market')}
+              icon={<Icon name="storefront-outline" />}
+            />
           </Space>
         </Col>
         <Col>
@@ -71,7 +65,7 @@ class ControlCenter extends Component {
         </Col>
         <Col span={24} style={{ height: 64 }} />
         <Col span={24}>
-          <MyApplications />
+          <Shelf />
         </Col>
       </Row>
     </Drawer>

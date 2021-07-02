@@ -1,19 +1,26 @@
-import React from 'react';
+import React, { useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import { Row, Col, Widget, Typography, Button, Icon } from 'sen-kit';
 
+import { dropPDB } from 'helpers/pdb';
 import { DynamicLogo } from 'helpers/loader';
+import { updateApps } from 'store/babysitter.reducer';
 
 
 /**
  * Removed Application
  */
-const AppGaurd = ({ name }) => {
+const AppGuard = ({ name }) => {
+  const { apps } = useSelector(state => state.babysitter);
+  const dispatch = useDispatch();
 
-  const remove = () => {
-    return console.log(name);
-  }
+  const uninstallApp = useCallback(async () => {
+    const newApps = apps.filter(appName => appName !== name);
+    await dispatch(updateApps(newApps));
+    return await dropPDB(name);
+  }, [dispatch, name, apps]);
 
   return <Widget type="glass">
     <Row gutter={[8, 8]} style={{ height: '100%' }} align="middle" justify="center">
@@ -30,15 +37,15 @@ const AppGaurd = ({ name }) => {
         <Button
           type="primary"
           icon={<Icon name="trash-outline" />}
-          onClick={remove}
+          onClick={uninstallApp}
         >Remove</Button>
       </Col>
     </Row>
   </Widget>
 }
 
-AppGaurd.propTypes = {
+AppGuard.propTypes = {
   name: PropTypes.string.isRequired
 }
 
-export default AppGaurd;
+export default AppGuard;
