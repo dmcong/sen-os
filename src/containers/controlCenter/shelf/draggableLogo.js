@@ -22,7 +22,7 @@ const DraggbleLogo = ({ page, index, name, onClick, onHover, onDrop }) => {
     const hoveredBoundingRect = ref.current.getBoundingClientRect();
     const hoveredMiddleX = (hoveredBoundingRect.right + hoveredBoundingRect.left) / 2;
     const { x: pointerX } = monitor.getClientOffset();
-    const sign = pointerX > hoveredMiddleX ? 1 : -1;
+    const sign = pointerX > hoveredMiddleX ? 1 : 0;
     return {
       current: { index: draggedIndex, page: draggedPage },
       next: { index: hoveredIndex + sign, page: hoveredPage }
