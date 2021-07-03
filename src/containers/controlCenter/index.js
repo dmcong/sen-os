@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
+import isEqual from 'react-fast-compare';
 
 import { Row, Col, Brand, Button, Icon, Switch, Space, Drawer } from 'sen-kit';
 import Shelf from './shelf';
@@ -17,6 +18,12 @@ class ControlCenter extends Component {
     this.state = {
       settings: false,
     }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { ui: { visibleControlCenter: prevVisibleControlCenter } } = prevProps;
+    const { ui: { visibleControlCenter } } = this.props;
+    if (!isEqual(prevVisibleControlCenter, visibleControlCenter)) this.setState({ settings: false });
   }
 
   to = async (route = '#') => {
