@@ -6,6 +6,7 @@ import isEqual from 'react-fast-compare';
 
 import { Row, Col, Brand, Button, Icon, Switch, Space, Drawer } from 'sen-kit';
 import Shelf from './shelf';
+import Wallet from './wallet';
 
 import { openControlCenter, closeControlCenter } from 'store/ui.reducer';
 import './style.less';
@@ -50,46 +51,46 @@ class ControlCenter extends Component {
       visible
     >
       <Row gutter={[16, 16]} align="middle" justify="space-between">
-        <Col>
+        <Col span={8}>
           <Brand size={32} lite={infix === 'xs'} />
         </Col>
-        <Col>
-          <Space size="middle">
-            <Button
-              type="text"
-              className="btnContained"
-              onClick={() => this.to('/')}
-              icon={<Icon name="tv-outline" />}
-            />
-            <Button
-              type="text"
-              className="btnContained"
-              onClick={visibleControlCenter ? closeControlCenter : openControlCenter}
-              icon={<Icon name={visibleControlCenter ? 'close-outline' : 'grid-outline'} />}
-            />
-            <Button
-              type="text"
-              className="btnContained"
-              onClick={() => this.to('/market')}
-              icon={<Icon name="storefront-outline" />}
-            />
-          </Space>
+        <Col span={8}>
+          <Row gutter={[16, 16]} align="middle" justify="center">
+            <Space size="middle">
+              <Button
+                type="text"
+                className="btnContained"
+                onClick={() => this.to('/')}
+                icon={<Icon name="tv-outline" />}
+              />
+              <Button
+                type="text"
+                className="btnContained"
+                onClick={visibleControlCenter ? closeControlCenter : openControlCenter}
+                icon={<Icon name={visibleControlCenter ? 'close-outline' : 'grid-outline'} />}
+              />
+              <Button
+                type="text"
+                className="btnContained"
+                onClick={() => this.to('/market')}
+                icon={<Icon name="storefront-outline" />}
+              />
+            </Space>
+          </Row >
         </Col>
-        <Col>
-          <Space direction="vertical" size={2}>
-            <Switch
-              size="small"
-              checkedChildren={<Icon name="sunny-outline" />}
-              unCheckedChildren={<Icon name="moon-outline" />}
-            />
-            {visibleControlCenter ? <Switch
-              size="small"
-              checkedChildren={<Icon name="cog-outline" />}
-              unCheckedChildren={<Icon name="cog-outline" />}
-              checked={settings}
-              onChange={this.onSettings}
-            /> : null}
-          </Space>
+        <Col span={8}>
+          <Row gutter={[16, 16]} align="middle" justify="end">
+            <Space direction="vertical" size={2}>
+              <Wallet />
+              {visibleControlCenter ? <Switch
+                size="small"
+                checkedChildren={<Icon name="cog-outline" />}
+                unCheckedChildren={<Icon name="cog-outline" />}
+                checked={settings}
+                onChange={this.onSettings}
+              /> : null}
+            </Space>
+          </Row >
         </Col>
         <Col span={24} style={{ height: 64 }} />
         <Col span={24}>

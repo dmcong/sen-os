@@ -6,8 +6,8 @@ import ssjs from 'senswapjs';
 
 import { Row, Col } from 'sen-kit';
 import Search from './search';
+import LogoInMarket from './logoInMarket'
 
-import { DynamicLogo } from 'helpers/loader';
 import { updateApps } from 'store/babysitter.reducer';
 import universe from 'universe.json';
 
@@ -31,6 +31,7 @@ class Market extends Component {
 
   render() {
     const { appNames } = this.state;
+    const { babysitter: { apps } } = this.props;
 
     return <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -40,11 +41,15 @@ class Market extends Component {
       <Col span={24}>
         <Row gutter={[16, 16]}>
           {appNames.map((appName, i) => <Col key={i}>
-            <DynamicLogo name={appName} onClick={() => this.installApp(appName)} />
+            <LogoInMarket
+              installed={apps.includes(appName)}
+              name={appName}
+              onClick={() => this.installApp(appName)}
+            />
           </Col>)}
         </Row>
       </Col>
-    </Row>
+    </Row >
   }
 }
 

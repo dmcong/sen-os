@@ -7,13 +7,14 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import isEqual from 'react-fast-compare';
+import ssjs from 'senswapjs';
 
 import { Row, Col } from 'sen-kit';
 import DraggbleLogo from './draggableLogo';
 import Spot from './spot';
 
 import { dropPDB } from 'helpers/pdb';
-import { updateApps } from 'store/babysitter.reducer';
+import { loadApps, updateApps } from 'store/babysitter.reducer';
 
 const DEFAULT_ITEM = {
   current: { index: -1, page: -1 },
@@ -26,19 +27,23 @@ class Shelf extends Component {
 
     this.state = {
       draftItem: { ...DEFAULT_ITEM },
-      apps: []
     }
   }
 
   componentDidMount() {
-    const { babysitter: { apps } } = this.props;
-    return this.setState({ apps });
+    this.loadMyApps();
   }
 
   componentDidUpdate(prevProps) {
-    const { babysitter: { apps: prevApps } } = prevProps;
-    const { babysitter: { apps } } = this.props;
-    if (!isEqual(prevApps, apps)) return this.setState({ apps });
+    const { wallet: { address: prevAddress } } = prevProps;
+    const { wallet: { address } } = this.props;
+    if (!isEqual(prevAddress, address)) this.loadMyApps();
+  }
+
+  loadMyApps = async () => {
+    const { wallet: { address }, loadApps } = this.props;
+    if (!ssjs.isAddress(address)) return;
+    return await loadApps(address);
   }
 
   uninstallApp = async (appName) => {
@@ -49,7 +54,7 @@ class Shelf extends Component {
   }
 
   onHover = (item) => {
-    const { apps } = this.state;
+    const { babysitter: { apps } } = this.props;
     const draftItem = JSON.parse(JSON.stringify(item));
     let { next: { index } } = draftItem;
     index = Math.min(Math.max(index, 0), apps.length - 1);
@@ -58,8 +63,8 @@ class Shelf extends Component {
   }
 
   onDrop = () => {
-    const { updateApps } = this.props;
-    const { apps: prevApps, draftItem } = this.state;
+    const { babysitter: { apps: prevApps }, updateApps } = this.props;
+    const { draftItem } = this.state;
     const { current: { index: oldIndex }, next: { index: newIndex } } = draftItem;
     const apps = [...prevApps];
     apps.splice(newIndex, 0, apps.splice(oldIndex, 1)[0]);
@@ -69,8 +74,8 @@ class Shelf extends Component {
   }
 
   render() {
-    const { ui: { touchable }, settings } = this.props;
-    const { apps, draftItem: { current: { index: oldIndex }, next: { index: newIndex } } } = this.state;
+    const { ui: { touchable }, settings, babysitter: { apps } } = this.props;
+    const { draftItem: { current: { index: oldIndex }, next: { index: newIndex } } } = this.state;
 
     return <DndProvider backend={touchable ? TouchBackend : HTML5Backend}>
       <Row gutter={[16, 16]}>
@@ -96,11 +101,12 @@ class Shelf extends Component {
 
 const mapStateToProps = state => ({
   ui: state.ui,
+  wallet: state.wallet,
   babysitter: state.babysitter,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  updateApps
+  loadApps, updateApps
 }, dispatch);
 
 PropTypes.defaultProps = {

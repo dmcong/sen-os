@@ -2,34 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
-import isEqual from 'react-fast-compare';
-import ssjs from 'senswapjs';
 
 import { Row } from 'sen-kit';
 import Wallet from 'containers/wallet';
 
 import { DynamicApp } from 'helpers/loader';
-import { loadApps } from 'store/babysitter.reducer';
 
 
 class Home extends Component {
-
-  componentDidMount() {
-    this.loadMyApps();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { wallet: { address: prevAddress } } = prevProps;
-    const { wallet: { address } } = this.props;
-    if (!isEqual(prevAddress, address)) this.loadMyApps();
-  }
-
-  loadMyApps = async () => {
-    const { wallet: { address }, loadApps } = this.props;
-    if (!ssjs.isAddress(address)) return;
-    return await loadApps(address);
-  }
-
   render() {
     const { babysitter: { apps } } = this.props;
 
@@ -41,12 +21,10 @@ class Home extends Component {
 }
 
 const mapStateToProps = state => ({
-  wallet: state.wallet,
   babysitter: state.babysitter,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  loadApps,
 }, dispatch);
 
 export default withRouter(connect(
