@@ -11,7 +11,7 @@ import Deck from './deck';
 class View extends Component {
   render() {
     return <Widget size="medium" type="glass">
-      <Row gutter={[8, 8]}>
+      <Row gutter={[16, 16]}>
         <Col span={24}>
           <Deck />
         </Col>

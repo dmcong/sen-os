@@ -14,7 +14,7 @@ class View extends Component {
     const { main: { time }, updateTime } = this.props;
 
     return <Widget type="glass">
-      <Row gutter={[8, 8]}>
+      <Row gutter={[16, 16]}>
         <Col span={24}>
           <Typography.Title level={1}>Template</Typography.Title>
         </Col>
