@@ -69,7 +69,12 @@ class ControlCenter extends Component {
           </Space>
         </Col>
         <Col>
-          <Space>
+          <Space direction="vertical" size={2}>
+            <Switch
+              size="small"
+              checkedChildren={<Icon name="sunny-outline" />}
+              unCheckedChildren={<Icon name="moon-outline" />}
+            />
             {visibleControlCenter ? <Switch
               size="small"
               checkedChildren={<Icon name="cog-outline" />}
@@ -77,11 +82,6 @@ class ControlCenter extends Component {
               checked={settings}
               onChange={this.onSettings}
             /> : null}
-            <Switch
-              size="small"
-              checkedChildren={<Icon name="sunny-outline" />}
-              unCheckedChildren={<Icon name="moon-outline" />}
-            />
           </Space>
         </Col>
         <Col span={24} style={{ height: 64 }} />

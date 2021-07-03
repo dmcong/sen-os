@@ -9,7 +9,7 @@ const TYPE = 'logo';
 
 const DraggbleLogo = (props) => {
   const { page, index, name, onClose, onClick, onHover, onDrop, disabled } = props;
-  const ref = useRef(null);
+  let ref = useRef(null);
   // Utility
   const inferPosition = (item, monitor) => {
     const draggedIndex = item.index;
@@ -42,10 +42,11 @@ const DraggbleLogo = (props) => {
   // Drag hook
   const [{ isDragging }, drag] = useDrag(() => ({
     type: TYPE,
+    canDrag: !disabled,
     item: () => ({ page, index }),
     collect: monitor => ({ isDragging: monitor.isDragging() }),
     end: (item, monitor) => onDrop(inferPosition(item, monitor)),
-  }));
+  }), [TYPE, disabled, page, index]);
   // Drop hook
   const [, drop] = useDrop(() => ({
     accept: TYPE,
@@ -54,13 +55,13 @@ const DraggbleLogo = (props) => {
       return onHover(inferPosition(item, monitor));
     },
     collect: monitor => ({ isOver: monitor.isOver() }),
-  }));
+  }), [TYPE]);
   // Render
-  if (!disabled) drag(drop(ref));
+  drag(drop(ref));
   const badge = !disabled ? <Button type="primary" size="small" shape="circle" onClick={onClose}>
     <Icon name="close-outline" />
   </Button> : 0;
-  return <span ref={ref}>
+  return <div ref={ref}>
     <Badge count={badge}>
       <DynamicLogo
         name={name}
@@ -68,7 +69,7 @@ const DraggbleLogo = (props) => {
         style={{ opacity: isDragging ? 0.1 : 1 }}
       />
     </Badge>
-  </span>
+  </div>
 }
 
 DraggbleLogo.defaultProps = {
