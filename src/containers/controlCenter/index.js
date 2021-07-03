@@ -4,7 +4,10 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import isEqual from 'react-fast-compare';
 
-import { Row, Col, Brand, Button, Icon, Switch, Space, Drawer } from 'sen-kit';
+import {
+  Row, Col, Brand, Button, Icon, Switch, Space, Drawer,
+  Typography, Divider
+} from 'sen-kit';
 import Shelf from './shelf';
 import Wallet from './wallet';
 
@@ -51,48 +54,52 @@ class ControlCenter extends Component {
       visible
     >
       <Row gutter={[16, 16]} align="middle" justify="space-between">
-        <Col span={8}>
-          <Brand size={32} lite={infix === 'xs'} />
+        <Col>
+          <Space size={infix === 'xs' ? 'small' : 'middle'}>
+            <span style={{ marginLeft: -7 }}>
+              <Brand size={32} lite={infix === 'xs'} />
+            </span>
+            <Button
+              type="text"
+              className="btnContained"
+              onClick={() => this.to('/')}
+              icon={<Icon name="tv-outline" />}
+            />
+            <Button
+              type="text"
+              className="btnContained"
+              onClick={visibleControlCenter ? closeControlCenter : openControlCenter}
+              icon={<Icon name={visibleControlCenter ? 'close-outline' : 'grid-outline'} />}
+            />
+            <Button
+              type="text"
+              className="btnContained"
+              onClick={() => this.to('/market')}
+              icon={<Icon name="storefront-outline" />}
+            />
+          </Space>
         </Col>
-        <Col span={8}>
-          <Row gutter={[16, 16]} align="middle" justify="center">
-            <Space size="middle">
-              <Button
-                type="text"
-                className="btnContained"
-                onClick={() => this.to('/')}
-                icon={<Icon name="tv-outline" />}
-              />
-              <Button
-                type="text"
-                className="btnContained"
-                onClick={visibleControlCenter ? closeControlCenter : openControlCenter}
-                icon={<Icon name={visibleControlCenter ? 'close-outline' : 'grid-outline'} />}
-              />
-              <Button
-                type="text"
-                className="btnContained"
-                onClick={() => this.to('/market')}
-                icon={<Icon name="storefront-outline" />}
-              />
-            </Space>
-          </Row >
+        <Col>
+          <Wallet />
         </Col>
-        <Col span={8}>
+        <Col span={24} style={{ height: 32 }} />
+        <Col span={24} >
           <Row gutter={[16, 16]} align="middle" justify="end">
-            <Space direction="vertical" size={2}>
-              <Wallet />
-              {visibleControlCenter ? <Switch
-                size="small"
-                checkedChildren={<Icon name="cog-outline" />}
-                unCheckedChildren={<Icon name="cog-outline" />}
-                checked={settings}
-                onChange={this.onSettings}
-              /> : null}
-            </Space>
+            <Col>
+              <Space>
+                <Typography.Title level={5} style={{ margin: 0 }}>Settings</Typography.Title>
+                <Divider type="vertical" />
+                <Switch
+                  size="small"
+                  checkedChildren={<Icon name="cog-outline" />}
+                  unCheckedChildren={<Icon name="cog-outline" />}
+                  checked={settings}
+                  onChange={this.onSettings}
+                />
+              </Space>
+            </Col>
           </Row >
         </Col>
-        <Col span={24} style={{ height: 64 }} />
         <Col span={24}>
           <Shelf settings={settings} />
         </Col>

@@ -6,10 +6,12 @@ import universe from 'universe.json';
 
 import { Row, Col, Card, Input, Icon, Button, Typography, Space } from 'sen-kit';
 
-import { DynamicLogo } from 'helpers/loader';
 import Keyword from './keyword';
 import SearchEngine from './engine';
+import LogoInMarket from '../logoInMarket';
 
+
+const KEYWORDS = ['tuphan', 'fun', 'swap'];
 
 class Search extends Component {
   constructor() {
@@ -36,19 +38,20 @@ class Search extends Component {
   }
 
   render() {
+    const { babysitter: { apps } } = this.props;
     const { loading, keywords, appNames } = this.state;
 
     return <Row gutter={[16, 16]} justify="center">
       <Col span={24}>
         <Card bordered={false} bodyStyle={{ padding: 8 }}>
-          <Row gutter={[8, 8]} justify="end">
+          <Row gutter={[16, 16]} justify="end">
             <Col span={24}>
               <Input
-                placeholder="keywords"
+                placeholder="keywords #1, keywords #2, ... "
                 value={keywords}
                 suffix={keywords ? <Button
                   type="text"
-                  style={{ marginLeft: -7 }}
+                  style={{ marginRight: -7 }}
                   icon={<Icon name="close-circle-outline" />}
                   loading={loading}
                   onClick={() => this.onSearch({ target: { value: '' } })}
@@ -64,15 +67,20 @@ class Search extends Component {
             <Col>
               <Space>
                 <Typography.Text>Popular:</Typography.Text>
-                <Keyword
-                  title="swap"
-                  onClick={() => this.onSearch({ target: { value: 'swap' } })}
-                />
+                {KEYWORDS.map(keyword => <Keyword
+                  key={keyword}
+                  title={keyword}
+                  onClick={() => this.onSearch({ target: { value: keyword } })}
+                />)}
               </Space>
             </Col>
             <Col span={24}>
-              <Space align="start">
-                {appNames.map(appName => <DynamicLogo key={appName} name={appName} />)}
+              <Space size={24} align="start">
+                {appNames.map(appName => <LogoInMarket
+                  key={appName}
+                  installed={apps.includes(appName)}
+                  name={appName}
+                />)}
               </Space>
             </Col>
           </Row>
@@ -83,6 +91,7 @@ class Search extends Component {
 }
 
 const mapStateToProps = state => ({
+  babysitter: state.babysitter,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

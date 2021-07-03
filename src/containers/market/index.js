@@ -4,7 +4,7 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 import ssjs from 'senswapjs';
 
-import { Row, Col } from 'sen-kit';
+import { Row, Col, Space } from 'sen-kit';
 import Search from './search';
 import LogoInMarket from './logoInMarket'
 
@@ -39,15 +39,14 @@ class Market extends Component {
       </Col>
       <Col span={24} style={{ height: 32 }} />
       <Col span={24}>
-        <Row gutter={[16, 16]}>
-          {appNames.map((appName, i) => <Col key={i}>
-            <LogoInMarket
-              installed={apps.includes(appName)}
-              name={appName}
-              onClick={() => this.installApp(appName)}
-            />
-          </Col>)}
-        </Row>
+        <Space size={24} align="start">
+          {appNames.map(appName => <LogoInMarket
+            key={appName}
+            installed={apps.includes(appName)}
+            name={appName}
+            onClick={() => this.installApp(appName)}
+          />)}
+        </Space>
       </Col>
     </Row >
   }

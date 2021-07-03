@@ -15,7 +15,7 @@ const initialState = {
  */
 
 export const loadApps = createAsyncThunk(`${NAME}/loadApps`, async (address, { rejectWithValue }) => {
-  if (!ssjs.isAddress(address)) return rejectWithValue('Invalid wallet address');
+  if (!ssjs.isAddress(address)) return initialState;
   try {
     const collection = db.createInstance({ storeName: address });
     const apps = await collection.getItem('apps') || [];

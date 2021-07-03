@@ -7,7 +7,6 @@ import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import isEqual from 'react-fast-compare';
-import ssjs from 'senswapjs';
 
 import { Row, Col } from 'sen-kit';
 import DraggbleLogo from './draggableLogo';
@@ -31,19 +30,14 @@ class Shelf extends Component {
   }
 
   componentDidMount() {
-    this.loadMyApps();
+    const { wallet: { address }, loadApps } = this.props;
+    loadApps(address);
   }
 
   componentDidUpdate(prevProps) {
     const { wallet: { address: prevAddress } } = prevProps;
-    const { wallet: { address } } = this.props;
-    if (!isEqual(prevAddress, address)) this.loadMyApps();
-  }
-
-  loadMyApps = async () => {
     const { wallet: { address }, loadApps } = this.props;
-    if (!ssjs.isAddress(address)) return;
-    return await loadApps(address);
+    if (!isEqual(prevAddress, address)) loadApps(address);
   }
 
   uninstallApp = async (appName) => {

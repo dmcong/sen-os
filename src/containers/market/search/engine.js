@@ -28,8 +28,11 @@ class SearchEngine {
     return this.index.add(id, doc);
   }
 
-  search = (text, limit = 5) => {
-    const raw = this.index.search(text, limit);
+  search = (text, limit = 10) => {
+    let raw = [];
+    text.split(',').forEach(word => {
+      raw = raw.concat(this.index.search(word, limit));
+    });
     let ids = [];
     raw.forEach(({ result }) => {
       return result.forEach(id => {

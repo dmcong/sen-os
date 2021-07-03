@@ -39,27 +39,37 @@ class Wallet extends Component {
   }
 
   render() {
-    const { wallet: { address, lamports }, openWallet, disconnectWallet } = this.props;
+    const {
+      ui: { infix },
+      wallet: { address, lamports }, openWallet, disconnectWallet
+    } = this.props;
+    const fontSize = infix === 'xs' ? 10 : 12;
+    const balance = numeral(ssjs.undecimalize(lamports, 9)).format('0.[00]');
 
     if (!ssjs.isAddress(address)) return <Fragment>
-      <Button
-        type="primary"
-        icon={<Icon name="wallet-outline" />}
-        onClick={openWallet}
-      />
+      <Space size={2}>
+        <Typography.Text style={{ fontSize }} >Connect Wallet</Typography.Text>
+        <Divider type="vertical" />
+        <Button
+          type="primary"
+          icon={<Icon name="wallet-outline" />}
+          onClick={openWallet}
+        />
+      </Space>
       <Login />
     </Fragment>
-    return <Space size={2}>
+    return <Space size={0}>
+
       <Typography.Link
-        style={{ color: '#ffffffd9', fontSize: 12 }}
+        style={{ color: '#ffffffd9', fontSize }}
         href={util.explorer(address)}
         target="_blank"
       >{address.substring(0, 4) + '..'} <Icon name="open-outline" /></Typography.Link>
       <Divider type="vertical" />
       <Tooltip title={`${ssjs.undecimalize(lamports, 9)} SOL`}>
         <Typography.Text
-          style={{ fontSize: 12 }}
-        >{numeral(ssjs.undecimalize(lamports, 9)).format('0.[00]')} SOL</Typography.Text>
+          style={{ fontSize }}
+        >{balance} <span style={{ color: '#03E1FF' }}>◎</span></Typography.Text>
       </Tooltip>
       <Divider type="vertical" />
       <Button
@@ -73,6 +83,7 @@ class Wallet extends Component {
 }
 
 const mapStateToProps = state => ({
+  ui: state.ui,
   wallet: state.wallet,
 });
 
