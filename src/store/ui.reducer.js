@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import util from 'helpers/util';
 
 const getInfix = () => {
   const width = window.innerWidth;
@@ -14,6 +15,7 @@ const NAME = 'ui';
 const initialState = {
   width: window.innerWidth,
   infix: getInfix(),
+  touchable: util.isTouchable(),
   visibleControlCenter: false,
 }
 

@@ -1,9 +1,11 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { TouchBackend } from 'react-dnd-touch-backend';
 import isEqual from 'react-fast-compare';
 
 import { Row, Col } from 'sen-kit';
@@ -67,8 +69,10 @@ class Shelf extends Component {
   }
 
   render() {
+    const { ui: { touchable }, settings } = this.props;
     const { apps, draftItem: { current: { index: oldIndex }, next: { index: newIndex } } } = this.state;
-    return <DndProvider backend={HTML5Backend}>
+
+    return <DndProvider backend={touchable ? TouchBackend : HTML5Backend}>
       <Row gutter={[16, 16]}>
         {apps.map((appName, i) => <Fragment key={i}>
           {newIndex === i && oldIndex > newIndex ? <Spot /> : null}
@@ -77,9 +81,10 @@ class Shelf extends Component {
               page={0}
               index={i}
               name={appName}
-              onClick={() => this.uninstallApp(appName)}
+              onClose={() => this.uninstallApp(appName)}
               onHover={this.onHover}
               onDrop={this.onDrop}
+              disabled={!settings}
             />
           </Col>
           {newIndex === i && oldIndex < newIndex ? <Spot /> : null}
@@ -90,12 +95,21 @@ class Shelf extends Component {
 }
 
 const mapStateToProps = state => ({
+  ui: state.ui,
   babysitter: state.babysitter,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   updateApps
 }, dispatch);
+
+PropTypes.defaultProps = {
+  settings: false
+}
+
+PropTypes.propTypes = {
+  settings: PropTypes.bool
+}
 
 export default withRouter(connect(
   mapStateToProps,

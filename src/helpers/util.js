@@ -23,4 +23,10 @@ util.explorer = (addressOrTxId) => {
   return `https://explorer.solana.com/tx/${addressOrTxId}?cluster=${cluster}`;
 }
 
+util.isTouchable = () => {
+  return ('ontouchstart' in window) ||
+    (navigator.maxTouchPoints > 0) ||
+    (navigator.msMaxTouchPoints > 0);
+}
+
 export default util;

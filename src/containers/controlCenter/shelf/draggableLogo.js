@@ -2,12 +2,13 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { useDrag, useDrop } from 'react-dnd';
 
+import { Badge, Icon, Button } from 'sen-kit';
 import { DynamicLogo } from 'helpers/loader';
 
 const TYPE = 'logo';
 
-const DraggbleLogo = ({ page, index, name, onClick, onHover, onDrop }) => {
-  // Ref hook
+const DraggbleLogo = (props) => {
+  const { page, index, name, onClose, onClick, onHover, onDrop, disabled } = props;
   const ref = useRef(null);
   // Utility
   const inferPosition = (item, monitor) => {
@@ -55,16 +56,24 @@ const DraggbleLogo = ({ page, index, name, onClick, onHover, onDrop }) => {
     collect: monitor => ({ isOver: monitor.isOver() }),
   }));
   // Render
-  drag(drop(ref));
-  return <DynamicLogo
-    ref={ref}
-    name={name}
-    onClick={onClick}
-    style={{ opacity: isDragging ? 0.1 : 1 }}
-  />
+  if (!disabled) drag(drop(ref));
+  const badge = !disabled ? <Button type="primary" size="small" shape="circle" onClick={onClose}>
+    <Icon name="close-outline" />
+  </Button> : 0;
+  return <span ref={ref}>
+    <Badge count={badge}>
+      <DynamicLogo
+        name={name}
+        onClick={onClick}
+        style={{ opacity: isDragging ? 0.1 : 1 }}
+      />
+    </Badge>
+  </span>
 }
 
 DraggbleLogo.defaultProps = {
+  disabled: false,
+  onClose: () => { },
   onClick: () => { },
   onHover: () => { },
   onDrop: () => { },
@@ -74,6 +83,8 @@ DraggbleLogo.propTypes = {
   page: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
   name: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
+  onClose: PropTypes.func,
   onClick: PropTypes.func,
   onHover: PropTypes.func,
   onDrop: PropTypes.func,
