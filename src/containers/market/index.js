@@ -17,7 +17,7 @@ class Market extends Component {
     super();
 
     this.state = {
-      appNames: Object.keys(universe).map(id => universe[id].name)
+      appNames: Object.keys(universe).map(id => universe[id].appName)
     }
   }
 

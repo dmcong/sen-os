@@ -36,6 +36,7 @@
     "serve": "serve -s build -l 80",
     "universe": "node ./scripts/packageWatcher.js",
     "analyze": "npm run prod && source-map-explorer 'build/static/js/*.js'",
+    "postinstall": "find ./src/applications/* -name package.json -maxdepth 1 -execdir npm install \\;",
     "test": "craco test"
   },
   "eslintConfig": {

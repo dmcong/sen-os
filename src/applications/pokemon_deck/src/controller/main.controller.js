@@ -4,7 +4,7 @@ import pokemon from 'pokemon';
 import util from 'helpers/util';
 import metadata from '../../package.json';
 
-const NAME = util.normalizeAppName(metadata.name);
+const NAME = util.normalizeAppName(metadata.appName);
 const initialState = {
   name: pokemon.random(),
 }

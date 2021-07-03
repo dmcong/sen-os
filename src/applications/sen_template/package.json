@@ -1,5 +1,6 @@
 {
-  "name": "Sen Template",
+  "name": "sen_template",
+  "appName": "Sen Template",
   "version": "1.0.0",
   "description": "The application default template",
   "main": "index.js",

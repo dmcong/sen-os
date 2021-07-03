@@ -13,7 +13,7 @@ class SearchEngine {
       document: {
         id: 'id',
         index: [
-          { field: 'name', ...PRESET },
+          { field: 'appName', ...PRESET },
           { field: 'description', ...PRESET },
           { field: 'keywords', ...PRESET },
           { field: 'author:name', ...PRESET },
@@ -39,7 +39,7 @@ class SearchEngine {
         if (!ids.includes(id)) return ids.push(id);
       });
     });
-    return ids.map(id => this.universe[id].name);
+    return ids.map(id => this.universe[id].appName);
   }
 }
 

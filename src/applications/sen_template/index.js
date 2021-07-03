@@ -15,9 +15,9 @@ import model from './src/model';
 class Main extends Component {
   render() {
     const { ui, wallet } = this.props;
-    const { name, version, author: { email } } = metadata;
-    const db = createPDB(name);
-    return <ErrorBoundary name={name} version={version} email={email}>
+    const { appName, version, author: { email } } = metadata;
+    const db = createPDB(appName);
+    return <ErrorBoundary name={appName} version={version} email={email}>
       <Provider store={model}>
         <SenOsProvider senos={{ ui, wallet, db }}>
           <View />

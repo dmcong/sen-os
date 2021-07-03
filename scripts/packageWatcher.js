@@ -17,13 +17,16 @@ const normalizeAppName = (appName) => {
 const buildMetadata = (id) => {
   const dir = path.join(__dirname, `../src/applications/${id}/package.json`);
   const raw = fs.readFileSync(dir);
-  const { name, version, description, keywords, author, license } = JSON.parse(raw);
-  if (id != normalizeAppName(name)) {
-    printError(`Error: Cannot match the app name and the folder name: ${name} vs ${id}`);
+  const { name, appName, version, description, keywords, author, license } = JSON.parse(raw);
+  if (id != name) {
+    printError(`Error: Cannot match the module name and the folder name: ${name} vs ${id}`);
     process.exit(1);
   }
-  const metadata = { [id]: { name, version, description, keywords, author, license } };
-  return metadata;
+  if (id != normalizeAppName(appName)) {
+    printError(`Error: Cannot match the app name and the folder name: ${appName} vs ${id}`);
+    process.exit(1);
+  }
+  return { [id]: { appName, version, description, keywords, author, license } };
 }
 const readUniverse = () => {
   if (!fs.existsSync(universeDir)) return {}
@@ -39,10 +42,7 @@ const updateUniverse = (dir, unlink = false) => {
   let universe = readUniverse();
   // Handle changes
   if (unlink) delete universe[id];
-  else {
-    const metadata = buildMetadata(id);
-    universe = { ...universe, ...metadata }
-  }
+  else universe = { ...universe, ...buildMetadata(id) }
   // Update universe
   const data = JSON.stringify(universe, null, 2);
   fs.writeFileSync(universeDir, data);
