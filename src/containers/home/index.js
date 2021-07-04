@@ -4,7 +4,6 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 
 import { Row } from 'sen-kit';
-import Wallet from 'containers/wallet';
 
 import { DynamicApp } from 'helpers/loader';
 
@@ -14,7 +13,6 @@ class Home extends Component {
     const { babysitter: { apps } } = this.props;
 
     return <Row gutter={[16, 16]}>
-      <Wallet />
       {apps.map(appName => <DynamicApp key={appName} name={appName} />)}
     </Row>
   }

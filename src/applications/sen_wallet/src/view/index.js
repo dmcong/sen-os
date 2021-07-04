@@ -5,19 +5,21 @@ import { withRouter } from 'react-router-dom';
 import ssjs from 'senswapjs';
 import numeral from 'numeral';
 
-import { Row, Col, Typography, Widget, Tooltip } from 'sen-kit';
+import { Row, Col, Widget, Typography, Tooltip } from 'sen-kit';
 
 import util from 'helpers/util';
-import { connectWallet } from 'store/wallet.reducer';
+import { withSenOs } from 'helpers/context';
+import { updateTime } from '../controller/main.controller';
 
-class Wallet extends Component {
+
+class View extends Component {
   render() {
-    const { wallet: { address, lamports } } = this.props;
+    const { senos: { wallet: { address, lamports } } } = this.props;
 
-    return <Widget type="glass" size="small">
+    return <Widget type="glass">
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Typography.Title level={1}>Wallet</Typography.Title>
+          <Typography.Title level={1}>SenWallet</Typography.Title>
         </Col>
         <Col span={24}>
           <Typography.Link href={util.explorer(address)} target="_blank" ellipsis>{address.substring(0, 20) + '...'}</Typography.Link>
@@ -33,14 +35,14 @@ class Wallet extends Component {
 }
 
 const mapStateToProps = state => ({
-  wallet: state.wallet,
+  main: state.main,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  connectWallet,
+  updateTime
 }, dispatch);
 
 export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(Wallet));
+)(withSenOs(View)));

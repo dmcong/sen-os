@@ -1,11 +1,11 @@
 {
-  "name": "sen_template",
-  "appName": "Sen Template",
+  "name": "sen_wallet",
+  "appName": "Sen Wallet",
   "version": "1.0.0",
-  "description": "The application default template",
+  "description": "Sen Wallet for SPLT",
   "main": "index.js",
   "keywords": [
-    "template"
+    "wallet"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
