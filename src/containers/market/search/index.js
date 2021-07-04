@@ -30,6 +30,7 @@ class Search extends Component {
     const keywords = e.target.value;
     return this.setState({ keywords, loading: true }, () => {
       clearTimeout(this.searching);
+      if (!keywords) return this.setState({ appNames: [], loading: false });
       this.searching = setTimeout(() => {
         const appNames = this.engine.search(keywords);
         return this.setState({ appNames, loading: false });

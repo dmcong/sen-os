@@ -1,6 +1,6 @@
 const CracoAlias = require('craco-alias');
 const CracoLessPlugin = require('craco-less');
-const theme = require('./src/static/styles/theme.js');
+const theme = require('sen-kit/styles/theme.js');
 const { compilerOptions: { baseUrl } } = require('./jsconfig.json');
 
 
