@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -8,9 +8,9 @@ import { HTML5Backend } from 'react-dnd-html5-backend';
 import { TouchBackend } from 'react-dnd-touch-backend';
 import isEqual from 'react-fast-compare';
 
-import { Row, Col } from 'sen-kit';
+import { Row, Col, Button, Icon } from 'sen-kit';
 import DraggbleLogo from './draggableLogo';
-import Spot from './spot';
+import DroppableZone from './droppableZone';
 
 import { dropPDB } from 'helpers/pdb';
 import { loadApps, updateApps } from 'store/babysitter.reducer';
@@ -42,7 +42,7 @@ class Shelf extends Component {
 
   uninstallApp = async (appName) => {
     const { babysitter: { apps }, updateApps } = this.props;
-    const newApps = apps.filter(name => name !== appName);
+    const newApps = apps.map(page => page.filter(name => name !== appName));
     await updateApps(newApps);
     return await dropPDB(appName);
   }
@@ -50,44 +50,94 @@ class Shelf extends Component {
   onHover = (item) => {
     const { babysitter: { apps } } = this.props;
     const draftItem = JSON.parse(JSON.stringify(item));
-    let { next: { index } } = draftItem;
-    index = Math.min(Math.max(index, 0), apps.length - 1);
+    let { current: { page: oldPage }, next: { index, page: newPage } } = draftItem;
+    const sign = oldPage === newPage ? 1 : 0;
+    index = Math.max(Math.min(index, apps[newPage].length - sign), 0);
     draftItem.next.index = index;
     return this.setState({ draftItem });
   }
 
   onDrop = () => {
     const { babysitter: { apps: prevApps }, updateApps } = this.props;
-    const { draftItem } = this.state;
-    const { current: { index: oldIndex }, next: { index: newIndex } } = draftItem;
-    const apps = [...prevApps];
-    apps.splice(newIndex, 0, apps.splice(oldIndex, 1)[0]);
-    return this.setState({ apps, draftItem: { ...DEFAULT_ITEM } }, () => {
+    const { draftItem: {
+      current: { index: oldIndex, page: oldPage },
+      next: { index: newIndex, page: newPage } }
+    } = this.state;
+    let apps = prevApps.map(row => [...row]);
+    if (oldPage === newPage) {
+      let row = apps[oldPage];
+      row.splice(newIndex, 0, row.splice(oldIndex, 1)[0]);
+      apps[oldPage] = row;
+    }
+    else {
+      const appName = apps[oldPage][oldIndex];
+      apps[oldPage] = apps[oldPage].filter(name => name !== appName);
+      apps[newPage].splice(newIndex, 0, appName);
+    }
+    return this.setState({ draftItem: { ...DEFAULT_ITEM } }, () => {
       return updateApps(apps);
     });
   }
 
+  onAddPage = () => {
+    const { babysitter: { apps: prevApps }, updateApps } = this.props;
+    const apps = [...prevApps];
+    apps.push([]);
+    return updateApps(apps);
+  }
+
+  onRemovePage = (page) => {
+    const { babysitter: { apps: prevApps }, updateApps } = this.props;
+    const apps = prevApps.filter((row, i) => row.length || i !== page);
+    return updateApps(apps);
+  }
+
   render() {
     const { ui: { touchable }, settings, babysitter: { apps } } = this.props;
-    const { draftItem: { current: { index: oldIndex }, next: { index: newIndex } } } = this.state;
 
     return <DndProvider backend={touchable ? TouchBackend : HTML5Backend}>
       <Row gutter={[16, 16]}>
-        {apps.map((appName, i) => <Fragment key={i}>
-          {newIndex === i && oldIndex > newIndex ? <Spot /> : null}
-          <Col>
-            <DraggbleLogo
-              page={0}
-              index={i}
-              name={appName}
-              onClose={() => this.uninstallApp(appName)}
-              onHover={this.onHover}
-              onDrop={this.onDrop}
-              disabled={!settings}
-            />
-          </Col>
-          {newIndex === i && oldIndex < newIndex ? <Spot /> : null}
-        </Fragment>)}
+        {apps.map((row, page) => <Col
+          key={page}
+          span={24}
+          className={`zone ${settings ? 'active' : 'passive'}`}
+        >
+          <Row gutter={[16, 16]}>
+            {row.map((appName, index) => <Col key={index}>
+              <DraggbleLogo
+                page={page}
+                index={index}
+                name={appName}
+                onClose={() => this.uninstallApp(appName)}
+                onHover={this.onHover}
+                onDrop={this.onDrop}
+                disabled={!settings}
+              />
+            </Col>)}
+            {settings ? <Col flex="auto">
+              <DroppableZone
+                index={row.length}
+                page={page}
+                onClose={() => this.onRemovePage(page)}
+                onHover={this.onHover}
+                disabled={!settings}
+              />
+            </Col> : null}
+          </Row>
+        </Col>)}
+        {/* I want to add more */}
+        {settings ? <Col span={24}>
+          <Row gutter={[16, 16]}>
+            <Col>
+              <Button
+                type="text"
+                className="btnContained"
+                icon={<Icon name="add-outline" />}
+                onClick={this.onAddPage}
+              />
+            </Col>
+          </Row>
+        </Col> : null}
       </Row>
     </DndProvider>
   }

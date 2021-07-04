@@ -17,7 +17,7 @@ const AppGuard = ({ name }) => {
   const dispatch = useDispatch();
 
   const uninstallApp = useCallback(async () => {
-    const newApps = apps.filter(appName => appName !== name);
+    const newApps = apps.map(page => page.filter(appName => appName !== name));
     await dispatch(updateApps(newApps));
     return await dropPDB(name);
   }, [dispatch, name, apps]);

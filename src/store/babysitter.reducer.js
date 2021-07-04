@@ -7,7 +7,7 @@ const db = createPDB('senos');
 const NAME = 'babysitter';
 const initialState = {
   address: '',
-  apps: [],
+  apps: [[]],
 }
 
 /**
@@ -18,7 +18,7 @@ export const loadApps = createAsyncThunk(`${NAME}/loadApps`, async (address, { r
   if (!ssjs.isAddress(address)) return initialState;
   try {
     const collection = db.createInstance({ storeName: address });
-    const apps = await collection.getItem('apps') || [];
+    const apps = await collection.getItem('apps') || [[]];
     return { address, apps }
   } catch (er) {
     return rejectWithValue(er);

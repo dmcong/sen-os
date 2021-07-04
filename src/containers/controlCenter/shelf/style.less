@@ -1,8 +1,15 @@
-.spot {
-  width: 4px;
-  height: 64px;
-  border-radius: 2px;
-  background-color: #fff;
-  box-shadow: 0 0 7px #fff, 0 0 10px #fff, 0 0 21px #fff, 0 0 42px #0fa,
-    0 0 82px #0fa, 0 0 92px #0fa, 0 0 102px #0fa, 0 0 151px #0fa;
+.zone {
+  transition: all 0.25s ease-in-out;
+  &.active {
+    background-color: #fafafa11;
+    border-radius: 24px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  &.passive {
+    background-color: transparent;
+    border-radius: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
 }

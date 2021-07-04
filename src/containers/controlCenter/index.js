@@ -84,10 +84,7 @@ class ControlCenter extends Component {
         </Col>
         <Col span={24} style={{ height: 32 }} />
         <Col span={24} >
-          <Row gutter={[16, 16]} align="middle">
-            <Col flex="auto">
-              <Typography.Title level={5} style={{ margin: 0 }}>My Apps</Typography.Title>
-            </Col>
+          <Row gutter={[16, 16]} align="middle" justify="end">
             <Col>
               <Space>
                 <Typography.Title level={5} style={{ margin: 0 }}>Settings</Typography.Title>

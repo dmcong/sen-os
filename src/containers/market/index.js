@@ -23,9 +23,9 @@ class Market extends Component {
 
   installApp = async (appName) => {
     const { babysitter: { address, apps }, updateApps } = this.props;
-    if (!ssjs.isAddress(address) || apps.includes(appName)) return;
-    const newApps = [...apps];
-    newApps.push(appName);
+    if (!ssjs.isAddress(address) || apps.flat().includes(appName)) return;
+    const newApps = apps.map(page => [...page]);
+    newApps[newApps.length - 1].push(appName);
     return await updateApps(newApps);
   }
 
@@ -42,7 +42,7 @@ class Market extends Component {
         <Space size={24} align="start">
           {appNames.map(appName => <LogoInMarket
             key={appName}
-            installed={apps.includes(appName)}
+            installed={apps.flat().includes(appName)}
             name={appName}
             onClick={() => this.installApp(appName)}
           />)}

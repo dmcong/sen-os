@@ -79,7 +79,7 @@ class Search extends Component {
               <Space size={24} align="start">
                 {appNames.map(appName => <LogoInMarket
                   key={appName}
-                  installed={apps.includes(appName)}
+                  installed={apps.flat().includes(appName)}
                   name={appName}
                 />)}
               </Space>
