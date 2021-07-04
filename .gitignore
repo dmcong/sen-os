@@ -24,3 +24,4 @@ yarn-error.log*
 
 dist
 universe.json
+package-lock.json
