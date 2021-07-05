@@ -6,11 +6,10 @@ import ssjs from 'senswapjs';
 
 import { Row, Col, Space } from 'sen-kit';
 import Search from './search';
-import LogoInMarket from './logoInMarket'
+import LogoInMarket from './logoInMarket';
 
 import { updateApps } from 'store/babysitter.reducer';
 import universe from 'universe.json';
-
 
 class Market extends Component {
   constructor() {
