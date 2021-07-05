@@ -62,20 +62,20 @@ class ControlCenter extends Component {
             <Button
               type="text"
               className="btnContained"
-              onClick={() => this.to('/')}
+              onClick={() => this.to('/home')}
               icon={<Icon name="tv-outline" />}
-            />
-            <Button
-              type="text"
-              className="btnContained"
-              onClick={visibleControlCenter ? closeControlCenter : openControlCenter}
-              icon={<Icon name={visibleControlCenter ? 'close-outline' : 'grid-outline'} />}
             />
             <Button
               type="text"
               className="btnContained"
               onClick={() => this.to('/market')}
               icon={<Icon name="storefront-outline" />}
+            />
+            <Button
+              type="text"
+              className="btnContained"
+              onClick={visibleControlCenter ? closeControlCenter : openControlCenter}
+              icon={<Icon name={visibleControlCenter ? 'close-outline' : 'grid-outline'} />}
             />
           </Space>
         </Col>
