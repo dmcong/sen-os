@@ -4,7 +4,7 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 import isEqual from 'react-fast-compare';
 
-import { Row, Col } from 'sen-kit';
+import { Row, Col, Affix } from 'sen-kit';
 
 import DotPagination from 'components/dotPagination';
 
@@ -18,23 +18,24 @@ class Home extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { match: { params: prevParams } } = prevProps;
-    const { match: { params } } = this.props;
-    if (!isEqual(prevParams, params)) this.parseParams();
+    const { location: { search: prevSearch } } = prevProps;
+    const { location: { search } } = this.props;
+    if (!isEqual(prevSearch, search)) this.parseParams();
   }
 
   parseParams = () => {
-    const { babysitter: { apps }, match: { params: { page, appName } } } = this.props;
-    return {
-      total: apps.length,
-      page: Math.min(parseInt(page) || 0, apps.length - 1),
-      appName: appName || ''
-    }
+    const { babysitter: { apps }, location: { search } } = this.props;
+    const params = new URLSearchParams(search);
+    const total = apps.length;
+    const page = Math.min(parseInt(params.get('page')) || 0, apps.length - 1);
+    const appName = params.get('appName') || '';
+    const mode = params.get('mode') === 'full' ? 'full' : 'lite';
+    return { total, page, appName, mode }
   }
 
   onPage = (page) => {
     const { history } = this.props;
-    return history.push(`/home/${page}`);
+    return history.push(`/home?page=${page}`);
   }
 
   render() {
@@ -45,11 +46,13 @@ class Home extends Component {
       <Col span={24}>
         <Row gutter={[16, 16]} justify="center">
           <Col>
-            <DotPagination
-              total={total}
-              page={page}
-              onClick={this.onPage}
-            />
+            <Affix offsetTop={10}>
+              <DotPagination
+                total={total}
+                page={page}
+                onClick={this.onPage}
+              />
+            </Affix>
           </Col>
         </Row>
       </Col>

@@ -18,7 +18,7 @@ class App extends Component {
         <Row gutter={[16, 16]} justify="center">
           <Col span={24} style={{ maxWidth: 1440 }}>
             <Switch>
-              <Route path='/home/:page?/:appName?' component={Home} />
+              <Route exact path='/home' component={Home} />
               <Route exact path='/market' component={Market} />
               <Redirect from='*' to={'/home'} />
             </Switch>
