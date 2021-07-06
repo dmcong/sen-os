@@ -2,19 +2,23 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
-
-import { Row, Col, Space } from 'sen-kit';
-import Search from './search';
-import AppLogoInMarket from './appLogoInMarket';
-
 import universe from 'universe.json';
+
+import { Row, Col } from 'sen-kit';
+import Search from './search';
+import HeroPanel from './heroPanel';
+import CategoryCard from './categoryCard';
+import Community from './community';
+import Foundation from './foundation';
+
 
 class Market extends Component {
   constructor() {
     super();
 
     this.state = {
-      appNames: Object.keys(universe).map(id => universe[id].appName)
+      appNames: Object.keys(universe).map(id => universe[id].appName),
+      categories: ['SenSwap', 'Fun', 'Pokemon', 'Tu Phan']
     }
   }
 
@@ -24,31 +28,53 @@ class Market extends Component {
     return history.push(`/market/${subRoute}`);
   }
 
+  search = (keyword) => {
+    if (!keyword) return;
+    const { history } = this.props;
+    const subRoute = encodeURI(keyword.toLowerCase());
+    return history.push(`/market?search=${subRoute}`);
+  }
+
   render() {
-    const { appNames } = this.state;
-    const { babysitter: { apps } } = this.props;
+    const { categories } = this.state;
 
     return <Row gutter={[16, 16]}>
       <Col span={24}>
         <Search />
       </Col>
-      <Col span={24} style={{ height: 32 }} />
+      <Col span={24} /> {/* Spacing */}
       <Col span={24}>
-        <Space size={24} align="start">
-          {appNames.map(appName => <AppLogoInMarket
-            key={appName}
-            installed={apps.flat().includes(appName)}
-            name={appName}
-            onClick={() => this.to(appName)}
-          />)}
-        </Space>
+        <HeroPanel />
+      </Col>
+      <Col span={24}>
+        <Row gutter={[16, 16]}>
+          {categories.map((category, i) => <Col
+            key={i}
+            xs={{ span: 24 }}
+            sm={{ span: 12 }}
+            md={{ span: 8 }}
+            xl={{ span: 6 }}
+          >
+            <CategoryCard 
+            category={category}
+             onClick={() => this.search(category)} 
+             />
+          </Col>)}
+        </Row>
+      </Col>
+      <Col span={24} style={{ height: 32 }} /> {/* Spacing */}
+      <Col span={24}>
+        <Community />
+      </Col>
+      <Col span={24} style={{ height: 32 }} /> {/* Spacing */}
+      <Col span={24}>
+        <Foundation />
       </Col>
     </Row >
   }
 }
 
 const mapStateToProps = state => ({
-  babysitter: state.babysitter,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

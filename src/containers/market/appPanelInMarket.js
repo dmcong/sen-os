@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Row, Col, Typography, Button, Icon, Space } from 'sen-kit';
+import { Row, Col, Typography, Button, Icon } from 'sen-kit';
 
 import metadata, { DynamicPanel } from 'helpers/loader';
 
@@ -14,14 +14,13 @@ const AppPanelInMarket = ({ appName, onClick }) => {
       <div className="result-card-mask">
         <Row gutter={[8, 8]} align="middle" justify="center">
           <Col>
-            <Space>
-              <Button
-                type="text"
-                size="large"
-                shape="circle"
-                icon={<Icon name="eye-outline" />}
-              />
-            </Space>
+            <Button
+              type="text"
+              size="large"
+              shape="circle"
+              icon={<Icon name="eye-outline" />}
+              onClick={onClick}
+            />
           </Col>
         </Row>
       </div>

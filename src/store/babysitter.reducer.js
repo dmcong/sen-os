@@ -3,6 +3,11 @@ import ssjs from 'senswapjs';
 import { createPDB } from 'helpers/pdb';
 
 const db = createPDB('senos');
+const troubleshoot = (apps) => {
+  if (!apps || !Array.isArray(apps)) return [[]];
+  if (!apps.length) return [[]];
+  return apps.map(row => row.filter(appName => appName));
+}
 
 const NAME = 'babysitter';
 const initialState = {
@@ -18,7 +23,7 @@ export const loadApps = createAsyncThunk(`${NAME}/loadApps`, async (address, { r
   if (!ssjs.isAddress(address)) return initialState;
   try {
     const collection = db.createInstance({ storeName: address });
-    const apps = await collection.getItem('apps') || [[]];
+    const apps = troubleshoot(await collection.getItem('apps'));
     return { address, apps }
   } catch (er) {
     return rejectWithValue(er);

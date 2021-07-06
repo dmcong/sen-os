@@ -5,7 +5,7 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 import ssjs from 'senswapjs';
 
-import { Row, Col, Button, Icon } from 'sen-kit';
+import { Row, Col, Button, Icon, Card } from 'sen-kit';
 import Markdown from 'components/markdown';
 
 import { dropPDB } from 'helpers/pdb';
@@ -52,7 +52,9 @@ class Description extends Component {
         >Install</Button>}
       </Col>
       <Col span={24}>
-        <Markdown appName={appName} />
+        <Card>
+          <Markdown appName={appName} />
+        </Card>
       </Col>
     </Row >
   }
