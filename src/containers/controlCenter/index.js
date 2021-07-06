@@ -4,14 +4,10 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import isEqual from 'react-fast-compare';
 
-import {
-  Row, Col, Brand, Button, Icon, Switch, Space, Drawer,
-  Typography, Divider
-} from 'sen-kit';
+import { Row, Col, Icon, Switch, Space, Drawer, Typography, Divider, Card } from 'sen-kit';
+import Navigation from './navigation';
 import Shelf from './shelf';
-import Wallet from './wallet';
 
-import { openControlCenter, closeControlCenter } from 'store/ui.reducer';
 import './style.less';
 
 
@@ -41,7 +37,7 @@ class ControlCenter extends Component {
   }
 
   render() {
-    const { ui: { infix, visibleControlCenter }, openControlCenter, closeControlCenter } = this.props;
+    const { ui: { visibleControlCenter } } = this.props;
     const { settings } = this.state;
 
     return <Drawer
@@ -54,52 +50,30 @@ class ControlCenter extends Component {
       visible
     >
       <Row gutter={[16, 16]} align="middle" justify="space-between">
-        <Col>
-          <Space size={infix === 'xs' ? 'small' : 'middle'}>
-            <span style={{ marginLeft: -7 }}>
-              <Brand size={32} lite={infix === 'xs'} />
-            </span>
-            <Button
-              type="text"
-              className="btnContained"
-              onClick={() => this.to('/home')}
-              icon={<Icon name="tv-outline" />}
-            />
-            <Button
-              type="text"
-              className="btnContained"
-              onClick={() => this.to('/market')}
-              icon={<Icon name="storefront-outline" />}
-            />
-            <Button
-              type="text"
-              className="btnContained"
-              onClick={visibleControlCenter ? closeControlCenter : openControlCenter}
-              icon={<Icon name={visibleControlCenter ? 'close-outline' : 'grid-outline'} />}
-            />
-          </Space>
+        <Col span={24}>
+          <Navigation />
         </Col>
-        <Col>
-          <Wallet />
-        </Col>
-        <Col span={24} style={{ height: 32 }} />
+        <Col span={24} />
         <Col span={24} >
-          <Row gutter={[16, 16]} align="middle" justify="end">
+          <Row gutter={[16, 16]} justify="center">
             <Col>
-              <Space>
-                <Typography.Title level={5} style={{ margin: 0 }}>Settings</Typography.Title>
-                <Divider type="vertical" />
-                <Switch
-                  size="small"
-                  checkedChildren={<Icon name="cog-outline" />}
-                  unCheckedChildren={<Icon name="cog-outline" />}
-                  checked={settings}
-                  onChange={this.onSettings}
-                />
-              </Space>
+              <Card hoverable>
+                <Space>
+                  <Typography.Text style={{ margin: 0 }}>Personalize your workspace here</Typography.Text>
+                  <Divider type="vertical" />
+                  <Switch
+                    size="small"
+                    checkedChildren={<Icon name="cog-outline" />}
+                    unCheckedChildren={<Icon name="cog-outline" />}
+                    checked={settings}
+                    onChange={this.onSettings}
+                  />
+                </Space>
+              </Card>
             </Col>
           </Row >
         </Col>
+        <Col span={24} />
         <Col span={24}>
           <Shelf settings={settings} />
         </Col>
@@ -113,7 +87,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  openControlCenter, closeControlCenter,
 }, dispatch);
 
 export default withRouter(connect(

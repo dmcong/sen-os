@@ -3,20 +3,18 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 
-import { Row, Col, Widget } from 'sen-kit';
+import { Row, Col } from 'sen-kit';
 
 import Deck from './deck';
 
 
 class View extends Component {
   render() {
-    return <Widget size="medium" type="glass">
-      <Row gutter={[16, 16]}>
-        <Col span={24}>
-          <Deck />
-        </Col>
-      </Row>
-    </Widget>
+    return <Row gutter={[16, 16]}>
+      <Col span={24}>
+        <Deck />
+      </Col>
+    </Row>
   }
 }
 

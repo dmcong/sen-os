@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import fileDownload from 'js-file-download';
 import ssjs from 'senswapjs';
+import isEqual from 'react-fast-compare';
 
 import { Row, Col, Icon, Button, Typography, Input, Modal } from 'sen-kit';
 
@@ -13,9 +14,18 @@ class NewKeyStore extends Component {
     this.state = {
       password: '',
       keystore: {},
-      visible: false,
       visiblePassword: false,
     }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { visible: prevVisible } = prevProps;
+    const { visible } = this.props;
+    if (!isEqual(prevVisible, visible) && visible) return this.setState({
+      password: '',
+      keystore: {},
+      visiblePassword: false,
+    });
   }
 
   onPassword = (e) => {
@@ -85,7 +95,7 @@ class NewKeyStore extends Component {
 
 NewKeyStore.defaultProps = {
   visible: false,
-  onClose: 'small',
+  onClose: () => { },
 }
 
 NewKeyStore.propTypes = {

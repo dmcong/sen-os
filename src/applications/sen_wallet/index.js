@@ -3,6 +3,8 @@ import { Provider, connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 
+import { Widget } from 'sen-kit';
+
 import { createPDB } from 'helpers/pdb';
 import { SenOsProvider } from 'helpers/context';
 import ErrorBoundary from 'components/errorBoundary';
@@ -20,7 +22,9 @@ class Main extends Component {
     return <ErrorBoundary name={appName} version={version} email={email}>
       <Provider store={model}>
         <SenOsProvider senos={{ ui, wallet, db }}>
-          <View />
+          <Widget type="glass" size="small">
+            <View />
+          </Widget>
         </SenOsProvider>
       </Provider>
     </ErrorBoundary>
