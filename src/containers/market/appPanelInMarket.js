@@ -5,7 +5,7 @@ import { Row, Col, Typography, Button, Icon, Space } from 'sen-kit';
 
 import metadata, { DynamicPanel } from 'helpers/loader';
 
-const Result = ({ appName, onClick }) => {
+const AppPanelInMarket = ({ appName, onClick }) => {
   const { description } = metadata(appName);
   const typoMargin = { margin: '4px 8px' }
   return <Row gutter={[8, 8]}>
@@ -33,13 +33,13 @@ const Result = ({ appName, onClick }) => {
   </Row>
 }
 
-Result.defaultProps = {
+AppPanelInMarket.defaultProps = {
   onClick: () => { },
 }
 
-Result.propTypes = {
+AppPanelInMarket.propTypes = {
   appName: PropTypes.string.isRequired,
   onClick: PropTypes.func,
 }
 
-export default Result;
+export default AppPanelInMarket;

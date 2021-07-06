@@ -8,7 +8,7 @@ import { Row, Col, Card, Input, Icon, Button, Typography, Space } from 'sen-kit'
 
 import Keyword from './keyword';
 import SearchEngine from './engine';
-import Result from './result';
+import AppPanelInMarket from '../appPanelInMarket';
 import './style.less';
 
 
@@ -95,7 +95,7 @@ class Search extends Component {
               md={{ span: 8 }}
               lg={{ span: 6 }}
             >
-              <Result appName={appName} onClick={() => this.to(appName)} />
+              <AppPanelInMarket appName={appName} onClick={() => this.to(appName)} />
             </Col>)}
           </Row>
         </Card>

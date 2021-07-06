@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 
 import { Row, Col, Space } from 'sen-kit';
 import Search from './search';
-import LogoInMarket from './logoInMarket';
+import AppLogoInMarket from './appLogoInMarket';
 
 import universe from 'universe.json';
 
@@ -35,7 +35,7 @@ class Market extends Component {
       <Col span={24} style={{ height: 32 }} />
       <Col span={24}>
         <Space size={24} align="start">
-          {appNames.map(appName => <LogoInMarket
+          {appNames.map(appName => <AppLogoInMarket
             key={appName}
             installed={apps.flat().includes(appName)}
             name={appName}
