@@ -3,6 +3,16 @@ import React, { Suspense, lazy, useMemo, forwardRef } from 'react';
 import util from 'helpers/util';
 import AppLoading from 'components/appLoading';
 import AppLogo from 'components/appLogo';
+import AppPanel from 'components/appPanel';
+
+const metadata = (appName) => {
+  const folderName = util.normalizeAppName(appName);
+  try {
+    return require(`applications/${folderName}/package.json`);
+  } catch (er) {
+    return {}
+  }
+}
 
 /**
  * Logo Loader
@@ -12,6 +22,16 @@ const DynamicLogo = forwardRef(({ name, ...others }, ref) => {
   let src = '';
   try { src = require(`applications/${folderName}/assets/icon.png`).default } catch (er) { /* Nothing */ }
   return <AppLogo name={name} src={src} {...others} ref={ref} />
+});
+
+/**
+ * Panel Loader
+ */
+const DynamicPanel = forwardRef(({ appName, ...others }, ref) => {
+  const folderName = util.normalizeAppName(appName);
+  let src = '';
+  try { src = require(`applications/${folderName}/assets/panel.png`).default } catch (er) { /* Nothing */ }
+  return <AppPanel appName={appName} src={src} {...others} ref={ref} />
 });
 
 /**
@@ -31,4 +51,5 @@ const DynamicApp = forwardRef(({ name }, ref) => {
   </Suspense>
 });
 
-export { DynamicApp, DynamicLogo }
+export { DynamicLogo, DynamicPanel, DynamicApp }
+export default metadata;

@@ -2,13 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
-import ssjs from 'senswapjs';
 
 import { Row, Col, Space } from 'sen-kit';
 import Search from './search';
 import LogoInMarket from './logoInMarket';
 
-import { updateApps } from 'store/babysitter.reducer';
 import universe from 'universe.json';
 
 class Market extends Component {
@@ -20,12 +18,10 @@ class Market extends Component {
     }
   }
 
-  installApp = async (appName) => {
-    const { babysitter: { address, apps }, updateApps } = this.props;
-    if (!ssjs.isAddress(address) || apps.flat().includes(appName)) return;
-    const newApps = apps.map(page => [...page]);
-    newApps[newApps.length - 1].push(appName);
-    return await updateApps(newApps);
+  to = (appName = '') => {
+    const { history } = this.props;
+    const subRoute = encodeURI(appName)
+    return history.push(`/market/${subRoute}`);
   }
 
   render() {
@@ -43,7 +39,7 @@ class Market extends Component {
             key={appName}
             installed={apps.flat().includes(appName)}
             name={appName}
-            onClick={() => this.installApp(appName)}
+            onClick={() => this.to(appName)}
           />)}
         </Space>
       </Col>
@@ -56,7 +52,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  updateApps,
 }, dispatch);
 
 export default withRouter(connect(

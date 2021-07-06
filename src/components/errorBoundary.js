@@ -46,7 +46,7 @@ class ErrorBoundary extends Component {
           <p align="center">Version {version}</p>
         </Col>
         <Col span={24}>
-          <p align="center">Oops! The application couldn't load properly</p>
+          <p align="center">Oops! The application can't load properly</p>
         </Col>
         <Col span={12}>
           <Button

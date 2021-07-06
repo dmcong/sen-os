@@ -50,6 +50,7 @@ const AppLogo = forwardRef(({ name, src, title, style: userStyle, ...others }, r
 
 AppLogo.defaultProps = {
   title: true,
+  src: '',
 }
 
 AppLogo.propTypes = {

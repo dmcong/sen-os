@@ -9,6 +9,7 @@ import UiUx from 'containers/uiux';
 import ControlCenter from 'containers/controlCenter';
 import Home from 'containers/home';
 import Market from 'containers/market';
+import AppViewer from 'containers/market/appViewer';
 
 
 class App extends Component {
@@ -20,6 +21,7 @@ class App extends Component {
             <Switch>
               <Route exact path='/home' component={Home} />
               <Route exact path='/market' component={Market} />
+              <Route exact path='/market/:appName' component={AppViewer} />
               <Redirect from='*' to={'/home'} />
             </Switch>
           </Col>

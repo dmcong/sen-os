@@ -2,26 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
-import isEqual from 'react-fast-compare';
 
 import { Row, Col, Affix } from 'sen-kit';
-
 import DotPagination from 'components/dotPagination';
 
 import { DynamicApp } from 'helpers/loader';
 
 
 class Home extends Component {
-
-  componentDidMount() {
-    this.parseParams();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { location: { search: prevSearch } } = prevProps;
-    const { location: { search } } = this.props;
-    if (!isEqual(prevSearch, search)) this.parseParams();
-  }
 
   parseParams = () => {
     const { babysitter: { apps }, location: { search } } = this.props;
