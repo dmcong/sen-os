@@ -18,7 +18,7 @@ class Market extends Component {
 
     this.state = {
       appNames: Object.keys(universe).map(id => universe[id].appName),
-      categories: ['SenSwap', 'Fun', 'Pokemon', 'Tu Phan']
+      categories: ['Swap', 'Fun', 'Pokemon', 'Tu Phan']
     }
   }
 

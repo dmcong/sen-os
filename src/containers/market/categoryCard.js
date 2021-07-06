@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import { Row, Col, Card, Typography, Avatar } from 'sen-kit';
 
 const CategoryCard = ({ category, onClick }) => {
-  const size = parseInt(Math.random() * 10) * 100;
-  const src = `https://source.unsplash.com/${size}x${size}/?abstract`;
+  const src = `https://source.unsplash.com/random/?${category}`;
   return <Card hoverable onClick={onClick}>
     <Row gutter={[16, 16]} align="middle" wrap={false}>
       <Col flex="auto">
