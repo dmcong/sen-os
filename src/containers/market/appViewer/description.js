@@ -41,7 +41,8 @@ class Description extends Component {
     return <Row gutter={[16, 16]}>
       <Col span={24}>
         {this.isInstalled() ? <Button
-          type="secondary"
+          type="text"
+          className="btnContained"
           icon={<Icon name="trash-outline" />}
           onClick={this.uninstallApp}
         >Uninstall</Button> : <Button

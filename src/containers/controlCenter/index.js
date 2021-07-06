@@ -59,7 +59,7 @@ class ControlCenter extends Component {
             <Col>
               <Card hoverable>
                 <Space>
-                  <Typography.Text style={{ margin: 0 }}>Personalize your workspace here</Typography.Text>
+                  <Typography.Text style={{ margin: 0 }}>Let's customize your workspace!</Typography.Text>
                   <Divider type="vertical" />
                   <Switch
                     size="small"

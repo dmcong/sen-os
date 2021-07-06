@@ -8,7 +8,8 @@ import { Row, Col, Card, Input, Icon, Button, Typography, Space } from 'sen-kit'
 
 import Keyword from './keyword';
 import SearchEngine from './engine';
-import LogoInMarket from '../logoInMarket';
+import Result from './result';
+import './style.less';
 
 
 const KEYWORDS = ['tuphan', 'fun', 'swap'];
@@ -38,14 +39,22 @@ class Search extends Component {
     });
   }
 
+  to = (appName = '') => {
+    const { history } = this.props;
+    const subRoute = encodeURI(appName)
+    return history.push(`/market/${subRoute}`);
+  }
+
   render() {
-    const { babysitter: { apps } } = this.props;
     const { loading, keywords, appNames } = this.state;
 
-    return <Row gutter={[16, 16]} justify="center">
+    return <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Card bordered={false} bodyStyle={{ padding: 8 }}>
-          <Row gutter={[16, 16]} justify="end">
+        <Card
+          className={`search-card ${keywords ? 'active' : 'passive'}`}
+          bordered={false}
+        >
+          <Row gutter={[16, 16]}>
             <Col span={24}>
               <Input
                 placeholder="keywords #1, keywords #2, ... "
@@ -65,25 +74,29 @@ class Search extends Component {
                 onChange={this.onSearch}
               />
             </Col>
-            <Col>
-              <Space>
-                <Typography.Text>Popular:</Typography.Text>
-                {KEYWORDS.map(keyword => <Keyword
-                  key={keyword}
-                  title={keyword}
-                  onClick={() => this.onSearch({ target: { value: keyword } })}
-                />)}
-              </Space>
-            </Col>
             <Col span={24}>
-              <Space size={24} align="start">
-                {appNames.map(appName => <LogoInMarket
-                  key={appName}
-                  installed={apps.flat().includes(appName)}
-                  name={appName}
-                />)}
-              </Space>
+              <Row gutter={[16, 16]} justify="end">
+                <Col>
+                  <Space>
+                    <Typography.Text>Popular:</Typography.Text>
+                    {KEYWORDS.map(keyword => <Keyword
+                      key={keyword}
+                      title={keyword}
+                      onClick={() => this.onSearch({ target: { value: keyword } })}
+                    />)}
+                  </Space>
+                </Col>
+              </Row>
             </Col>
+            {appNames.map(appName => <Col
+              key={appName}
+              xs={{ span: 24 }}
+              sm={{ span: 12 }}
+              md={{ span: 8 }}
+              lg={{ span: 6 }}
+            >
+              <Result appName={appName} onClick={() => this.to(appName)} />
+            </Col>)}
           </Row>
         </Card>
       </Col>
@@ -92,7 +105,6 @@ class Search extends Component {
 }
 
 const mapStateToProps = state => ({
-  babysitter: state.babysitter,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

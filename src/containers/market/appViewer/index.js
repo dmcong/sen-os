@@ -35,10 +35,11 @@ class AppViewer extends Component {
   render() {
     const { appName } = this.parseParams();
 
-    return <Row gutter={[32, 32]}>
+    return <Row gutter={[16, 16]}>
       <Col span={24}>
         <Button
           type="text"
+          size="large"
           icon={<Icon name="arrow-back-outline" />}
           onClick={this.back}
         >Back</Button>

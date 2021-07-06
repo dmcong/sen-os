@@ -1,0 +1,12 @@
+.search-card {
+  transition: all 0.25s ease-in-out;
+  &.active {
+    min-height: calc(100vh - 80px);
+  }
+  &.passive {
+    min-height: 100%;
+  }
+  & > .ant-card-body {
+    padding: 8px;
+  }
+}

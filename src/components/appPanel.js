@@ -22,23 +22,15 @@ const AppPanel = forwardRef(({ appName, src }, ref) => {
     backgroundSize: 'cover',
   } : { backgroundColor: bgColor }
   // Render
-  return <div
-    style={{
-      width: '100%',
-      display: 'block',
-      borderRadius: 16,
-      ...bg
-    }}
-    ref={ref}
-  >
+  return <div style={{ width: '100%', borderRadius: 16, ...bg }} ref={ref}>
     <div style={{ width: '100%', paddingTop: '75%' }} />
     {src ? null : <div style={{
+      width: '100%',
       position: 'absolute',
       top: 'calc(50% - 23px)',
       left: 0,
       verticalAlign: 'center',
       textAlign: 'center',
-      width: '100%'
     }}>
       <Typography.Title
         level={1}
