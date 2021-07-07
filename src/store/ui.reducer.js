@@ -46,10 +46,10 @@ export const notify = createAsyncThunk(`${NAME}/notify`, async (
   if (!type) return rejectWithValue('Notification type is not provided');
   if (!description) return rejectWithValue('Description is not provided');
   // Parse icon
-  let icon = <Icon name="information-circle-outline" style={{ color: '#37CDFA' }} />
-  if (type === 'error') icon = <Icon name="close-circle-outline" style={{ color: '#F2323F' }} />
-  if (type === 'warning') icon = <Icon name="alert-circle-outline" style={{ color: '#FCB017' }} />
-  if (type === 'success') icon = <Icon name="checkmark-circle-outline" style={{ color: '#3DBA4E' }} />
+  let icon = <Icon name="information-circle" style={{ color: '#374FC7' }} />
+  if (type === 'error') icon = <Icon name="alert-circle" style={{ color: '#F2323F' }} />
+  if (type === 'warning') icon = <Icon name="warning" style={{ color: '#FCB017' }} />
+  if (type === 'success') icon = <Icon name="checkmark-circle" style={{ color: '#3DBA4E' }} />
   notification[type]({
     message: type.toUpperCase(),
     description,
