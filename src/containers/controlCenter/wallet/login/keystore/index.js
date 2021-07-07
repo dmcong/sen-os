@@ -8,6 +8,7 @@ import { Row, Col, Space, Icon, Button, Typography, Input } from 'sen-kit';
 
 import NewKeyStore from './newKeystore';
 import { connectWallet } from 'store/wallet.reducer';
+import { notify } from 'store/ui.reducer';
 
 
 class KeyStore extends Component {
@@ -46,12 +47,12 @@ class KeyStore extends Component {
 
   connect = async () => {
     const { password, keystore } = this.state;
-    const { setError, connectWallet } = this.props;
-    if (!keystore) return setError('Please upload your keystore');
-    if (!password) return setError('Please enter your password to unlock your wallet');
+    const { notify, connectWallet } = this.props;
+    if (!keystore) return notify({ type: 'warning', description: 'Please upload your keystore' });
+    if (!password) return notify({ type: 'warning', description: 'Please enter your password to unlock your wallet' });
     const wallet = new KeystoreWallet(keystore, password);
-    const { error } = await connectWallet(wallet);
-    if (error) setError(error.message);
+    const { error, payload } = await connectWallet(wallet);
+    if (error) return notify({ type: 'error', description: payload });
   }
 
   onOpen = () => this.setState({ visible: true });
@@ -123,6 +124,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   connectWallet,
+  notify,
 }, dispatch);
 
 export default withRouter(connect(

@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { notification, Icon } from 'sen-kit';
 import util from 'helpers/util';
 
 const getInfix = () => {
@@ -39,6 +40,26 @@ export const closeControlCenter = createAsyncThunk(`${NAME}/closeControlCenter`,
   return { visibleControlCenter: false }
 });
 
+export const notify = createAsyncThunk(`${NAME}/notify`, async (
+  { type, description, onClick }, { rejectWithValue }
+) => {
+  if (!type) return rejectWithValue('Notification type is not provided');
+  if (!description) return rejectWithValue('Description is not provided');
+  // Parse icon
+  let icon = <Icon name="information-circle-outline" style={{ color: '#37CDFA' }} />
+  if (type === 'error') icon = <Icon name="close-circle-outline" style={{ color: '#F2323F' }} />
+  if (type === 'warning') icon = <Icon name="alert-circle-outline" style={{ color: '#FCB017' }} />
+  if (type === 'success') icon = <Icon name="checkmark-circle-outline" style={{ color: '#3DBA4E' }} />
+  notification[type]({
+    message: type.toUpperCase(),
+    description,
+    onClick,
+    closeIcon: <Icon name="close-outline" />,
+    icon,
+  });
+  return {}
+});
+
 /**
  * Usual procedure
  */
@@ -50,6 +71,7 @@ const slice = createSlice({
     .addCase(resize.fulfilled, (state, { payload }) => void Object.assign(state, payload))
     .addCase(openControlCenter.fulfilled, (state, { payload }) => void Object.assign(state, payload))
     .addCase(closeControlCenter.fulfilled, (state, { payload }) => void Object.assign(state, payload))
+    .addCase(notify.fulfilled, (state, { payload }) => void Object.assign(state, payload))
 });
 
 export default slice.reducer;

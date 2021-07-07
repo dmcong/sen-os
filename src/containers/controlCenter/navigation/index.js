@@ -30,7 +30,7 @@ class Navigation extends Component {
             type="text"
             className="btnContained"
             onClick={() => this.to('/home')}
-            icon={<Icon name="tv-outline" />}
+            icon={<Icon name="ellipse-outline" />}
           />
           <Button
             type="text"

@@ -8,17 +8,21 @@ import { Row, Col, Button, Typography, Icon, Avatar, Space } from 'sen-kit';
 
 import COIN98 from 'static/images/coin98.png';
 import { connectWallet } from 'store/wallet.reducer';
+import { notify } from 'store/ui.reducer';
 
 
 class Coin98 extends Component {
 
   connect = async () => {
-    const { connectWallet, setError } = this.props;
+    const { connectWallet, notify } = this.props;
     const { coin98 } = window;
-    if (!coin98) return console.log('Coin98 Wallet is not installed. If this is the first time you install Coin98 wallet, please restart your browser to finish the setup.');
+    if (!coin98) return notify({
+      type: 'warning',
+      description: 'Coin98 Wallet is not installed. If this is the first time you install Coin98 wallet, please restart your browser to finish the setup.'
+    });
     const wallet = new Coin98Wallet();
-    const { error } = await connectWallet(wallet);
-    if (error) setError(error.message);
+    const { error, payload } = await connectWallet(wallet);
+    if (error) return notify({ type: 'error', description: payload });
   }
 
   render() {
@@ -50,6 +54,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   connectWallet,
+  notify,
 }, dispatch);
 
 export default withRouter(connect(

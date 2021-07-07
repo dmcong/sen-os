@@ -7,6 +7,7 @@ import ssjs, { SecretKeyWallet } from 'senswapjs';
 import { Row, Col, Typography, Input, Icon, Button, Space } from 'sen-kit';
 
 import { connectWallet } from 'store/wallet.reducer';
+import { notify } from 'store/ui.reducer';
 
 
 class SecretKey extends Component {
@@ -24,12 +25,12 @@ class SecretKey extends Component {
   }
 
   connect = async () => {
-    const { setError, connectWallet } = this.props;
+    const { notify, connectWallet } = this.props;
     const { secretKey } = this.state;
-    if (!secretKey) return setError('The secret key cannot be empty');
+    if (!secretKey) return notify({ type: 'error', description: 'The secret key cannot be empty' });
     const wallet = new SecretKeyWallet(secretKey);
-    const { error } = await connectWallet(wallet);
-    if (error) setError(error.message);
+    const { error, payload } = await connectWallet(wallet);
+    if (error) return notify({ type: 'error', description: payload });
   }
 
   onGen = () => {
@@ -82,6 +83,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   connectWallet,
+  notify,
 }, dispatch);
 
 export default withRouter(connect(
