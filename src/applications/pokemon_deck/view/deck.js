@@ -4,10 +4,10 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 
 import { Row, Col, Button, Icon, Space, Tooltip } from 'sen-kit';
-import { withSenOs } from 'helpers/context';
+import { withSenOs } from 'helpers/senos';
 
 import Pokemon from './pokemon';
-import { choosePokemon } from '../controller/main.controller';
+import { choosePokemon } from '@/pokemon_deck/controller/main.controller';
 
 
 class Deck extends Component {

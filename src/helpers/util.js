@@ -29,4 +29,8 @@ util.isTouchable = () => {
     (navigator.msMaxTouchPoints > 0);
 }
 
+util.asyncWait = (ms) => {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 export default util;

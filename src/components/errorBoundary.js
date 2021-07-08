@@ -1,9 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { withRouter } from 'react-router-dom';
 
 import { Row, Col, Typography, Widget, Button, Icon } from 'sen-kit';
 
+import { dropPDB } from 'helpers/pdb';
 import { DynamicLogo } from 'helpers/loader';
+import { updateApps } from 'store/babysitter.reducer';
 
 
 /**
@@ -23,26 +28,29 @@ class ErrorBoundary extends Component {
     return this.setState({ error, info });
   }
 
-  remove = () => {
-    // Not yet
+  uninstallApp = async () => {
+    const { babysitter: { apps }, updateApps, appName } = this.props;
+    const newApps = apps.map(page => page.filter(name => name !== appName));
+    await updateApps(newApps);
+    return await dropPDB(appName);
   }
 
   support = () => {
-    const { email, name } = this.props;
-    return window.open(`mailto:${email}?subject=${name} has failed`, '_blank');
+    const { email, appName } = this.props;
+    return window.open(`mailto:${email}?subject=${appName} has failed`, '_blank');
   }
 
   render() {
     const { error } = this.state;
-    const { name, version } = this.props;
+    const { appName, version, children } = this.props;
 
-    if (error) return <Widget type="glass">
+    if (error || !children) return <Widget type="glass">
       <Row gutter={[8, 8]} style={{ height: '100%' }} align="middle" justify="center" >
         <Col>
-          <DynamicLogo name={name} title={false} />
+          <DynamicLogo name={appName} title={false} />
         </Col>
         <Col span={24}>
-          <Typography.Title level={4} align="center">{name}</Typography.Title>
+          <Typography.Title level={4} align="center">{appName}</Typography.Title>
           <p align="center">Version {version}</p>
         </Col>
         <Col span={24}>
@@ -52,9 +60,9 @@ class ErrorBoundary extends Component {
           <Button
             type="primary"
             icon={<Icon name="trash-outline" />}
-            onClick={this.remove}
+            onClick={this.uninstallApp}
             block
-          >Remove</Button>
+          >Uninstall</Button>
         </Col>
         <Col span={12}>
           <Button
@@ -66,14 +74,25 @@ class ErrorBoundary extends Component {
         </Col>
       </Row>
     </Widget>
-    return this.props.children;
+    return children;
   }
 }
 
 ErrorBoundary.propTypes = {
-  name: PropTypes.string.isRequired,
+  appName: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired,
   version: PropTypes.string.isRequired,
 }
 
-export default ErrorBoundary;
+const mapStateToProps = state => ({
+  babysitter: state.babysitter,
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  updateApps
+}, dispatch);
+
+export default withRouter(connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ErrorBoundary));

@@ -19,27 +19,19 @@ const initialState = {
  * Actions
  */
 
-export const loadApps = createAsyncThunk(`${NAME}/loadApps`, async (address, { rejectWithValue }) => {
+export const loadApps = createAsyncThunk(`${NAME}/loadApps`, async (address) => {
   if (!ssjs.isAddress(address)) return initialState;
-  try {
-    const collection = db.createInstance({ storeName: address });
-    const apps = troubleshoot(await collection.getItem('apps'));
-    return { address, apps }
-  } catch (er) {
-    return rejectWithValue(er);
-  }
+  const collection = db.createInstance({ storeName: address });
+  const apps = troubleshoot(await collection.getItem('apps'));
+  return { address, apps }
 });
 
-export const updateApps = createAsyncThunk(`${NAME}/updateApps`, async (apps, { getState, rejectWithValue }) => {
+export const updateApps = createAsyncThunk(`${NAME}/updateApps`, async (apps, { getState }) => {
   const { babysitter: { address } } = getState();
-  if (!ssjs.isAddress(address)) return rejectWithValue('You need to load apps first');
-  try {
-    const collection = db.createInstance({ storeName: address });
-    await collection.setItem('apps', apps);
-    return { apps }
-  } catch (er) {
-    return rejectWithValue(er);
-  }
+  if (!ssjs.isAddress(address)) throw new Error('You need to load apps first');
+  const collection = db.createInstance({ storeName: address });
+  await collection.setItem('apps', apps);
+  return { apps }
 });
 
 /**

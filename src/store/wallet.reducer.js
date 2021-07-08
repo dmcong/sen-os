@@ -19,8 +19,8 @@ export const closeWallet = createAsyncThunk(`${NAME}/closeWallet`, async () => {
   return { visible: false }
 });
 
-export const connectWallet = createAsyncThunk(`${NAME}/connectWallet`, async (wallet, { rejectWithValue }) => {
-  if (!wallet) return rejectWithValue('Invalid wallet instance');
+export const connectWallet = createAsyncThunk(`${NAME}/connectWallet`, async (wallet) => {
+  if (!wallet) throw new Error('Invalid wallet instance');
   window.senos.wallet = wallet;
   const address = await wallet.getAccount();
   const lamports = await window.senos.lamports.get(address);

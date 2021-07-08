@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import { Badge } from 'sen-kit';
 import { DynamicLogo } from 'helpers/loader';
 
-const LogoInMarket = forwardRef(({ installed, ...others }, ref) => {
+const LogoInMarket = forwardRef(({ installed, ...rest }, ref) => {
   if (installed) return <Badge.Ribbon text="Installed">
-    <DynamicLogo {...others} ref={ref} />
+    <DynamicLogo {...rest} ref={ref} />
   </Badge.Ribbon>
-  return <DynamicLogo {...others} ref={ref} />
+  return <DynamicLogo {...rest} ref={ref} />
 });
 
 LogoInMarket.defaultProps = {

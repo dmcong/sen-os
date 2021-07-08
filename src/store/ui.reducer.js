@@ -1,7 +1,11 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { notification, Icon } from 'sen-kit';
+
 import util from 'helpers/util';
 
+/**
+ * Utility
+ */
 const getInfix = () => {
   const width = window.innerWidth;
   if (width < 576) return 'xs';
@@ -11,6 +15,10 @@ const getInfix = () => {
   if (width < 1400) return 'xl';
   return 'xxl';
 }
+
+/**
+ * Store constructor
+ */
 
 const NAME = 'ui';
 const initialState = {
@@ -40,11 +48,9 @@ export const closeControlCenter = createAsyncThunk(`${NAME}/closeControlCenter`,
   return { visibleControlCenter: false }
 });
 
-export const notify = createAsyncThunk(`${NAME}/notify`, async (
-  { type, description, onClick }, { rejectWithValue }
-) => {
-  if (!type) return rejectWithValue('Notification type is not provided');
-  if (!description) return rejectWithValue('Description is not provided');
+export const notify = createAsyncThunk(`${NAME}/notify`, async ({ type, description, onClick }) => {
+  if (!type) throw new Error('Notification type is not provided');
+  if (!description) throw new Error('Description is not provided');
   // Parse icon
   let icon = <Icon name="information-circle" style={{ color: '#374FC7' }} />
   if (type === 'error') icon = <Icon name="alert-circle" style={{ color: '#F2323F' }} />

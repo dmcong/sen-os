@@ -9,7 +9,7 @@ import util from 'helpers/util';
 /**
  * Application Logo
  */
-const AppLogo = forwardRef(({ name, src, title, style: userStyle, ...others }, ref) => {
+const AppLogo = forwardRef(({ name, src, title, style: userStyle, ...rest }, ref) => {
   // Infer color
   const bgColor = util.randomColor(util.normalizeAppName(name), 'light');
   const symbol = name.substring(0, 2);
@@ -25,7 +25,7 @@ const AppLogo = forwardRef(({ name, src, title, style: userStyle, ...others }, r
   return <Row
     style={{ width: 64, cursor: 'pointer', ...userStyle }}
     gutter={[0, 8]}
-    {...others}
+    {...rest}
     ref={ref}
   >
     <Col span={24}>

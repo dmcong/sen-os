@@ -2,31 +2,31 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
-import ssjs from 'senswapjs';
-import numeral from 'numeral';
 
-import { Row, Col, Typography, Tooltip } from 'sen-kit';
+import { Row, Col, Typography, Button, Icon } from 'sen-kit';
 
-import util from 'helpers/util';
-import { withSenOs } from 'helpers/context';
+import { withSenOs } from 'helpers/senos';
 import { updateTime } from '../controller/main.controller';
 
 
 class View extends Component {
   render() {
-    const { senos: { wallet: { address, lamports } } } = this.props;
+    const { main: { time }, updateTime } = this.props;
 
     return <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Typography.Title level={1}>SenWallet</Typography.Title>
+        <Typography.Title level={1}>Template</Typography.Title>
       </Col>
       <Col span={24}>
-        <Typography.Link href={util.explorer(address)} target="_blank" ellipsis>{address.substring(0, 20) + '...'}</Typography.Link>
+        <Typography.Text>Updated at: {(new Date(time)).toString()}</Typography.Text>
       </Col>
       <Col span={24}>
-        <Tooltip title={`${ssjs.undecimalize(lamports, 9)} SOL`}>
-          <Typography.Text>{numeral(ssjs.undecimalize(lamports, 9)).format('0.[0000]')} SOL</Typography.Text>
-        </Tooltip>
+        <Button
+          type="primary"
+          onClick={updateTime}
+          icon={<Icon name="reload-outline" />}
+          block
+        >Update</Button>
       </Col>
     </Row>
   }

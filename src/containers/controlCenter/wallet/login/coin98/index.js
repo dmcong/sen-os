@@ -21,8 +21,8 @@ class Coin98 extends Component {
       description: 'Coin98 Wallet is not installed. If this is the first time you install Coin98 wallet, please restart your browser to finish the setup.'
     });
     const wallet = new Coin98Wallet();
-    const { error, payload } = await connectWallet(wallet);
-    if (error) return notify({ type: 'error', description: payload });
+    const { error } = await connectWallet(wallet);
+    if (error) return notify({ type: 'error', description: error.message });
   }
 
   render() {

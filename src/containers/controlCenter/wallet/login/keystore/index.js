@@ -51,8 +51,8 @@ class KeyStore extends Component {
     if (!keystore) return notify({ type: 'warning', description: 'Please upload your keystore' });
     if (!password) return notify({ type: 'warning', description: 'Please enter your password to unlock your wallet' });
     const wallet = new KeystoreWallet(keystore, password);
-    const { error, payload } = await connectWallet(wallet);
-    if (error) return notify({ type: 'error', description: payload });
+    const { error } = await connectWallet(wallet);
+    if (error) return notify({ type: 'error', description: error.message });
   }
 
   onOpen = () => this.setState({ visible: true });

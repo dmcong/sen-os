@@ -27,10 +27,10 @@ class SecretKey extends Component {
   connect = async () => {
     const { notify, connectWallet } = this.props;
     const { secretKey } = this.state;
-    if (!secretKey) return notify({ type: 'error', description: 'The secret key cannot be empty' });
+    if (!secretKey) return notify({ type: 'warning', description: 'Please enter your secret key' });
     const wallet = new SecretKeyWallet(secretKey);
-    const { error, payload } = await connectWallet(wallet);
-    if (error) return notify({ type: 'error', description: payload });
+    const { error } = await connectWallet(wallet);
+    if (error) return notify({ type: 'error', description: error.message });
   }
 
   onGen = () => {

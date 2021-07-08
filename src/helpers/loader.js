@@ -17,21 +17,21 @@ const metadata = (appName) => {
 /**
  * Logo Loader
  */
-const DynamicLogo = forwardRef(({ name, ...others }, ref) => {
+const DynamicLogo = forwardRef(({ name, ...rest }, ref) => {
   const folderName = util.normalizeAppName(name);
   let src = '';
   try { src = require(`applications/${folderName}/assets/icon.png`).default } catch (er) { /* Nothing */ }
-  return <AppLogo name={name} src={src} {...others} ref={ref} />
+  return <AppLogo name={name} src={src} {...rest} ref={ref} />
 });
 
 /**
  * Panel Loader
  */
-const DynamicPanel = forwardRef(({ appName, ...others }, ref) => {
+const DynamicPanel = forwardRef(({ appName, ...rest }, ref) => {
   const folderName = util.normalizeAppName(appName);
   let src = '';
   try { src = require(`applications/${folderName}/assets/panel.png`).default } catch (er) { /* Nothing */ }
-  return <AppPanel appName={appName} src={src} {...others} ref={ref} />
+  return <AppPanel appName={appName} src={src} {...rest} ref={ref} />
 });
 
 /**
@@ -43,11 +43,11 @@ const DynamicApp = forwardRef(({ name }, ref) => {
     try {
       return await import(`applications/${folderName}/index`);
     } catch (er) {
-      return await import('components/appGuard');
+      return await import('components/errorBoundary');
     }
   }), [folderName]);
   return <Suspense fallback={<AppLoading />}>
-    <Application name={name} ref={ref} />
+    <Application appName={name} ref={ref} />
   </Suspense>
 });
 

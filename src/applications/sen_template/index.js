@@ -5,35 +5,30 @@ import { withRouter } from 'react-router-dom';
 
 import { Widget } from 'sen-kit';
 
-import { createPDB } from 'helpers/pdb';
-import { SenOsProvider } from 'helpers/context';
+import SenOsProvider from 'helpers/senos';
 import ErrorBoundary from 'components/errorBoundary';
 
 import metadata from './package.json';
-import View from './src/view';
-import model from './src/model';
+import View from './view';
+import model from './model';
 
 
 class Main extends Component {
   render() {
-    const { ui, wallet } = this.props;
     const { appName, version, author: { email } } = metadata;
-    const db = createPDB(appName);
-    return <ErrorBoundary name={appName} version={version} email={email}>
-      <Provider store={model}>
-        <SenOsProvider senos={{ ui, wallet, db }}>
+    return <ErrorBoundary appName={appName} version={version} email={email}>
+      <SenOsProvider appName={appName}>
+        <Provider store={model}>
           <Widget type="glass" size="small">
             <View />
           </Widget>
-        </SenOsProvider>
-      </Provider>
+        </Provider>
+      </SenOsProvider>
     </ErrorBoundary>
   }
 }
 
 const mapStateToProps = state => ({
-  ui: state.ui,
-  wallet: state.wallet,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

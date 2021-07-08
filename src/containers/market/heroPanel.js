@@ -4,7 +4,7 @@ import { Row, Col, Card, Typography, Button, Space, Icon } from 'sen-kit';
 
 const HeroPanel = () => {
   const style = {
-    backgroundImage: `url("https://source.unsplash.com/random/?liquid")`,
+    backgroundImage: `url("https://source.unsplash.com/random/?liquid,abstract")`,
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
