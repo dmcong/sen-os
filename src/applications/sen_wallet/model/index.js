@@ -3,8 +3,8 @@ import middleware from 'store/middleware';
 import devTools from 'store/devTools';
 
 import { appName } from '../package.json';
-import main from '../controller/main.controller';
-import bucket from '../controller/bucket.controller';
+import mints from '../controller/mints.controller';
+import accounts from '../controller/accounts.controller';
 import cgk from '../controller/cgk.controller';
 
 /**
@@ -14,8 +14,8 @@ const model = configureStore({
   middleware,
   devTools: devTools(appName),
   reducer: {
-    main,
-    bucket,
+    mints,
+    accounts,
     cgk,
   },
 });

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import ssjs from 'senswapjs';
 import numeral from 'numeral';
 
-import { Row, Col, Avatar, Typography, Tooltip, Space, Icon, Button, Popover } from 'sen-kit';
+import { Row, Col, Avatar, Typography, Tooltip, Space, Icon, Button, Popover, Card } from 'sen-kit';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import QRCode from 'qrcode.react';
 
@@ -12,11 +12,6 @@ import util from 'helpers/util';
 import mintConfig from '@/sen_wallet/config/mint.config';
 import { getCGK } from '@/sen_wallet/controller/cgk.controller';
 
-const shortenAddress = (address, size = 6) => {
-  const prefix = address.substring(0, size);
-  const suffix = address.substring(address.length - size, address.length);
-  return prefix + '...' + suffix;
-}
 
 const Copy = ({ address }) => {
   const [copied, setCopied] = useState(false);
@@ -51,12 +46,32 @@ const QR = ({ address }) => {
   </Popover>
 }
 
+const Balance = ({ value }) => {
+  const [hidden, setHidden] = useState(true);
+  const toggle = () => setHidden(!hidden);
+  const balance = numeral(value).format('0,0.[00]');
+  return <Space >
+    <Typography.Text style={{ margin: 0 }}>{hidden ? 'ಠ_ಠ' : `$${balance}`}</Typography.Text>
+    <Button
+      type="text"
+      shape="circle"
+      size="small"
+      icon={<Icon name={hidden ? 'eye-off-outline' : 'eye-outline'} />}
+      onClick={toggle}
+    />
+  </Space>
+}
 
-const getTotalBalance = async (accounts, bucket, getPrice) => {
+const getTotalBalance = async (lamports, accounts, getPrice) => {
   let usd = 0;
+  // Calculate SOL
+  const { payload: { solana: { price: solPrice } } } = await getPrice('solana');
+  usd = usd + ssjs.undecimalize(lamports, 9) * solPrice;
+  // Calculate mints
   const mintAddresses = mintConfig.map(({ address }) => address);
-  for (let accountAddress of accounts) {
-    const { mint: mintAddress, amount } = bucket[accountAddress] || {};
+  const accountAddresses = Object.keys(accounts);
+  for (let accountAddress of accountAddresses) {
+    const { mint: mintAddress, amount } = accounts[accountAddress] || {};
     const index = mintAddresses.indexOf(mintAddress);
     if (index < 0) continue;
     const { ticket, decimals } = mintConfig[index];
@@ -68,56 +83,54 @@ const getTotalBalance = async (accounts, bucket, getPrice) => {
 
 const AccountInfo = () => {
   const [value, setValue] = useState(0);
-  const bucket = useSelector(state => state.bucket);
-  const { accounts } = useSelector(state => state.main);
+  const accounts = useSelector(state => state.accounts);
   const dispatch = useDispatch();
   const { senos: { wallet: { address, lamports } } } = useSenOs();
 
-  const balance = ssjs.undecimalize(lamports, 9);
   useEffect(() => {
     (async () => {
       const getPrice = (ticket) => dispatch(getCGK(ticket));
-      const usd = await getTotalBalance(accounts, bucket, getPrice);
+      const usd = await getTotalBalance(lamports, accounts, getPrice);
       setValue(usd);
     })();
-  }, [accounts, bucket, dispatch]);
+  }, [lamports, accounts, dispatch]);
 
-  return <Row gutter={[16, 16]}>
-    <Col span={24}>
-      <Row gutter={[16, 16]} wrap={false} align="middle">
-        <Col>
-          <Avatar size={48}>{ssjs.randEmoji(address)}</Avatar>
-        </Col>
-        <Col flex="auto">
-          <Row>
-            <Col span={24}>
-              <Row wrap={false}>
-                <Col flex="auto">
-                  <Tooltip title={address}>
-                    <Typography.Text>{shortenAddress(address)}</Typography.Text>
-                  </Tooltip>
-                </Col>
-                <Col>
-                  <Space>
-                    <Copy address={address} />
-                    <QR address={address} />
-                  </Space>
-                </Col>
-              </Row>
-            </Col>
-            <Col span={24}>
-              <Tooltip title={balance}>
-                <Typography.Text type="secondary">{numeral(balance).format('0.[0000]')} SOL</Typography.Text>
-              </Tooltip>
-            </Col>
-          </Row>
-        </Col>
-      </Row>
-    </Col>
-    <Col sapn={24}>
-      <Typography.Title level={2}>$ {numeral(value).format('0,0.[00]')}</Typography.Title>
-    </Col>
-  </Row>
+  const shortenAddress = () => {
+    const size = 4;
+    const prefix = address.substring(0, size);
+    const suffix = address.substring(address.length - size, address.length);
+    return prefix + ' ... ' + suffix;
+  }
+
+  return <Card bodyStyle={{ padding: 16 }} bordered={false}>
+    <Row gutter={[16, 16]} wrap={false} align="middle">
+      <Col>
+        <Avatar size={48}>{ssjs.randEmoji(address)}</Avatar>
+      </Col>
+      <Col flex="auto">
+        <Row>
+          <Col span={24}>
+            <Row wrap={false}>
+              <Col flex="auto">
+                <Tooltip title={address}>
+                  <Typography.Text type="secondary" style={{ fontSize: 11 }}>{shortenAddress()}</Typography.Text>
+                </Tooltip>
+              </Col>
+              <Col>
+                <Space>
+                  <Copy address={address} />
+                  <QR address={address} />
+                </Space>
+              </Col>
+            </Row>
+          </Col>
+          <Col span={24}>
+            <Balance value={value} />
+          </Col>
+        </Row>
+      </Col>
+    </Row>
+  </Card>
 }
 
 export default AccountInfo;

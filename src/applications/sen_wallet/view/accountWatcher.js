@@ -6,11 +6,10 @@ import ssjs from 'senswapjs';
 import isEqual from 'react-fast-compare';
 
 import { withSenOs } from 'helpers/senos';
-import { getAccounts } from '@/sen_wallet/controller/main.controller';
-import { upsetData, upsetBatch } from '@/sen_wallet/controller/bucket.controller';
+import { getAccounts, upsetAccount } from '@/sen_wallet/controller/accounts.controller';
 
 
-class BucketWatcher extends Component {
+class AccountWatcher extends Component {
 
   componentDidMount() {
     this.fetchData();
@@ -26,32 +25,37 @@ class BucketWatcher extends Component {
     }
   }
 
-  componentWillUnmount() {
-    return this.unwatchData();
-  }
+  // componentWillUnmount() {
+  //   return this.unwatchData();
+  // }
 
   fetchData = async () => {
-    const { senos: { wallet: { address }, notify }, getAccounts, upsetBatch } = this.props;
+    const { senos: { wallet: { address }, notify }, getAccounts } = this.props;
     if (!ssjs.isAddress(address)) return;
-    const { error, meta: { data } } = await getAccounts(address);
+    const { error } = await getAccounts(address);
     if (error) return await notify({ type: 'error', description: error.message });
-    await upsetBatch(data);
   }
 
   watchData = () => {
-    const { senos: { wallet: { address } }, upsetData } = this.props;
+    const { senos: { wallet: { address } }, upsetAccount } = this.props;
     if (!ssjs.isAddress(address)) return this.unwatchData();
     if (this.watchId) return console.log('Already watched');
     const callback = (er, re) => {
       if (er) return;
-      return upsetData(re);
+      return upsetAccount(re);
     }
     const filters = [{ memcmp: { bytes: address, offset: 32 } }];
     this.watchId = window.senos.splt.watch(callback, filters);
   }
 
   unwatchData = () => {
-    window.senos.splt.unwatch(this.watchId);
+    if (!this.watchId) return;
+    try {
+      window.senos.splt.unwatch(this.watchId);
+    } catch (er) {
+      console.log(er)
+      // Nothing
+    }
     this.watchId = null;
   }
 
@@ -64,11 +68,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  getAccounts,
-  upsetData, upsetBatch
+  getAccounts, upsetAccount
 }, dispatch);
 
 export default withRouter(connect(
   mapStateToProps,
   mapDispatchToProps
-)(withSenOs(BucketWatcher)));
+)(withSenOs(AccountWatcher)));

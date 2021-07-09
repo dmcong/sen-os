@@ -20,13 +20,13 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
     "remarkable": "^2.0.1",
-    "sen-kit": "^1.0.28",
+    "sen-kit": "^1.0.30",
     "senswapjs": "^2.0.6",
     "web-vitals": "^1.1.2"
   },
   "scripts": {
     "start": "concurrently --kill-others \"npm:prebuild\" \"npm:dev\"",
-    "dev": "REACT_APP_ENV=development PORT=5000 craco start",
+    "dev": "REACT_APP_ENV=development REACT_EDITOR=false PORT=5000 craco start",
     "stag": "REACT_APP_ENV=staging npm run build",
     "prod": "REACT_APP_ENV=production npm run build",
     "prebuild": "node ./scripts/packageWatcher.js",
