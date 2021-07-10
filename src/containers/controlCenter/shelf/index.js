@@ -11,8 +11,10 @@ import isEqual from 'react-fast-compare';
 import { Row, Col, Button, Icon } from 'sen-kit';
 import DraggbleLogo from './draggableLogo';
 import DroppableZone from './droppableZone';
+import { MultipleProvider, MultipleContainer, MultipleWrapper } from 'components/dnd';
 
 import { dropPDB } from 'helpers/pdb';
+import { DynamicLogo } from 'helpers/loader';
 import { loadApps, updateApps } from 'store/babysitter.reducer';
 
 const DEFAULT_ITEM = {
@@ -97,6 +99,23 @@ class Shelf extends Component {
 
     return <DndProvider backend={touchable ? TouchBackend : HTML5Backend}>
       <Row gutter={[16, 16]}>
+
+        <MultipleProvider>
+          {apps.map((row, page) => <Col
+            key={page}
+            span={24}
+            className={`zone ${settings ? 'active' : 'passive'}`}
+          >
+            <MultipleContainer>
+              {row.map(appName => <MultipleWrapper id={appName} key={appName}>
+                <Col>
+                  <DynamicLogo name={appName} />
+                </Col>
+              </MultipleWrapper>)}
+            </MultipleContainer>
+          </Col>)}
+        </MultipleProvider>
+
         {apps.map((row, page) => <Col
           key={page}
           span={24}
@@ -139,7 +158,7 @@ class Shelf extends Component {
           </Row>
         </Col> : null}
       </Row>
-    </DndProvider>
+    </DndProvider >
   }
 }
 

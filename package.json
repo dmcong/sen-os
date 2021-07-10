@@ -22,7 +22,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.3",
     "remarkable": "^2.0.1",
-    "sen-kit": "^1.0.31",
+    "sen-kit": "^1.0.32",
     "senswapjs": "^2.0.6",
     "web-vitals": "^1.1.2"
   },

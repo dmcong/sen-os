@@ -9,7 +9,7 @@ import {
   Button,
 } from 'sen-kit';
 import DotPagination from 'components/dotPagination';
-import { SortableProvider, SortableWrapper } from 'components/dnd';
+import { SortableDnD } from 'components/dnd';
 
 import { DynamicApp } from 'helpers/loader';
 import { updateApps } from 'store/babysitter.reducer';
@@ -97,15 +97,16 @@ class Home extends Component {
         </Row>
       </Col>
       <Col span={24}>
-        <SortableProvider onChange={this.onSort}>
-          {appNames.map(appName => <SortableWrapper
-            id={appName}
-            key={appName}
-            disabled={!editable}
-          >
-            <DynamicApp appName={appName} />
-          </SortableWrapper>)}
-        </SortableProvider>
+        <SortableDnD
+          ids={appNames}
+          Item={DynamicApp}
+          itemProps={id => ({ appName: id })}
+          Wrapper={Row}
+          wrapperProps={{ gutter: [16, 16] }}
+          onChange={this.onSort}
+          overlayStyle={{ width: '100%' }}
+          disabled={!editable}
+        />
       </Col>
       <Col span={24}>
         <Row justify="space-between" align="middle">
