@@ -37,8 +37,8 @@ const DynamicPanel = forwardRef(({ appName, ...rest }, ref) => {
 /**
  * App Loader
  */
-const DynamicApp = forwardRef(({ name }, ref) => {
-  const folderName = util.normalizeAppName(name);
+const DynamicApp = forwardRef(({ appName, ...rest }, ref) => {
+  const folderName = util.normalizeAppName(appName);
   const Application = useMemo(() => lazy(async () => {
     try {
       return await import(`applications/${folderName}/index`);
@@ -47,7 +47,7 @@ const DynamicApp = forwardRef(({ name }, ref) => {
     }
   }), [folderName]);
   return <Suspense fallback={<AppLoading />}>
-    <Application appName={name} ref={ref} />
+    <Application appName={appName} {...rest} ref={ref} />
   </Suspense>
 });
 

@@ -12,6 +12,7 @@ import AccountInfo from './accountInfo';
 import Search from './search';
 import AccountCard from './accountCard';
 import Settings from './settings';
+import Transfer from './transfer';
 
 import { withSenOs } from 'helpers/senos';
 import mintConfig from '@/sen_wallet/config/mint.config';
@@ -35,6 +36,7 @@ class View extends Component {
       settings: {
         hiddenZeros: false
       },
+      accountIndex: -1,
     }
   }
 
@@ -76,12 +78,16 @@ class View extends Component {
     return this.setState({ settings });
   }
 
-  onCard = () => {
+  onCard = (accountIndex) => {
+    return this.setState({ accountIndex });
+  }
 
+  onClose = () => {
+    return this.setState({ accountIndex: -1 });
   }
 
   render() {
-    const { orderedAccounts, settings } = this.state;
+    const { orderedAccounts, settings, accountIndex } = this.state;
     const { hiddenZeros } = settings;
 
     return <Row gutter={[24, 24]}>
@@ -106,10 +112,15 @@ class View extends Component {
             if (!amount && hiddenZeros) return null;
             return <Col span={24} key={i}>
               <LazyLoad height={76} overflow>
-                <AccountCard data={accountData} onClick={this.onCard} />
+                <AccountCard data={accountData} onClick={() => this.onCard(i)} />
               </LazyLoad>
             </Col>
           })}
+          <Transfer
+            visible={accountIndex >= 0}
+            onClose={this.onClose}
+            accountData={orderedAccounts[accountIndex]}
+          />
         </Row>
       </Col>
       <Col span={24} />

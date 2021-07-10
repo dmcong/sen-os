@@ -11,14 +11,14 @@ import { getMint } from '@/sen_wallet/controller/mints.controller';
 
 const FONT_SIZE = { fontSize: 11 }
 
-const AccountCard = ({ data }) => {
+const AccountCard = ({ data, onClick }) => {
   const [icon, setIcon] = useState('#');
   const [price, setPrice] = useState(0);
   const [priceChange, setPriceChange] = useState(0);
   const [decimals, setDecimals] = useState(9);
   const dispatch = useDispatch();
 
-  const { address, ticket, name, amount, symbol, mint } = data;
+  const { ticket, name, amount, symbol, mint } = data;
   useEffect(() => {
     (async () => {
       if (!ticket) return;
@@ -44,9 +44,9 @@ const AccountCard = ({ data }) => {
     </Typography.Text>
   }
 
-  const onClick = (e) => {
+  const onSend = (e) => {
     e.stopPropagation();
-    console.log(address)
+    return onClick();
   }
 
   return <Card bodyStyle={{ padding: 16 }} bordered={false} hoverable >
@@ -75,7 +75,7 @@ const AccountCard = ({ data }) => {
           type="text"
           className="btnContained"
           icon={<Icon name="send" />}
-          onClick={onClick}
+          onClick={onSend}
         />
       </Col>
     </Row>

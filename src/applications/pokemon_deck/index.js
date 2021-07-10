@@ -1,7 +1,5 @@
-import React, { Component } from 'react';
-import { Provider, connect } from 'react-redux';
-import { bindActionCreators } from '@reduxjs/toolkit';
-import { withRouter } from 'react-router-dom';
+import React, { forwardRef } from 'react';
+import { Provider } from 'react-redux';
 
 import { Widget } from 'sen-kit';
 
@@ -13,28 +11,17 @@ import View from './view';
 import model from './model';
 
 
-class Main extends Component {
-  render() {
-    const { appName, version, author: { email } } = metadata;
-    return <ErrorBoundary appName={appName} version={version} email={email}>
-      <SenOsProvider appName={appName}>
-        <Provider store={model}>
-          <Widget type="glass" size="medium">
-            <View />
-          </Widget>
-        </Provider>
-      </SenOsProvider>
-    </ErrorBoundary>
-  }
-}
-
-const mapStateToProps = state => ({
+const Main = forwardRef(({ appName, ...rest }, ref) => {
+  const { version, author: { email } } = metadata;
+  return <ErrorBoundary appName={appName} version={version} email={email}>
+    <SenOsProvider appName={appName}>
+      <Provider store={model}>
+        <Widget  {...rest} type="glass" size="medium" ref={ref}>
+          <View />
+        </Widget>
+      </Provider>
+    </SenOsProvider>
+  </ErrorBoundary>
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-}, dispatch);
-
-export default withRouter(connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Main));
+export default Main;
