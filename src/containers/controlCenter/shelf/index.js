@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import isEqual from 'react-fast-compare';
+import ssjs from 'senswapjs';
 
 import { Row, Col, Button, Icon } from 'sen-kit';
 import { MultipleDnd } from 'components/dnd';
@@ -37,7 +38,7 @@ class Shelf extends Component {
     if (!isEqual(prevApps, apps)) this.setState({ apps });
     const { apps: prevAppsInState } = prevState;
     const { apps: appsInState } = this.state;
-    if (prevAppsInState.length && !isEqual(prevAppsInState, appsInState)) this.setApps();
+    if (!isEqual(prevAppsInState, appsInState)) this.setApps();
   }
 
   getApps = async () => {
@@ -49,8 +50,9 @@ class Shelf extends Component {
   }
 
   setApps = async () => {
-    const { updateApps, notify } = this.props;
+    const { wallet: { address }, updateApps, notify } = this.props;
     const { apps } = this.state;
+    if (!ssjs.isAddress(address)) return;
     const { error } = await updateApps(apps);
     if (error) return await notify({ type: 'error', description: error.message });
   }

@@ -25,9 +25,9 @@ class AccountWatcher extends Component {
     }
   }
 
-  // componentWillUnmount() {
-  //   return this.unwatchData();
-  // }
+  componentWillUnmount() {
+    return this.unwatchData();
+  }
 
   fetchData = async () => {
     const { senos: { wallet: { address }, notify }, getAccounts } = this.props;
@@ -39,9 +39,9 @@ class AccountWatcher extends Component {
   watchData = () => {
     const { senos: { wallet: { address } }, upsetAccount } = this.props;
     if (!ssjs.isAddress(address)) return this.unwatchData();
-    if (this.watchId) return console.log('Already watched');
+    if (this.watchId) return console.warn('Already watched');
     const callback = (er, re) => {
-      if (er) return;
+      if (er) return console.error(er);
       return upsetAccount(re);
     }
     const filters = [{ memcmp: { bytes: address, offset: 32 } }];
@@ -50,12 +50,7 @@ class AccountWatcher extends Component {
 
   unwatchData = () => {
     if (!this.watchId) return;
-    try {
-      window.senos.splt.unwatch(this.watchId);
-    } catch (er) {
-      console.log(er)
-      // Nothing
-    }
+    window.senos.splt.unwatch(this.watchId);
     this.watchId = null;
   }
 
