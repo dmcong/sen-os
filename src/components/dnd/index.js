@@ -1,2 +1,2 @@
 export { default as SortableDnD } from './sortable';
-export * from './multiple';
+export { default as MultipleDnd } from './multiple';

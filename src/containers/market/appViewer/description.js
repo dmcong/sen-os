@@ -30,6 +30,12 @@ class Description extends Component {
     return await updateApps(newApps);
   }
 
+  toApp = () => {
+    const { history, babysitter: { apps }, appName } = this.props;
+    const page = apps.findIndex(row => row.includes(appName));
+    return history.push(`/home?page=${page}&appName=${appName}`);
+  }
+
   isInstalled = () => {
     const { babysitter: { address, apps }, appName } = this.props;
     return ssjs.isAddress(address) && apps.flat().includes(appName);
@@ -38,18 +44,24 @@ class Description extends Component {
   render() {
     const { appName } = this.props;
 
-    return <Row gutter={[16, 16]}>
-      <Col span={24}>
+    return <Row gutter={[16, 16]} justify="space-between">
+      <Col>
+        {this.isInstalled() ? <Button
+          type="primary"
+          onClick={this.toApp}
+        >Open</Button> : <Button
+          type="primary"
+          icon={<Icon name="cloud-download-outline" />}
+          onClick={this.installApp}
+        >Install</Button>}
+      </Col>
+      <Col>
         {this.isInstalled() ? <Button
           type="text"
           className="btnContained"
           icon={<Icon name="trash-outline" />}
           onClick={this.uninstallApp}
-        >Uninstall</Button> : <Button
-          type="primary"
-          icon={<Icon name="cloud-download-outline" />}
-          onClick={this.installApp}
-        >Install</Button>}
+        >Uninstall</Button> : null}
       </Col>
       <Col span={24}>
         <Card>

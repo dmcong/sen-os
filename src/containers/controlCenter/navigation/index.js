@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
+import ssjs from 'senswapjs';
 
 import { Row, Col, Brand, Button, Icon, Space } from 'sen-kit';
 import Wallet from '../wallet';
@@ -18,7 +19,10 @@ class Navigation extends Component {
   }
 
   render() {
-    const { ui: { infix, visibleControlCenter }, openControlCenter, closeControlCenter } = this.props;
+    const {
+      ui: { infix, visibleControlCenter }, wallet: { address },
+      openControlCenter, closeControlCenter
+    } = this.props;
 
     return <Row gutter={[16, 16]} align="middle">
       <Col flex="auto">
@@ -37,6 +41,7 @@ class Navigation extends Component {
             className="btnContained"
             onClick={visibleControlCenter ? closeControlCenter : openControlCenter}
             icon={<Icon name={visibleControlCenter ? 'close-outline' : 'grid-outline'} />}
+            disabled={!ssjs.isAddress(address)}
           />
           <Button
             type="text"
@@ -55,6 +60,7 @@ class Navigation extends Component {
 
 const mapStateToProps = state => ({
   ui: state.ui,
+  wallet: state.wallet,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

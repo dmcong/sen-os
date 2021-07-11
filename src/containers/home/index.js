@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 import isEqual from 'react-fast-compare';
+import ssjs from 'senswapjs';
 
 import {
   Row, Col, Affix, Space, Switch, Typography, Icon,
@@ -36,7 +37,7 @@ class Home extends Component {
     if (!isEqual(prevSearch, search)) this.getAppNames();
     const { appNames: prevAppNames } = prevState;
     const { appNames } = this.state;
-    if (!isEqual(prevAppNames, appNames)) this.setAppNames();
+    if (prevAppNames.length && !isEqual(prevAppNames, appNames)) this.setAppNames();
   }
 
   parseParams = () => {
@@ -78,6 +79,39 @@ class Home extends Component {
     return this.setState({ editable });
   }
 
+  renderActions = () => {
+    const { wallet: { address } } = this.props;
+    const { editable } = this.state;
+
+    if (!ssjs.isAddress(address)) return null;
+    return <Row justify="space-between" align="middle">
+      <Col>
+        <Space>
+          <Button
+            type="text"
+            className="btnContained"
+            icon={<Icon name="add-outline" />}
+            onClick={() => this.to('/market')}
+            size="small"
+          />
+          <Typography.Text type="secondary" style={{ fontSize: 11 }}>Add more apps</Typography.Text>
+        </Space>
+      </Col>
+      <Col>
+        <Space>
+          <Typography.Text type="secondary" style={{ fontSize: 11 }}>Drag to re-organize widgets!</Typography.Text>
+          <Switch
+            size="small"
+            checkedChildren={<Icon name="cog-outline" />}
+            unCheckedChildren={<Icon name="cog-outline" />}
+            checked={editable}
+            onChange={this.onEdit}
+          />
+        </Space>
+      </Col>
+    </Row>
+  }
+
   render() {
     const { appNames, editable } = this.state;
     const { total, page } = this.parseParams();
@@ -90,7 +124,7 @@ class Home extends Component {
               <DotPagination
                 total={total}
                 page={page}
-                onClick={() => this.to(`/home?page=${page}`)}
+                onClick={i => this.to(`/home?page=${i}`)}
               />
             </Affix>
           </Col>
@@ -100,7 +134,7 @@ class Home extends Component {
         <SortableDnD
           ids={appNames}
           Item={DynamicApp}
-          itemProps={id => ({ appName: id })}
+          itemPropsFunc={id => ({ appName: id })}
           Wrapper={Row}
           wrapperProps={{ gutter: [16, 16] }}
           onChange={this.onSort}
@@ -109,38 +143,14 @@ class Home extends Component {
         />
       </Col>
       <Col span={24}>
-        <Row justify="space-between" align="middle">
-          <Col>
-            <Space>
-              <Button
-                type="text"
-                className="btnContained"
-                icon={<Icon name="add-outline" />}
-                onClick={() => this.to('/market')}
-                size="small"
-              />
-              <Typography.Text type="secondary" style={{ fontSize: 11 }}>Add more apps</Typography.Text>
-            </Space>
-          </Col>
-          <Col>
-            <Space>
-              <Typography.Text type="secondary" style={{ fontSize: 11 }}>Drag to re-organize widgets!</Typography.Text>
-              <Switch
-                size="small"
-                checkedChildren={<Icon name="cog-outline" />}
-                unCheckedChildren={<Icon name="cog-outline" />}
-                checked={editable}
-                onChange={this.onEdit}
-              />
-            </Space>
-          </Col>
-        </Row>
+        {this.renderActions()}
       </Col>
     </Row>
   }
 }
 
 const mapStateToProps = state => ({
+  wallet: state.wallet,
   babysitter: state.babysitter,
 });
 

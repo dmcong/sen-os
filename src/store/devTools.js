@@ -1,11 +1,10 @@
 import configs from 'configs';
-import util from 'helpers/util';
 
 // Bugfix: https://github.com/zalmoxisus/redux-devtools-extension/blob/master/docs/Troubleshooting.md#excessive-use-of-memory-and-cpu
-const devTools = (appName) => {
+const devTools = (appName = 'SenOS') => {
   if (configs.env !== 'development') return false;
   return {
-    name: util.normalizeAppName(appName),
+    name: appName,
     actionSanitizer: ({ payload, type }) => ({ payload, type }),
   }
 }

@@ -33,17 +33,21 @@ SortableWrapper.propTypes = {
 /**
  * Sortable DnD
  */
-const SortableDnD = ({ ids, Item, itemProps, Wrapper, wrapperProps, disabled, onChange, overlayStyle }) => {
+const SortableDnD = ({
+  ids, disabled, onChange,
+  Item, itemPropsFunc, Wrapper, wrapperProps, overlayStyle
+}) => {
   const [activeId, setActiveId] = useState(null);
   const sensors = useSensors(useSensor(MouseSensor), useSensor(TouchSensor));
 
   const onDragStart = ({ active }) => {
-    return setActiveId(active.id);
+    setActiveId(active.id);
   }
   const onDragEnd = ({ active, over }) => {
-    if (active.id === over.id) return;
-    const newIds = arrayMove(ids, ids.indexOf(active.id), ids.indexOf(over.id));
-    return onChange(newIds);
+    if (active.id !== over.id) {
+      const newIds = arrayMove(ids, ids.indexOf(active.id), ids.indexOf(over.id));
+      onChange(newIds);
+    }
   }
 
   return <DndContext
@@ -55,11 +59,11 @@ const SortableDnD = ({ ids, Item, itemProps, Wrapper, wrapperProps, disabled, on
     <Wrapper {...wrapperProps}>
       <SortableContext items={ids}>
         {ids.map(id => <SortableWrapper key={id} id={id} disabled={disabled}>
-          <Item {...itemProps(id)} />
+          <Item {...itemPropsFunc(id)} />
         </SortableWrapper>)}
       </SortableContext>
       <DragOverlay style={overlayStyle}>
-        {<Item {...itemProps(activeId)} id={activeId} />}
+        {<Item {...itemPropsFunc(activeId)} />}
       </DragOverlay>
     </Wrapper>
   </DndContext>
@@ -67,7 +71,7 @@ const SortableDnD = ({ ids, Item, itemProps, Wrapper, wrapperProps, disabled, on
 
 SortableDnD.defaultProps = {
   disabled: false,
-  itemProps: () => { },
+  itemPropsFunc: () => { },
   Wrapper: Fragment,
   wrapperProps: {},
   onChange: () => { },
@@ -77,7 +81,7 @@ SortableDnD.defaultProps = {
 SortableDnD.propTypes = {
   ids: PropTypes.arrayOf(PropTypes.string).isRequired,
   Item: PropTypes.elementType.isRequired,
-  itemProps: PropTypes.func,
+  itemPropsFunc: PropTypes.func,
   Wrapper: PropTypes.elementType,
   wrapperProps: PropTypes.object,
   disabled: PropTypes.bool,

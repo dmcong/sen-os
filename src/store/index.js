@@ -8,7 +8,7 @@ import babysitter from './babysitter.reducer';
 
 const store = configureStore({
   middleware,
-  devTools,
+  devTools: devTools('SenOS'),
   reducer: {
     ui,
     wallet,
