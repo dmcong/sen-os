@@ -32,20 +32,20 @@ class Navigation extends Component {
           </span>
           <Button
             type="text"
-            className="btnContained"
+            className="contained"
             onClick={() => this.to('/home')}
             icon={<Icon name="ellipse-outline" />}
           />
           <Button
             type="text"
-            className="btnContained"
+            className="contained"
             onClick={visibleControlCenter ? closeControlCenter : openControlCenter}
             icon={<Icon name={visibleControlCenter ? 'close-outline' : 'grid-outline'} />}
             disabled={!ssjs.isAddress(address)}
           />
           <Button
             type="text"
-            className="btnContained"
+            className="contained"
             onClick={() => this.to('/market')}
             icon={<Icon name="storefront-outline" />}
           />

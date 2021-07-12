@@ -89,7 +89,7 @@ class Home extends Component {
         <Space>
           <Button
             type="text"
-            className="btnContained"
+            className="contained"
             icon={<Icon name="add-outline" />}
             onClick={() => this.to('/market')}
             size="small"

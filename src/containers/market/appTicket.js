@@ -6,7 +6,7 @@ import metadata, { DynamicLogo } from 'helpers/loader';
 
 const AppTicket = ({ appName, installed, onClick, onAdd }) => {
   const { description } = metadata(appName);
-  return <Card style={{ backgroundColor: '#181C36' }} bordered={false}>
+  return <Card className="shadowed" style={{ backgroundColor: '#181C36' }} bordered={false}>
     <Row gutter={[16, 16]} wrap={false}>
       <Col>
         <DynamicLogo name={appName} title={false} onClick={onClick} />
@@ -19,12 +19,12 @@ const AppTicket = ({ appName, installed, onClick, onAdd }) => {
         {installed ? <Button
           type="text"
           shape="round"
-          className="btnContained"
+          className="contained"
           onClick={onClick}
         >View</Button> : <Button
           type="text"
           shape="round"
-          className="btnContained"
+          className="contained"
           onClick={onAdd}
         >Add</Button>}
       </Col>

@@ -58,13 +58,13 @@ class Description extends Component {
       <Col>
         {this.isInstalled() ? <Button
           type="text"
-          className="btnContained"
+          className="contained"
           icon={<Icon name="trash-outline" />}
           onClick={this.uninstallApp}
         >Uninstall</Button> : null}
       </Col>
       <Col span={24}>
-        <Card>
+        <Card className="shadowed">
           <Markdown appName={appName} />
         </Card>
       </Col>

@@ -57,7 +57,7 @@ class Deck extends Component {
     // Release
     if (pokemons.includes(name)) return <Button
       type="text"
-      className="btnContained"
+      className="contained"
       onClick={() => this.releasePokemon(name)}
       icon={<Icon name="paw-outline" />}
       block
@@ -65,7 +65,7 @@ class Deck extends Component {
     // Catch
     return <Button
       type="text"
-      className="btnContained"
+      className="contained"
       onClick={this.catchPokemon}
       icon={<Icon name="magnet-outline" />}
       block

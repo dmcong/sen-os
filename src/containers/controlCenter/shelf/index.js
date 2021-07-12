@@ -102,7 +102,7 @@ class Shelf extends Component {
           <Col>
             <Button
               type="text"
-              className="btnContained"
+              className="contained"
               icon={<Icon name="add-outline" />}
               onClick={this.onAddPage}
             />

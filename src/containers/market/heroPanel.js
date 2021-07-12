@@ -9,7 +9,7 @@ const HeroPanel = () => {
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
   }
-  return <Card style={style} bordered={false}>
+  return <Card className="shadowed" style={style} bordered={false}>
     <Row gutter={[16, 16]}>
       <Col span={24}>
         <Typography.Title level={5}>Welcome to SenMarket!</Typography.Title>
@@ -17,7 +17,7 @@ const HeroPanel = () => {
       </Col>
       <Col span={24} style={{ height: 96 }} />
       <Col span={24}>
-        <Button type="text" className="btnContained">
+        <Button type="text" className="contained">
           <Space>
             <Typography.Text>Let's go</Typography.Text>
             <Icon name="arrow-forward-outline" />

@@ -5,7 +5,7 @@ import { Row, Col, Card, Typography, Avatar } from 'sen-kit';
 
 const CategoryCard = ({ category, onClick }) => {
   const src = `https://source.unsplash.com/random/?${category},abstract`;
-  return <Card hoverable onClick={onClick}>
+  return <Card className="shadowed" style={{ cursor: 'pointer' }} onClick={onClick}>
     <Row gutter={[16, 16]} align="middle" wrap={false}>
       <Col flex="auto">
         <Typography.Text type="secondary">Click to explore</Typography.Text>

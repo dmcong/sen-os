@@ -46,7 +46,7 @@ class ControlCenter extends Component {
       height="100%"
       bodyStyle={{ padding: 16 }}
       closable={false}
-      mask={visibleControlCenter}
+      mask={false}
       visible
     >
       <Row gutter={[16, 16]} align="middle" justify="space-between">

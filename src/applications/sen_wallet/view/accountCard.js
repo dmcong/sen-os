@@ -73,7 +73,7 @@ const AccountCard = ({ data, onClick }) => {
       <Col>
         <Button
           type="text"
-          className="btnContained"
+          className="contained"
           icon={<Icon name="send" />}
           onClick={onSend}
         />

@@ -96,9 +96,9 @@ class View extends Component {
         <AccountInfo />
       </Col>
       <Col span={24}>
-        <Row gutter={[8, 8]} justify="center">
+        <Row gutter={[16, 16]} justify="center">
           <Col span={24}>
-            <Row gutter={[8, 8]} align="middle">
+            <Row gutter={[16, 16]} align="middle">
               <Col>
                 <Settings value={settings} onChange={this.onSettings} />
               </Col>

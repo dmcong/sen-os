@@ -74,7 +74,7 @@ class Wallet extends Component {
       <Divider type="vertical" />
       <Button
         type="text"
-        className="btnContained"
+        className="contained"
         icon={<Icon name="power-outline" />}
         onClick={disconnectWallet}
       />

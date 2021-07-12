@@ -29,10 +29,12 @@ const HeroPanel = ({ appName }) => {
 
   return <Row gutter={[16, 16]}>
     <Col span={24}>
-      <DynamicPanel appName={appName} />
+      <Card className="shadowed" bodyStyle={{ padding: 0 }} bordered={false}>
+        <DynamicPanel appName={appName} />
+      </Card>
     </Col>
     <Col span={24}>
-      <Card hoverable>
+      <Card className="shadowed">
         <Row gutter={[16, 16]}>
           <Col span={24}>
             <Typography.Title level={3}>Widget Info</Typography.Title>

@@ -11,7 +11,7 @@ const Container = forwardRef(({ index, disabled, onClose, children }, ref) => {
       {children.length ? null : <Col>
         <Button
           type="text"
-          className="btnContained"
+          className="contained"
           icon={<Icon name="close-outline" />}
           onClick={() => onClose(index)}
         />
