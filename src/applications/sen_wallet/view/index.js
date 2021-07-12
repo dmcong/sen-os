@@ -8,11 +8,11 @@ import ssjs from 'senswapjs';
 import { Row, Col } from 'sen-kit';
 import LazyLoad from 'react-lazyload';
 import AccountWatcher from './accountWatcher';
-import AccountInfo from './accountInfo';
+import WalletInfo from './walletInfo';
 import Search from './search';
 import AccountCard from './accountCard';
 import Settings from './settings';
-import Transfer from './transfer';
+import Interaction from './interaction';
 
 import { withSenOs } from 'helpers/senos';
 import mintConfig from '@/sen_wallet/config/mint.config';
@@ -36,7 +36,7 @@ class View extends Component {
       settings: {
         hiddenZeros: false
       },
-      accountIndex: -1,
+      accountIndex: 1,
     }
   }
 
@@ -61,8 +61,8 @@ class View extends Component {
       const { mint } = data;
       const index = mintAddresses.indexOf(mint);
       if (index < 0) return rest.push({ address, ...data });
-      const { ticket, symbol, name, decimals } = mintConfig[index];
-      return priority.push({ ...data, address, ticket, symbol, name, decimals });
+      const { ticket, symbol, name } = mintConfig[index];
+      return priority.push({ ...data, address, ticket, symbol, name });
     });
     const orderedAccounts = priority.concat(rest);
     return this.setState({ orderedAccounts });
@@ -90,20 +90,20 @@ class View extends Component {
     const { orderedAccounts, settings, accountIndex } = this.state;
     const { hiddenZeros } = settings;
 
-    return <Row gutter={[24, 24]}>
+    return <Row gutter={[16, 32]}>
       <AccountWatcher />
       <Col span={24}>
-        <AccountInfo />
+        <WalletInfo />
       </Col>
       <Col span={24}>
-        <Row gutter={[16, 16]} justify="center">
+        <Row gutter={[16, 12]} justify="center">
           <Col span={24}>
-            <Row gutter={[16, 16]} align="middle">
-              <Col>
-                <Settings value={settings} onChange={this.onSettings} />
-              </Col>
+            <Row gutter={[8, 8]} align="middle">
               <Col flex="auto">
                 <Search onChange={this.onSearch} />
+              </Col>
+              <Col>
+                <Settings value={settings} onChange={this.onSettings} />
               </Col>
             </Row>
           </Col>
@@ -116,7 +116,7 @@ class View extends Component {
               </LazyLoad>
             </Col>
           })}
-          <Transfer
+          <Interaction
             visible={accountIndex >= 0}
             onClose={this.onClose}
             accountData={orderedAccounts[accountIndex]}

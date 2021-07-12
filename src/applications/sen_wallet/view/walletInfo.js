@@ -23,11 +23,7 @@ const Copy = ({ address }) => {
   if (!ssjs.isAddress(address)) return null;
   return <Tooltip title="Copied" visible={copied}>
     <CopyToClipboard text={address} onCopy={onCopy} >
-      <Button
-        type="text"
-        size="small"
-        icon={<Icon name="copy-outline" />}
-      />
+      <Button type="text" size="small" icon={<Icon name="copy-outline" />} />
     </CopyToClipboard>
   </Tooltip>
 }
@@ -38,11 +34,7 @@ const QR = ({ address }) => {
     content={<QRCode value={address} size={140} bgColor="#1f1f1f" fgColor="#ffffff" />}
     trigger="click"
   >
-    <Button
-      type="text"
-      size="small"
-      icon={<Icon name="qr-code-outline" />}
-    />
+    <Button type="text" size="small" icon={<Icon name="qr-code-outline" />} />
   </Popover>
 }
 
@@ -81,7 +73,7 @@ const getTotalBalance = async (lamports, accounts, getPrice) => {
   return usd;
 }
 
-const AccountInfo = () => {
+const WalletInfo = () => {
   const [value, setValue] = useState(0);
   const accounts = useSelector(state => state.accounts);
   const dispatch = useDispatch();
@@ -133,4 +125,4 @@ const AccountInfo = () => {
   </Card>
 }
 
-export default AccountInfo;
+export default WalletInfo;

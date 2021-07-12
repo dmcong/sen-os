@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Document } from 'flexsearch';
 
-import { Row, Col, Card, Input, Icon } from 'sen-kit';
+import { Row, Col, Card, Input, Icon, Button } from 'sen-kit';
 
 import mintConfig from '@/sen_wallet/config/mint.config';
 
@@ -62,7 +62,13 @@ const Search = ({ onChange }) => {
           value={keyword}
           size="small"
           bordered={false}
-          suffix={keyword ? <Icon name="close-outline" onClick={() => setKeyword('')} /> : <Icon name="search-outline" />}
+          prefix={<Button
+            type="text"
+            style={{ marginLeft: -7 }}
+            size="small"
+            onClick={keyword ? () => setKeyword('') : () => { }}
+            icon={<Icon name={keyword ? 'close-outline' : 'search-outline'} />}
+          />}
           onChange={e => setKeyword(e.target.value)}
         />
       </Card>

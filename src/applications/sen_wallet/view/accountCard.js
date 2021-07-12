@@ -21,8 +21,9 @@ const AccountCard = ({ data, onClick }) => {
   const { ticket, name, amount, symbol, mint } = data;
   useEffect(() => {
     (async () => {
-      if (!ticket) return;
-      const { payload: { [ticket]: { icon, price, priceChange } } } = await dispatch(getCGK(ticket));
+      const { error, payload } = await dispatch(getCGK(ticket));
+      if (error) return;
+      const { [ticket]: { icon, price, priceChange } } = payload;
       const { payload: { [mint]: { decimals } } } = await dispatch(getMint(mint));
       setIcon(icon);
       setPrice(price);

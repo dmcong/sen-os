@@ -48,9 +48,8 @@ class AccountWatcher extends Component {
     this.watchId = window.senos.splt.watch(callback, filters);
   }
 
-  unwatchData = () => {
-    if (!this.watchId) return;
-    window.senos.splt.unwatch(this.watchId);
+  unwatchData = async () => {
+    try { await window.senos.splt.unwatch(this.watchId) } catch (er) { /* Nothing */ }
     this.watchId = null;
   }
 
