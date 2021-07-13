@@ -10,13 +10,13 @@ const mint = {}
 mint.development = [
   {
     ticket: 'bitcoin',
-    symbol: 'wBTC',
-    name: 'Wrapped Bitcoin',
+    symbol: 'WBTC',
+    name: 'Bitcoin',
     address: '8jk4eJymMfNZV9mkRNxJEt2VJ3pRvdJvD5FE94GXGBPM',
   },
   {
     ticket: 'ethereum',
-    symbol: 'ETH',
+    symbol: 'WETH',
     name: 'Ethereum',
     address: '27hdcZv7RtuMp75vupThR3T4KLsL61t476eosMdoec4c',
   },
