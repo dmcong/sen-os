@@ -35,13 +35,13 @@ const AccountCard = ({ data, onClick }) => {
 
   const arrow = () => {
     if (priceChange > 0) return <Typography.Text type="success" style={FONT_SIZE}>
-      <Icon name="arrow-up-circle" />
+      <Icon name="arrow-up-circle" /> {numeral(Math.abs(priceChange)).format('0.[0]')}%
     </Typography.Text>
     if (priceChange < 0) return <Typography.Text type="danger" style={FONT_SIZE}>
-      <Icon name="arrow-down-circle" />
+      <Icon name="arrow-down-circle" /> {numeral(Math.abs(priceChange)).format('0.[0]')}%
     </Typography.Text>
     return <Typography.Text type="warning" style={FONT_SIZE}>
-      <Icon name="remove-circle" />
+      <Icon name="remove-circle" /> {numeral(Math.abs(priceChange)).format('0.[0]')}%
     </Typography.Text>
   }
 

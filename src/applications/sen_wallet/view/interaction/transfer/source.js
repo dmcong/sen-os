@@ -43,7 +43,7 @@ const Source = ({
     <Col span={24}>
       <Input
         placeholder={0}
-        prefix={<Tooltip title={`Your token account: ${accountAddress}`}>
+        prefix={<Tooltip title={`The ${symbol} associated account: ${accountAddress}`}>
           <Button
             type="link"
             style={{ marginLeft: -7, color: '#ffffff73' }}
