@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Row, Col, Card, Typography, Divider } from 'sen-kit';
 
-import metadata, { DynamicPanel } from 'helpers/loader';
+import metadata, { DynamicPanel, DynamicLogo } from 'helpers/loader';
 
 
 const TitleAndValue = ({ title, value, divider = false }) => {
@@ -37,8 +37,16 @@ const HeroPanel = ({ appName }) => {
       <Card className="shadowed">
         <Row gutter={[16, 16]}>
           <Col span={24}>
-            <Typography.Title level={3}>Widget Info</Typography.Title>
+            <Row gutter={[16, 16]} align="bottom" wrap={false}>
+              <Col flex="auto">
+                <Typography.Title level={3} style={{ margin: 0 }}>Widget Info</Typography.Title>
+              </Col>
+              <Col>
+                <DynamicLogo name={appName} title={false} />
+              </Col>
+            </Row>
           </Col>
+          <Col span={24} />
           <Col span={24}>
             <TitleAndValue title="Name" value={appName} divider />
           </Col>
