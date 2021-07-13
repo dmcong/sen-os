@@ -17,7 +17,7 @@ class App extends Component {
     return <Layout style={{ backgroundColor: '#00000000' }}>
       <Layout.Content style={{ padding: 8 }}>
         <Row gutter={[16, 16]} justify="center">
-          <Col span={24} style={{ maxWidth: 1440 }}>
+          <Col span={24} style={{ maxWidth: 1920 }}>
             <Switch>
               <Route exact path='/home' component={Home} />
               <Route exact path='/market' component={Market} />

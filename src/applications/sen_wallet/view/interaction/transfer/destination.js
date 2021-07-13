@@ -5,34 +5,60 @@ import ssjs from 'senswapjs';
 import { Row, Col, Input, Typography, Button, Tooltip, Icon, Space } from 'sen-kit';
 
 
-const Destination = ({ mintAddress, value, onChange, error }) => {
-  const [address, setAddress] = useState('');
-  const [created, setCreated] = useState(false);
+const DEFAULT_META = { walletAddress: '', associatedAddress: '', state: 0 }
+const inferAccounts = async (addr, mintAddress) => {
+  let meta = { ...DEFAULT_META }
+  // Validate inputed addresses
+  if (!ssjs.isAddress(addr) || !ssjs.isAddress(mintAddress)) return meta;
+  // Get SPLT instance
+  let splt = null;
+  try {
+    splt = window.senos.splt;
+  } catch (er) {
+    return meta;
+  }
+  // Classify inputed address
+  try {
+    if (ssjs.isAssociatedAddress(addr)) meta.associatedAddress = addr;
+    else meta.associatedAddress = await splt.deriveAssociatedAddress(addr, mintAddress);
+  } catch (er) {
+    return meta;
+  }
+  // Get the status of the associated address
+  try {
+    const splt = window.senos.splt;
+    const data = await splt.getAccountData(meta.associatedAddress);
+    meta.walletAddress = data.owner;
+    meta.state = data.state;
+  } catch (er) {
+    return meta;
+  }
+  // Return
+  return meta;
+}
+
+const Destination = ({ mintAddress, value, onChange, onCallback, error }) => {
+  const [meta, setMeta] = useState({ ...DEFAULT_META });
 
   useEffect(() => {
     (async () => {
-      if (!ssjs.isAddress(value)) return setCreated(false);
-      try {
-        const splt = window.senos.splt;
-        const associatedAddress = await splt.deriveAssociatedAddress(value, mintAddress);
-        await setAddress(associatedAddress);
-        const { state } = await splt.getAccountData(associatedAddress);
-        if (!state) return setCreated(false);
-        return setCreated(true);
-      } catch (er) {
-        return setCreated(false);
-      }
+      const data = await inferAccounts(value, mintAddress);
+      await setMeta(data);
     })();
   }, [value, mintAddress]);
+  useEffect(() => onCallback({ ...meta }), [meta, onCallback]);
 
   const icon = () => {
-    if (!ssjs.isAddress(value)) return <Tooltip title="Invalid address">
+    if (!ssjs.isAddress(meta.associatedAddress)) return <Tooltip title="Invalid address">
       <Icon name='warning-outline' style={{ color: '#F2323F' }} />
     </Tooltip>
-    if (!created) return <Tooltip title="The receiver account is not created. You may pay little fee to create it for the receiver.">
+    if (meta.state === 0) return <Tooltip title="The receiver account is not created. You may pay little fee to create one for them.">
       <Icon name='help-circle-outline' style={{ color: '#FCB017' }} />
     </Tooltip>
-    return <Tooltip title={`The account is safe to transfer. The receiver associated address is ${address}.`}>
+    if (meta.state === 2) return <Tooltip title="The receiver account is frozen. You cannot send assets to a frozen account.">
+      <Icon name='help-circle-outline' style={{ color: '#FCB017' }} />
+    </Tooltip>
+    return <Tooltip title={`The account is safe to transfer. The receiver associated address is ${meta.associatedAddress}.`}>
       <Icon name='shield-checkmark-outline' style={{ color: '#3DBA4E' }} />
     </Tooltip>
   }
@@ -65,18 +91,18 @@ const Destination = ({ mintAddress, value, onChange, error }) => {
 }
 
 Destination.defaultProps = {
-  accountAddress: '',
   mintAddress: '',
   value: '',
   onChange: () => { },
+  onCallback: () => { },
   error: '',
 }
 
 Destination.propTypes = {
-  accountAddress: PropTypes.string,
   mintAddress: PropTypes.string,
   value: PropTypes.string,
-  onChange: PropTypes.any,
+  onChange: PropTypes.func,
+  onCallback: PropTypes.func,
   error: PropTypes.string,
 }
 

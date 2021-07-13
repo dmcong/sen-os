@@ -23,7 +23,7 @@
     "react-scripts": "^4.0.3",
     "remarkable": "^2.0.1",
     "sen-kit": "^1.0.40",
-    "senswapjs": "^2.0.7",
+    "senswapjs": "^2.0.9",
     "web-vitals": "^1.1.2"
   },
   "scripts": {

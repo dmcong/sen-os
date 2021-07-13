@@ -10,24 +10,31 @@ import { Row, Col, Input, Typography, Button, Space, Tooltip, Icon } from 'sen-k
 import util from 'helpers/util';
 
 
+const DEFAULT_META = { amount: 0n, decimals: 0 }
+
 const Source = ({
   accountAddress, mintAddress, symbol, maxAmount,
-  value, onChange, error
+  value, onChange, error, onCallback
 }) => {
-  const [decimals, setDecimals] = useState(0);
+  const [meta, setMeta] = useState({ ...DEFAULT_META });
   const dispatch = useDispatch();
+
+  const balance = ssjs.undecimalize(maxAmount, meta.decimals);
+  const handleMax = () => onChange(balance);
 
   useEffect(() => {
     (async () => {
-      const { error, payload } = await dispatch(getMint(mintAddress));
-      if (error) return;
-      const { [mintAddress]: { decimals } } = payload;
-      return setDecimals(decimals);
+      let meta = { ...DEFAULT_META }
+      try {
+        const { error, payload } = await dispatch(getMint(mintAddress));
+        if (error) return setMeta(meta);
+        meta.decimals = payload[mintAddress].decimals;
+        meta.amount = ssjs.decimalize(value, meta.decimals);
+      } catch (er) { /* Skip errors */ }
+      return setMeta(meta);
     })();
-  }, [mintAddress, dispatch]);
-
-  const balance = ssjs.undecimalize(maxAmount, decimals);
-  const max = () => onChange(balance);
+  }, [mintAddress, value, dispatch]);
+  useEffect(() => onCallback({ ...meta }), [meta, onCallback]);
 
   return <Row gutter={[8, 8]}>
     <Col span={24}>
@@ -47,11 +54,7 @@ const Source = ({
             disabled={!ssjs.isAddress(accountAddress)}
           >{symbol}</Button>
         </Tooltip>}
-        suffix={<Button
-          type="text"
-          style={{ marginRight: -7 }}
-          onClick={max}
-        >MAX</Button>}
+        suffix={<Button type="text" style={{ marginRight: -7 }} onClick={handleMax}>MAX</Button>}
         value={value}
         onChange={e => onChange(e.target.value || '')}
       />
@@ -87,6 +90,7 @@ Source.defaultProps = {
   maxAmount: 0n,
   value: '',
   onChange: () => { },
+  onCallback: () => { },
   error: '',
 }
 
@@ -97,6 +101,7 @@ Source.propTypes = {
   maxAmount: PropTypes.any,
   value: PropTypes.string,
   onChange: PropTypes.func,
+  onCallback: PropTypes.func,
   error: PropTypes.string,
 }
 

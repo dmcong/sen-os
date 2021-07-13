@@ -36,7 +36,7 @@ class View extends Component {
       settings: {
         hiddenZeros: false
       },
-      accountIndex: 1,
+      accountIndex: -1,
     }
   }
 
@@ -111,7 +111,7 @@ class View extends Component {
             const { amount } = accountData;
             if (!amount && hiddenZeros) return null;
             return <Col span={24} key={i}>
-              <LazyLoad height={76} overflow>
+              <LazyLoad height={76} overflow unmountIfInvisible>
                 <AccountCard data={accountData} onClick={() => this.onCard(i)} />
               </LazyLoad>
             </Col>

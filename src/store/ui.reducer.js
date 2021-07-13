@@ -62,6 +62,7 @@ export const notify = createAsyncThunk(`${NAME}/notify`, async ({ type, descript
     onClick,
     closeIcon: <Icon name="close-outline" />,
     icon,
+    style: { cursor: 'pointer' }
   });
   return {}
 });
