@@ -75,13 +75,13 @@ const Unwrap = ({ accountData, reset, onChange }) => {
       <Button type="primary" onClick={unwrap} block>Unwrap All</Button>
     </Col>
     <Col span={24} style={{ fontSize: 11 }}>
-      <Typography.Text type="secondary">Due to technical limitation, you have to:</Typography.Text>
+      <Typography.Text type="secondary">Due to technical limitation, it only allows:</Typography.Text>
       <ul style={{ paddingLeft: 16 }}>
         <li>
-          <Typography.Text type="secondary">Remove all at the time.</Typography.Text>
+          <Typography.Text type="secondary">Remove all at once.</Typography.Text>
         </li>
         <li>
-          <Typography.Text type="secondary">To increase/decrease the WSOL balance, remove all first and re-wrap your desired number.</Typography.Text>
+          <Typography.Text type="secondary">To increase/decrease the WSOL balance, remove all first then re-wrap your desired number.</Typography.Text>
         </li>
       </ul>
     </Col>
