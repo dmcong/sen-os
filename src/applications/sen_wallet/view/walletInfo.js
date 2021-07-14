@@ -62,7 +62,7 @@ const getTotalBalance = async (lamports, accounts, getPrice) => {
   // Calculate mints
   const mintAddresses = mintConfig.map(({ address }) => address);
   const accountAddresses = Object.keys(accounts);
-  for (let accountAddress of accountAddresses) {
+  for (const accountAddress of accountAddresses) {
     const { mint: mintAddress, amount } = accounts[accountAddress] || {};
     const index = mintAddresses.indexOf(mintAddress);
     if (index < 0) continue;

@@ -48,9 +48,11 @@ class Description extends Component {
       <Col>
         {this.isInstalled() ? <Button
           type="primary"
+          size="large"
           onClick={this.toApp}
         >Open</Button> : <Button
           type="primary"
+          size="large"
           icon={<Icon name="cloud-download-outline" />}
           onClick={this.installApp}
         >Install</Button>}
@@ -59,6 +61,7 @@ class Description extends Component {
         {this.isInstalled() ? <Button
           type="text"
           className="contained"
+          size="large"
           icon={<Icon name="trash-outline" />}
           onClick={this.uninstallApp}
         >Uninstall</Button> : null}
