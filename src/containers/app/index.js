@@ -15,7 +15,7 @@ import AppViewer from 'containers/market/appViewer';
 class App extends Component {
   render() {
     return <Layout style={{ backgroundColor: '#00000000' }}>
-      <Layout.Content style={{ padding: 8 }}>
+      <Layout.Content style={{ padding: '12px 8px' }}>
         <Row gutter={[16, 16]} justify="center">
           <Col span={24} style={{ maxWidth: 1920 }}>
             <Switch>

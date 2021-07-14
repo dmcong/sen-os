@@ -4,7 +4,7 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 import ssjs from 'senswapjs';
 
-import { Row, Col, Button, Icon } from 'sen-kit';
+import { Row, Col } from 'sen-kit';
 import HeroPanel from './heroPanel';
 import Description from './description';
 
@@ -12,11 +12,6 @@ import { updateApps } from 'store/babysitter.reducer';
 
 
 class AppViewer extends Component {
-
-  back = () => {
-    const { history } = this.props;
-    return history.goBack();
-  }
 
   parseParams = () => {
     const { match: { params } } = this.props;
@@ -36,14 +31,6 @@ class AppViewer extends Component {
     const { appName } = this.parseParams();
 
     return <Row gutter={[16, 16]}>
-      <Col span={24}>
-        <Button
-          type="text"
-          size="large"
-          icon={<Icon name="arrow-back-outline" />}
-          onClick={this.back}
-        >Back</Button>
-      </Col>
       <Col xs={{ span: 24 }} md={{ span: 8 }}>
         <HeroPanel appName={appName} />
       </Col>

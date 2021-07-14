@@ -28,10 +28,11 @@ export const connectWallet = createAsyncThunk(`${NAME}/connectWallet`, async (wa
 });
 
 export const disconnectWallet = createAsyncThunk(`${NAME}/disconnectWallet`, async () => {
-  if (!window.senos || !window.senos.wallet) return { ...initialState }
-  window.senos.wallet.disconnect();
-  window.senos.wallet = null;
-  return { ...initialState }
+  if (window.senos && window.senos.wallet) {
+    window.senos.wallet.disconnect();
+    window.senos.wallet = null;
+  }
+  window.location.reload(); // Reset all redux store
 });
 
 /**

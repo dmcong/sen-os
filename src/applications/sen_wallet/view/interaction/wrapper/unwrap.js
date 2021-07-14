@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import ssjs from 'senswapjs';
 
-import { Row, Col, Button, Input, Typography, Icon, Tooltip } from 'sen-kit';
+import { Row, Col, Button, Input, Typography, Icon, Tooltip, Space } from 'sen-kit';
 
 import util from 'helpers/util';
 import { useSenOs } from 'helpers/senos';
@@ -69,7 +69,11 @@ const Unwrap = ({ accountData, reset, onChange }) => {
       />
     </Col>
     <Col span={24}>
-      <Typography.Text type="danger" style={{ fontSize: 11 }} >{error}</Typography.Text>
+      {error ? <Typography.Text type="danger" style={{ fontSize: 11 }}><Space>
+        <Icon name="warning-outline" />
+        {error}
+      </Space>
+      </Typography.Text> : null}
     </Col>
     <Col span={24}>
       <Button type="primary" onClick={unwrap} block>Unwrap All</Button>

@@ -70,7 +70,11 @@ const Wrap = ({ accountData, reset, onChange }) => {
           />
         </Col>
         <Col flex="auto">
-          <Typography.Text type="danger" style={{ fontSize: 11 }} >{error}</Typography.Text>
+          {error ? <Typography.Text type="danger" style={{ fontSize: 11 }}><Space>
+            <Icon name="warning-outline" />
+            {error}
+          </Space>
+          </Typography.Text> : null}
         </Col>
         <Col>
           <Space style={{ fontSize: 11 }}>
