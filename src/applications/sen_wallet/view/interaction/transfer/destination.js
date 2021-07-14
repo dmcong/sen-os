@@ -14,7 +14,10 @@ const inferAccounts = async (addr, mintAddress) => {
   // Classify inputed address
   try {
     if (ssjs.isAssociatedAddress(addr)) meta.associatedAddress = addr;
-    else meta.associatedAddress = await splt.deriveAssociatedAddress(addr, mintAddress);
+    else {
+      meta.walletAddress = addr;
+      meta.associatedAddress = await splt.deriveAssociatedAddress(addr, mintAddress);
+    }
   } catch (er) {
     return meta;
   }

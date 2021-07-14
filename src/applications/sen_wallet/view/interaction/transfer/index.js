@@ -32,14 +32,15 @@ const Transfer = ({ accountData, reset, onChange }) => {
 
   const { address, mint, symbol, amount: maxAmount } = accountData;
   const transfer = async () => {
-    const { associatedAddress: dstAddress, state } = dstMeta;
+    const { associatedAddress: dstAddress, walletAddress: ownerAddress, state } = dstMeta;
     const { amount } = srcMeta;
     if (!amount) return setSrcError('Invalid amount');
     if (amount > maxAmount) return setSrcError('Exceed your available balance');
     if (!ssjs.isAddress(dstAddress)) return setDstError('Invalid receiver address');
-    if (state !== 1) return setDstError('Resolve the problem before proceeding');
+    if (state === 2) return setDstError('The receiver address has been frozen');
     try {
       const { splt, wallet } = window.senos;
+      if (!state) await splt.initializeAccount(mint, ownerAddress, wallet);
       const { txId } = await splt.transfer(amount, address, dstAddress, wallet);
       await notify({
         type: 'success',
@@ -82,11 +83,7 @@ const Transfer = ({ accountData, reset, onChange }) => {
         />
       </Col>
       <Col span={24}>
-        <Button
-          type="primary"
-          onClick={transfer}
-          block
-        >Transfer</Button>
+        <Button type="primary" onClick={transfer} block>Transfer</Button>
       </Col>
     </Row>
   </Card>
