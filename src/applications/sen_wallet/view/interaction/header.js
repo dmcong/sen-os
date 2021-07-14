@@ -5,10 +5,11 @@ import { getCGK } from '@/sen_wallet/controller/cgk.controller';
 
 import { Row, Col, Icon, Avatar, Typography } from 'sen-kit';
 
-const Header = ({ mintAddress, ticket, symbol, name }) => {
+const Header = ({ accountData, reset }) => {
   const [icon, setIcon] = useState('#');
   const dispatch = useDispatch();
 
+  const { mint, ticket, symbol, name } = accountData;
   useEffect(() => {
     (async () => {
       const { error, payload } = await dispatch(getCGK(ticket));
@@ -16,7 +17,10 @@ const Header = ({ mintAddress, ticket, symbol, name }) => {
       const { [ticket]: { icon } } = payload;
       setIcon(icon);
     })();
-  }, [ticket, dispatch])
+  }, [ticket, dispatch]);
+  useEffect(() => {
+    return () => setIcon('#');
+  }, [reset]);
 
   return <Row gutter={[16, 16]} align="middle" wrap={false}>
     <Col>
@@ -25,24 +29,20 @@ const Header = ({ mintAddress, ticket, symbol, name }) => {
       </Avatar >
     </Col>
     <Col>
-      <Typography.Title level={5} style={{ margin: 0 }}>{name || mintAddress.substring(0, 6)}</Typography.Title>
+      <Typography.Title level={5} style={{ margin: 0 }}>{name || mint.substring(0, 6)}</Typography.Title>
       <Typography.Text type="secondary" style={{ margin: 0 }}>{symbol}</Typography.Text>
     </Col>
   </Row>
 }
 
 Header.defaultProps = {
-  mintAddress: '',
-  ticket: '',
-  name: '',
-  symbol: 'TOKEN',
+  accountData: {},
+  reset: false,
 }
 
 Header.propTypes = {
-  mintAddress: PropTypes.string,
-  ticket: PropTypes.string,
-  name: PropTypes.string,
-  symbol: PropTypes.string,
+  accountData: PropTypes.object,
+  reset: PropTypes.bool,
 }
 
 export default Header;

@@ -9,13 +9,12 @@ import { Row, Col, Card, Avatar, Icon, Typography, Divider, Space, Button } from
 import { getCGK } from '@/sen_wallet/controller/cgk.controller';
 import { getMint } from '@/sen_wallet/controller/mints.controller';
 
-const FONT_SIZE = { fontSize: 11 }
 
 const AccountCard = ({ data, onClick }) => {
   const [icon, setIcon] = useState('#');
   const [price, setPrice] = useState(0);
   const [priceChange, setPriceChange] = useState(0);
-  const [decimals, setDecimals] = useState(9);
+  const [decimals, setDecimals] = useState(0);
   const dispatch = useDispatch();
 
   const { ticket, name, amount, symbol, mint } = data;
@@ -34,13 +33,13 @@ const AccountCard = ({ data, onClick }) => {
   const balance = ssjs.undecimalize(amount, decimals);
 
   const arrow = () => {
-    if (priceChange > 0) return <Typography.Text type="success" style={FONT_SIZE}>
+    if (priceChange > 0) return <Typography.Text type="success">
       <Icon name="arrow-up-circle" /> {numeral(Math.abs(priceChange)).format('0.[0]')}%
     </Typography.Text>
-    if (priceChange < 0) return <Typography.Text type="danger" style={FONT_SIZE}>
+    if (priceChange < 0) return <Typography.Text type="danger">
       <Icon name="arrow-down-circle" /> {numeral(Math.abs(priceChange)).format('0.[0]')}%
     </Typography.Text>
-    return <Typography.Text type="warning" style={FONT_SIZE}>
+    return <Typography.Text type="warning">
       <Icon name="remove-circle" /> {numeral(Math.abs(priceChange)).format('0.[0]')}%
     </Typography.Text>
   }
@@ -63,11 +62,11 @@ const AccountCard = ({ data, onClick }) => {
             <Typography.Text>{numeral(balance).format('0,0.[00]')} </Typography.Text>
             <Typography.Text type="secondary">{symbol || 'TOKEN'}</Typography.Text>
           </Space>
-          <Space>
-            <Typography.Text style={FONT_SIZE}>{name || mint.substring(0, 6)}</Typography.Text>
+          <Space style={{ fontSize: 11 }}>
+            <Typography.Text>{name || mint.substring(0, 6)}</Typography.Text>
             <Divider type="vertical" style={{ margin: 0 }} />
             {arrow()}
-            <Typography.Text style={FONT_SIZE}>${price}</Typography.Text>
+            <Typography.Text>${price}</Typography.Text>
           </Space>
         </Space>
       </Col>

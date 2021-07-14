@@ -51,11 +51,12 @@ class View extends Component {
     if (!isEqual(prevAccounts, accounts)) this.sort(Object.keys(accounts));
   }
 
-  sort = (accountAddresses) => {
+  sort = async (accountAddresses) => {
     const { accounts } = this.props;
     const mintAddresses = mintConfig.map(({ address }) => address);
     let priority = [];
     let rest = [];
+    // Prioritized mints
     accountAddresses.forEach(address => {
       const data = accounts[address];
       const { mint } = data;
@@ -64,6 +65,21 @@ class View extends Component {
       const { ticket, symbol, name } = mintConfig[index];
       return priority.push({ ...data, address, ticket, symbol, name });
     });
+    // We always add WSOL as default
+    const splt = window.senos.splt;
+    const { senos: { wallet: { address: walletAddress } } } = this.props;
+    const wsolMint = mintConfig.find(({ symbol }) => (symbol === 'WSOL'));
+    const wsolAssociatedAddress = await splt.deriveAssociatedAddress(walletAddress, wsolMint.address);
+    if (!accountAddresses.includes(wsolAssociatedAddress)) {
+      priority.push({
+        address: wsolAssociatedAddress,
+        mint: wsolMint.address,
+        ticket: wsolMint.ticket,
+        symbol: wsolMint.symbol,
+        name: wsolMint.name,
+      });
+    }
+    // Unknown mints
     const orderedAccounts = priority.concat(rest);
     return this.setState({ orderedAccounts });
   }

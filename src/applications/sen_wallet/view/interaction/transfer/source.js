@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
 import { getMint } from '@/sen_wallet/controller/mints.controller';
 import ssjs from 'senswapjs';
-import numeral from 'numeral';
 
 import { Row, Col, Input, Typography, Button, Space, Tooltip, Icon } from 'sen-kit';
 
@@ -46,7 +45,7 @@ const Source = ({
         prefix={<Tooltip title={`The ${symbol} associated account: ${accountAddress}`}>
           <Button
             type="link"
-            style={{ marginLeft: -7, color: '#ffffff73' }}
+            style={{ marginLeft: -7, color: 'inherit' }}
             icon={<Icon name="wallet-outline" />}
             href={util.explorer(accountAddress)}
             target="_blank"
@@ -60,25 +59,12 @@ const Source = ({
       />
     </Col>
     <Col span={24}>
-      <Row gutter={[8, 8]} align="center" justify="space-between" wrap={false}>
-        <Col>
-          {error ? <Typography.Text type="danger" style={{ fontSize: 11 }}>
-            <Space>
-              <Icon name="warning-outline" />
-              {error}
-            </Space>
-          </Typography.Text> : null}
-        </Col>
-        <Col>
-          <Space>
-            <Typography.Text type="secondary" style={{ fontSize: 11 }}>Available: </Typography.Text>
-            <Tooltip title={balance}>
-              <Typography.Text style={{ fontSize: 11 }}>{numeral(balance).format('0,0.[0000]')}</Typography.Text>
-            </Tooltip>
-            <Typography.Text type="secondary" style={{ fontSize: 11 }}>{symbol}</Typography.Text>
-          </Space>
-        </Col>
-      </Row>
+      {error ? <Typography.Text type="danger" style={{ fontSize: 11 }}>
+        <Space>
+          <Icon name="warning-outline" />
+          {error}
+        </Space>
+      </Typography.Text> : null}
     </Col>
   </Row>
 }

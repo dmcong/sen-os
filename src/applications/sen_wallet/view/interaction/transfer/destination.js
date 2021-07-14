@@ -7,16 +7,10 @@ import { Row, Col, Input, Typography, Button, Tooltip, Icon, Space } from 'sen-k
 
 const DEFAULT_META = { walletAddress: '', associatedAddress: '', state: 0 }
 const inferAccounts = async (addr, mintAddress) => {
+  const { splt } = window.senos;
   let meta = { ...DEFAULT_META }
   // Validate inputed addresses
   if (!ssjs.isAddress(addr) || !ssjs.isAddress(mintAddress)) return meta;
-  // Get SPLT instance
-  let splt = null;
-  try {
-    splt = window.senos.splt;
-  } catch (er) {
-    return meta;
-  }
   // Classify inputed address
   try {
     if (ssjs.isAssociatedAddress(addr)) meta.associatedAddress = addr;
@@ -26,7 +20,6 @@ const inferAccounts = async (addr, mintAddress) => {
   }
   // Get the status of the associated address
   try {
-    const splt = window.senos.splt;
     const data = await splt.getAccountData(meta.associatedAddress);
     meta.walletAddress = data.owner;
     meta.state = data.state;

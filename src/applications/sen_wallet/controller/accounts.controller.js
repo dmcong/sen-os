@@ -28,10 +28,26 @@ export const getAccounts = createAsyncThunk(`${NAME}/getAccounts`, async (ownerA
   return bulk;
 });
 
+export const getAccount = createAsyncThunk(`${NAME}/getAccount`, async ({ address }, { getState }) => {
+  if (!ssjs.isAddress(address)) throw new Error('Invalid address');
+  const { accounts: { [address]: data } } = getState();
+  if (data) return { [address]: data }
+  const splt = window.senos.splt;
+  const raw = await splt.getAccountData(address);
+  return { [address]: raw }
+});
+
 export const upsetAccount = createAsyncThunk(`${NAME}/upsetAccount`, async ({ address, data }) => {
   if (!ssjs.isAddress(address)) throw new Error('Invalid address');
   if (!data) throw new Error('Data is empty');
   return { [address]: data }
+});
+
+export const deleteAccount = createAsyncThunk(`${NAME}/deleteAccount`, async ({ address }, { getState }) => {
+  if (!ssjs.isAddress(address)) throw new Error('Invalid address');
+  const { accounts: { [address]: data } } = getState();
+  if (!data) return {}
+  return { address }
 });
 
 /**
@@ -43,7 +59,9 @@ const slice = createSlice({
   initialState,
   extraReducers: builder => void builder
     .addCase(getAccounts.fulfilled, (state, { payload }) => void Object.assign(state, payload))
+    .addCase(getAccount.fulfilled, (state, { payload }) => void Object.assign(state, payload))
     .addCase(upsetAccount.fulfilled, (state, { payload }) => void Object.assign(state, payload))
+    .addCase(deleteAccount.fulfilled, (state, { payload }) => void delete state[payload.address])
 });
 
 export default slice.reducer;
