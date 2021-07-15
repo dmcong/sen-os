@@ -19,25 +19,25 @@ class Deck extends Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     this.updatePokemon();
   }
 
   updatePokemon = async () => {
-    const { senos: { pdb } } = this.props;
-    const pokemons = await pdb.keys();
+    const { senos: { db } } = this.props;
+    const pokemons = await db.keys();
     return this.setState({ pokemons });
   }
 
   catchPokemon = async () => {
-    const { senos: { pdb }, main: { name } } = this.props;
-    await pdb.setItem(name, new Date());
+    const { senos: { db }, main: { name } } = this.props;
+    await db.setItem(name, new Date());
     return await this.updatePokemon();
   }
 
   releasePokemon = async (pokemon) => {
-    const { senos: { pdb } } = this.props;
-    await pdb.removeItem(pokemon);
+    const { senos: { db } } = this.props;
+    await db.removeItem(pokemon);
     return await this.updatePokemon();
   }
 

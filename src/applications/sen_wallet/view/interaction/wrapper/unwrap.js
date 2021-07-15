@@ -19,7 +19,7 @@ const Unwrap = ({ accountData, reset, onChange }) => {
   const { address, symbol, amount, mint } = accountData;
   useEffect(() => {
     (async () => {
-      const { error, payload } = await dispatch(getMint(mint));
+      const { error, payload } = await dispatch(getMint({ address: mint }));
       if (error) return setError(error.message);
       const { [mint]: { decimals } } = payload;
       setDecimals(decimals);

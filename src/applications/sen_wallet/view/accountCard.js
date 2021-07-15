@@ -20,18 +20,24 @@ const AccountCard = ({ data, onClick }) => {
   const { ticket, name, amount, symbol, mint } = data;
   useEffect(() => {
     (async () => {
+      const { error, payload } = await dispatch(getMint({ address: mint }));
+      if (error) return;
+      const { [mint]: { decimals } } = payload;
+      setDecimals(decimals);
+    })();
+  }, [dispatch, mint]);
+  useEffect(() => {
+    (async () => {
       const { error, payload } = await dispatch(getCGK(ticket));
       if (error) return;
       const { [ticket]: { icon, price, priceChange } } = payload;
-      const { payload: { [mint]: { decimals } } } = await dispatch(getMint(mint));
       setIcon(icon);
       setPrice(price);
       setPriceChange(priceChange);
-      setDecimals(decimals);
     })();
-  }, [ticket, dispatch, mint]);
-  const balance = ssjs.undecimalize(amount, decimals);
+  }, [ticket, dispatch]);
 
+  const balance = ssjs.undecimalize(amount, decimals);
   const arrow = () => {
     if (priceChange > 0) return <Typography.Text type="success">
       <Icon name="arrow-up-circle" /> {numeral(Math.abs(priceChange)).format('0.[0]')}%

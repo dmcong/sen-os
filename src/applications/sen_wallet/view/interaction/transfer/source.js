@@ -25,7 +25,7 @@ const Source = ({
     (async () => {
       let meta = { ...DEFAULT_META }
       try {
-        const { error, payload } = await dispatch(getMint(mintAddress));
+        const { error, payload } = await dispatch(getMint({ address: mintAddress }));
         if (error) return setMeta(meta);
         meta.decimals = payload[mintAddress].decimals;
         meta.amount = ssjs.decimalize(value, meta.decimals);

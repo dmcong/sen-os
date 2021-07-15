@@ -21,16 +21,22 @@ const Info = ({ accountData, reset }) => {
   const balance = ssjs.undecimalize(amount, decimals);
   useEffect(() => {
     (async () => {
+      const { error, payload } = await dispatch(getMint({ address: mint }));
+      if (error) return;
+      const { [mint]: { decimals } } = payload;
+      setDecimals(decimals);
+    })();
+  }, [dispatch, mint]);
+  useEffect(() => {
+    (async () => {
       const { error, payload } = await dispatch(getCGK(ticket));
       if (error) return;
       const { [ticket]: { icon, price, priceChange } } = payload;
-      const { payload: { [mint]: { decimals } } } = await dispatch(getMint(mint));
       setIcon(icon);
       setPrice(price);
       setPriceChange(priceChange);
-      setDecimals(decimals);
     })();
-  }, [ticket, dispatch, mint]);
+  }, [ticket, dispatch]);
   useEffect(() => {
     return () => {
       setIcon('#');

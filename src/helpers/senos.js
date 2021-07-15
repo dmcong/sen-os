@@ -21,7 +21,10 @@ const SenOsProvider = ({ children, appName }) => {
   const address = senos.wallet?.address;
   const instanceName = util.normalizeAppName(appName);
   const pdb = ssjs.isAddress(address) ? createPDB(address) : null;
-  senos.pdb = pdb?.createInstance({ storeName: instanceName });
+  (async () => {
+    console.log(await pdb.keys());
+  })();
+  senos.db = pdb?.createInstance({ storeName: instanceName });
   // Context provider
   return <Context.Provider value={{ senos }}>
     {children}

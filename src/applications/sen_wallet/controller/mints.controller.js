@@ -15,7 +15,7 @@ const initialState = {}
  * Actions
  */
 
-export const getMint = createAsyncThunk(`${NAME}/getMint`, async (address, { getState }) => {
+export const getMint = createAsyncThunk(`${NAME}/getMint`, async ({ address }, { getState }) => {
   if (!ssjs.isAddress(address)) throw new Error('Invalid address');
   const { mints: { [address]: data } } = getState();
   if (data) return { [address]: data }
