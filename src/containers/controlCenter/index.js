@@ -4,12 +4,15 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import isEqual from 'react-fast-compare';
 
-import { Row, Col, Icon, Switch, Space, Drawer, Typography, Divider, Card } from 'sen-kit';
+import {
+  Row, Col, Icon, Switch, Space, Drawer, Typography, Divider, Card,
+  Button, Badge
+} from 'sen-kit';
 import Navigation from './navigation';
 import Shelf from './shelf';
-import Sync from './sync';
 
 import './style.less';
+import { toggleSync } from 'store/ui.reducer';
 
 
 class ControlCenter extends Component {
@@ -38,7 +41,7 @@ class ControlCenter extends Component {
   }
 
   render() {
-    const { ui: { visibleControlCenter } } = this.props;
+    const { ui: { visibleControlCenter, visibleSync }, toggleSync } = this.props;
     const { settings } = this.state;
 
     return <Drawer
@@ -60,7 +63,14 @@ class ControlCenter extends Component {
             <Col>
               <Card hoverable>
                 <Space>
-                  <Sync />
+                  <Badge status="success">
+                    <Button
+                      type="text"
+                      className="contained"
+                      icon={<Icon name="cloudy-outline" />}
+                      onClick={() => toggleSync(!visibleSync)}
+                    />
+                  </Badge>
                   <Divider type="vertical" />
                   <Typography.Text>Let's customize your workspace!</Typography.Text>
                   <Divider type="vertical" />
@@ -90,6 +100,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
+  toggleSync,
 }, dispatch);
 
 export default withRouter(connect(

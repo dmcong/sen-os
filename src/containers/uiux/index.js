@@ -4,6 +4,7 @@ import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 
 import { resize } from 'store/ui.reducer';
+import Sync from './sync';
 
 
 class UiUx extends Component {
@@ -18,7 +19,9 @@ class UiUx extends Component {
   }
 
   render() {
-    return <Fragment />
+    return <Fragment >
+      <Sync />
+    </Fragment>
   }
 }
 

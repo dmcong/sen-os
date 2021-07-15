@@ -3,15 +3,14 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import isEqual from 'react-fast-compare';
 
-import {
-  Row, Col, Icon, Input, Tooltip,
-  Button, Badge, Popover
-} from 'sen-kit';
+import { Row, Col, Icon, Input, Tooltip, Button, Modal, Typography } from 'sen-kit';
+import Policy from './policy';
 
 import PDB from 'helpers/pdb';
 import util from 'helpers/util';
-import { notify } from 'store/ui.reducer';
+import { toggleSync, notify } from 'store/ui.reducer';
 
 
 class Sync extends Component {
@@ -20,8 +19,15 @@ class Sync extends Component {
 
     this.state = {
       copied: false,
+      reviewed: false,
       link: '',
     }
+  }
+
+  componentDidUpdate(prevProps) {
+    const { ui: { visibleSync: prevVisibleSync } } = prevProps;
+    const { ui: { visibleSync } } = this.props;
+    if (!isEqual(prevVisibleSync, visibleSync)) this.onReview(false);
   }
 
   parseCID = (link) => {
@@ -44,6 +50,10 @@ class Sync extends Component {
     this.setState({ copied: false });
   }
 
+  onReview = (reviewed) => {
+    return this.setState({ reviewed });
+  }
+
   onBackup = async () => {
     const { wallet: { address } } = this.props;
     const pdb = new PDB(address);
@@ -52,7 +62,7 @@ class Sync extends Component {
   }
 
   onRestore = async () => {
-    const { wallet: { address }, notify } = this.props;
+    const { wallet: { address }, notify, toggleSync } = this.props;
     const { link } = this.state;
     const cid = this.parseCID(link);
     if (!cid) return notify({
@@ -60,16 +70,28 @@ class Sync extends Component {
       description: 'Invalid backup link format'
     });
     const pdb = new PDB(address);
-    const data = await pdb.restore(cid);
-    console.log(data);
+    await pdb.restore(cid);
+    await toggleSync(false);
+    return window.location.reload();
   }
 
   render() {
-    const { copied, link } = this.state;
+    const { ui: { visibleSync }, toggleSync } = this.props;
+    const { reviewed, copied, link } = this.state;
 
-    return <Popover
-      overlayStyle={{ maxWidth: 370 }}
-      content={<Row gutter={[8, 8]}>
+    return <Modal
+      visible={visibleSync}
+      onCancel={() => toggleSync(false)}
+      closeIcon={<Icon name="close" />}
+      footer={null}
+      destroyOnClose={true}
+      centered={true}
+    >
+      <Row gutter={[16, 16]}>
+        <Col span={24}>
+          <Typography.Title level={5} style={{ margin: 0 }}>Backup & Restore</Typography.Title>
+        </Col>
+        <Col span={24} />
         <Col span={24}>
           <Input
             placeholder="https://ipfs.io/ipfs/..."
@@ -97,44 +119,39 @@ class Sync extends Component {
             onChange={this.onLink}
           />
         </Col>
-        <Col span={16}>
+        <Col span={24}>
+          <Policy value={reviewed} onChange={this.onReview} />
+        </Col>
+        <Col span={14}>
           <Button
             type="primary"
-            icon={<Icon name="link-outline" />}
+            icon={<Icon name="color-wand-outline" />}
             onClick={this.onBackup}
+            disabled={!reviewed}
             block
           >Gen a backup link</Button>
         </Col>
-        <Col span={8}>
+        <Col span={10}>
           <Button
             type="text"
             className="contained"
-            icon={<Icon name="link-outline" />}
+            icon={<Icon name="push-outline" />}
             onClick={this.onRestore}
             block
           >Restore</Button>
         </Col>
-      </Row>}
-      trigger="click"
-      placement="bottom"
-    >
-      <Badge status="success">
-        <Button
-          type="text"
-          className="contained"
-          icon={<Icon name="cloudy-outline" />}
-        />
-      </Badge>
-    </Popover>
+      </Row>
+    </Modal>
   }
 }
 
 const mapStateToProps = state => ({
+  ui: state.ui,
   wallet: state.wallet,
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  notify,
+  toggleSync, notify,
 }, dispatch);
 
 export default withRouter(connect(

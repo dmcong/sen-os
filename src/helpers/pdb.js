@@ -10,7 +10,6 @@ import util from 'helpers/util';
 class PDB {
   constructor(walletAddress) {
     this.dbName = walletAddress;
-    this.pdb = localForage.createInstance({ name: walletAddress });
   }
 
   _IPFS = async () => {
@@ -34,7 +33,7 @@ class PDB {
     });
   }
 
-  backup = async () => {
+  _getAll = async () => {
     let data = {}
     const apps = (await this.createInstance('senos').getItem('apps'))
       .flat()
@@ -43,20 +42,40 @@ class PDB {
     for (const app of apps) {
       data[app] = {}
       const instance = this.createInstance(app);
-      await instance.iterate((value, key) => data[app][key] = value);
+      await instance.iterate((value, key) => { data[app][key] = value });
     }
+    return data;
+  }
+
+  _setAll = async (data) => {
+    for (const app in data) {
+      const instance = await this.createInstance(app);
+      for (const key in data[app]) {
+        const value = data[app][key];
+        await instance.setItem(key, value);
+      }
+    }
+  }
+
+  backup = async () => {
+    // Build data
+    const data = await this._getAll();
     const raw = JSON.stringify(data);
+    // Upload data
     const ipfs = await this._IPFS();
     const { path: cid } = await ipfs.add(raw);
     return cid;
   }
 
   restore = async (cid) => {
+    // Download data
     const ipfs = await this._IPFS();
     const stream = await ipfs.cat(cid);
-    let raw = ''
+    let raw = '';
     for await (const chunk of stream) raw += Buffer.from(chunk).toString();
     const data = JSON.parse(raw);
+    // Apply to storage
+    await this._setAll(data);
     return data;
   }
 

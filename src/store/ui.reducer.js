@@ -28,6 +28,7 @@ const initialState = {
   infix: getInfix(),
   touchable: util.isTouchable(),
   visibleControlCenter: false,
+  visibleSync: false,
 }
 
 /**
@@ -38,16 +39,6 @@ export const resize = createAsyncThunk(`${NAME}/resize`, async () => {
   const width = window.innerWidth;
   const infix = getInfix();
   return { width, infix }
-});
-
-export const openControlCenter = createAsyncThunk(`${NAME}/openControlCenter`, async () => {
-  document.body.style.overflow = 'hidden';
-  return { visibleControlCenter: true }
-});
-
-export const closeControlCenter = createAsyncThunk(`${NAME}/closeControlCenter`, async () => {
-  document.body.style.overflow = 'scroll';
-  return { visibleControlCenter: false }
 });
 
 export const notify = createAsyncThunk(`${NAME}/notify`, async ({ type, description, onClick }) => {
@@ -69,6 +60,16 @@ export const notify = createAsyncThunk(`${NAME}/notify`, async ({ type, descript
   return {}
 });
 
+export const toggleControlCenter = createAsyncThunk(`${NAME}/toggleControlCenter`, async (visible) => {
+  document.body.style.overflow = visible ? 'hidden' : 'scroll';
+  return { visibleControlCenter: visible }
+});
+
+export const toggleSync = createAsyncThunk(`${NAME}/toggleSync`, async (visible) => {
+  document.body.style.overflow = visible ? 'hidden' : 'scroll';
+  return { visibleSync: visible }
+});
+
 /**
  * Usual procedure
  */
@@ -78,9 +79,9 @@ const slice = createSlice({
   initialState,
   extraReducers: builder => void builder
     .addCase(resize.fulfilled, (state, { payload }) => void Object.assign(state, payload))
-    .addCase(openControlCenter.fulfilled, (state, { payload }) => void Object.assign(state, payload))
-    .addCase(closeControlCenter.fulfilled, (state, { payload }) => void Object.assign(state, payload))
     .addCase(notify.fulfilled, (state, { payload }) => void Object.assign(state, payload))
+    .addCase(toggleControlCenter.fulfilled, (state, { payload }) => void Object.assign(state, payload))
+    .addCase(toggleSync.fulfilled, (state, { payload }) => void Object.assign(state, payload))
 });
 
 export default slice.reducer;

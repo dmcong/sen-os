@@ -7,21 +7,21 @@ import ssjs from 'senswapjs';
 import { Row, Col, Brand, Button, Icon, Space } from 'sen-kit';
 import Wallet from '../wallet';
 
-import { openControlCenter, closeControlCenter } from 'store/ui.reducer';
+import { toggleControlCenter } from 'store/ui.reducer';
 
 
 class Navigation extends Component {
 
   to = async (route = '#') => {
-    const { history, closeControlCenter } = this.props;
-    await closeControlCenter();
+    const { history, toggleControlCenter } = this.props;
+    await toggleControlCenter(false);
     return history.push(route);
   }
 
   render() {
     const {
       ui: { infix, visibleControlCenter }, wallet: { address },
-      openControlCenter, closeControlCenter
+      toggleControlCenter
     } = this.props;
 
     return <Row gutter={[16, 16]} align="middle">
@@ -39,7 +39,7 @@ class Navigation extends Component {
           <Button
             type="text"
             className="contained"
-            onClick={visibleControlCenter ? closeControlCenter : openControlCenter}
+            onClick={() => toggleControlCenter(!visibleControlCenter)}
             icon={<Icon name={visibleControlCenter ? 'close-outline' : 'grid-outline'} />}
             disabled={!ssjs.isAddress(address)}
           />
@@ -64,7 +64,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  openControlCenter, closeControlCenter,
+  toggleControlCenter,
 }, dispatch);
 
 export default withRouter(connect(
