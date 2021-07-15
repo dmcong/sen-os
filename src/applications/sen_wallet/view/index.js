@@ -56,7 +56,7 @@ class View extends Component {
       return priority.push({ ...data, address, ticket, symbol, name });
     });
     // We always add WSOL as default
-    const splt = window.senos.splt;
+    const { splt } = window.senos;
     const { senos: { wallet: { address: walletAddress } } } = this.props;
     const wsolMint = mintConfig.find(({ symbol }) => (symbol === 'WSOL'));
     const wsolAssociatedAddress = await splt.deriveAssociatedAddress(walletAddress, wsolMint.address);

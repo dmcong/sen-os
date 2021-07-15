@@ -16,7 +16,7 @@ const initialState = {}
 
 export const getAccounts = createAsyncThunk(`${NAME}/getAccounts`, async (ownerAddress) => {
   if (!ssjs.isAddress(ownerAddress)) throw new Error('Invalid owner/wallet address');
-  const splt = window.senos.splt;
+  const { splt } = window.senos;
   const ownerPublicKey = ssjs.fromAddress(ownerAddress);
   const { value } = await splt.connection.getTokenAccountsByOwner(ownerPublicKey, { programId: splt.spltProgramId });
   let bulk = {}
@@ -32,7 +32,7 @@ export const getAccount = createAsyncThunk(`${NAME}/getAccount`, async ({ addres
   if (!ssjs.isAddress(address)) throw new Error('Invalid address');
   const { accounts: { [address]: data } } = getState();
   if (data) return { [address]: data }
-  const splt = window.senos.splt;
+  const { splt } = window.senos;
   const raw = await splt.getAccountData(address);
   return { [address]: raw }
 });

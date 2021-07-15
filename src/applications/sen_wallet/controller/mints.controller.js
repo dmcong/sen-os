@@ -19,7 +19,7 @@ export const getMint = createAsyncThunk(`${NAME}/getMint`, async (address, { get
   if (!ssjs.isAddress(address)) throw new Error('Invalid address');
   const { mints: { [address]: data } } = getState();
   if (data) return { [address]: data }
-  const splt = window.senos.splt;
+  const { splt } = window.senos;
   const raw = await splt.getMintData(address);
   return { [address]: raw }
 });
