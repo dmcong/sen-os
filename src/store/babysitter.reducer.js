@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 import ssjs from 'senswapjs';
-import { createPDB } from 'helpers/pdb';
+import PDB from 'helpers/pdb';
 
 
 /**
@@ -30,7 +30,7 @@ const initialState = {
 export const loadApps = createAsyncThunk(`${NAME}/loadApps`, async (_, { getState }) => {
   const { wallet: { address } } = getState();
   if (!ssjs.isAddress(address)) throw new Error('Wallet is not connected yet');
-  const db = createPDB(address).createInstance({ storeName: 'senos' });
+  const db = (new PDB(address)).createInstance('senos');
   const apps = troubleshoot(await db.getItem('apps'));
   return { apps }
 });
@@ -38,7 +38,7 @@ export const loadApps = createAsyncThunk(`${NAME}/loadApps`, async (_, { getStat
 export const updateApps = createAsyncThunk(`${NAME}/updateApps`, async (apps, { getState }) => {
   const { wallet: { address } } = getState();
   if (!ssjs.isAddress(address)) throw new Error('Wallet is not connected yet');
-  const db = createPDB(address).createInstance({ storeName: 'senos' });
+  const db = (new PDB(address)).createInstance('senos');
   apps = troubleshoot(apps);
   await db.setItem('apps', apps);
   return { apps }

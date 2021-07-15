@@ -7,6 +7,7 @@ import isEqual from 'react-fast-compare';
 import { Row, Col, Icon, Switch, Space, Drawer, Typography, Divider, Card } from 'sen-kit';
 import Navigation from './navigation';
 import Shelf from './shelf';
+import Sync from './sync';
 
 import './style.less';
 
@@ -59,7 +60,9 @@ class ControlCenter extends Component {
             <Col>
               <Card hoverable>
                 <Space>
-                  <Typography.Text style={{ margin: 0 }}>Let's customize your workspace!</Typography.Text>
+                  <Sync />
+                  <Divider type="vertical" />
+                  <Typography.Text>Let's customize your workspace!</Typography.Text>
                   <Divider type="vertical" />
                   <Switch
                     size="small"

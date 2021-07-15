@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 
 import { Row, Col, Typography, Widget, Button, Icon } from 'sen-kit';
 
-import { dropInstance } from 'helpers/pdb';
+import PDB from 'helpers/pdb';
 import { DynamicLogo } from 'helpers/loader';
 import { updateApps } from 'store/babysitter.reducer';
 
@@ -29,10 +29,11 @@ class ErrorBoundary extends Component {
   }
 
   uninstallApp = async () => {
-    const { babysitter: { apps }, updateApps, appName } = this.props;
+    const { wallet: { address }, babysitter: { apps }, updateApps, appName } = this.props;
+    const pdb = new PDB(address);
     const newApps = apps.map(page => page.filter(name => name !== appName));
     await updateApps(newApps);
-    return await dropInstance(appName);
+    return await pdb.dropInstance(appName);
   }
 
   support = () => {
@@ -85,6 +86,7 @@ ErrorBoundary.propTypes = {
 }
 
 const mapStateToProps = state => ({
+  wallet: state.wallet,
   babysitter: state.babysitter,
 });
 

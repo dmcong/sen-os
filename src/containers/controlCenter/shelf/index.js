@@ -11,7 +11,7 @@ import { MultipleDnd } from 'components/dnd';
 import Container from './container';
 import Item from './item';
 
-import { dropInstance } from 'helpers/pdb';
+import PDB from 'helpers/pdb';
 import { loadApps, updateApps } from 'store/babysitter.reducer';
 import { notify } from 'store/ui.reducer';
 
@@ -58,10 +58,11 @@ class Shelf extends Component {
   }
 
   uninstallApp = async (appName) => {
-    const { babysitter: { apps }, updateApps } = this.props;
+    const { wallet: { address }, babysitter: { apps }, updateApps } = this.props;
+    const pdb = new PDB(address);
     const newApps = apps.map(page => page.filter(name => name !== appName));
     await updateApps(newApps);
-    return await dropInstance(appName);
+    return await pdb.dropInstance(appName);
   }
 
   onAddPage = () => {

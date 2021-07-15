@@ -8,18 +8,19 @@ import ssjs from 'senswapjs';
 import { Row, Col, Button, Icon, Card } from 'sen-kit';
 import Markdown from 'components/markdown';
 
-import { dropInstance } from 'helpers/pdb';
+import PDB from 'helpers/pdb';
 import { updateApps } from 'store/babysitter.reducer';
 
 
 class Description extends Component {
 
   uninstallApp = async () => {
-    const { babysitter: { apps }, appName, updateApps } = this.props;
+    const { wallet: { address }, babysitter: { apps }, appName, updateApps } = this.props;
+    const pdb = new PDB(address);
     if (!this.isInstalled()) return;
     const newApps = apps.map(page => page.filter(name => name !== appName));
     await updateApps(newApps);
-    return await dropInstance(appName);
+    return await pdb.dropInstance(appName);
   }
 
   installApp = async () => {

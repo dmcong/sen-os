@@ -23,7 +23,6 @@
   "license": "MIT",
   "dependencies": {
     "qrcode.react": "^1.0.1",
-    "react-copy-to-clipboard": "^5.0.3",
     "react-lazyload": "^3.2.0"
   },
   "devDependencies": {}
