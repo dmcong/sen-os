@@ -6,7 +6,7 @@ import { withRouter } from 'react-router-dom';
 
 import { Row, Col, Typography, Widget, Button, Icon } from 'sen-kit';
 
-import { dropPDB } from 'helpers/pdb';
+import { dropInstance } from 'helpers/pdb';
 import { DynamicLogo } from 'helpers/loader';
 import { updateApps } from 'store/babysitter.reducer';
 
@@ -32,7 +32,7 @@ class ErrorBoundary extends Component {
     const { babysitter: { apps }, updateApps, appName } = this.props;
     const newApps = apps.map(page => page.filter(name => name !== appName));
     await updateApps(newApps);
-    return await dropPDB(appName);
+    return await dropInstance(appName);
   }
 
   support = () => {

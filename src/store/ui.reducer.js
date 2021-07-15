@@ -3,9 +3,11 @@ import { notification, Icon } from 'sen-kit';
 
 import util from 'helpers/util';
 
+
 /**
  * Utility
  */
+
 const getInfix = () => {
   const width = window.innerWidth;
   if (width < 576) return 'xs';

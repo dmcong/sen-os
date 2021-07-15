@@ -13,7 +13,7 @@ const initialState = {
  * Actions
  */
 
-export const choosePokemon = createAsyncThunk(`${NAME}/choosePokemon`, async (x) => {
+export const choosePokemon = createAsyncThunk(`${NAME}/choosePokemon`, async () => {
   return { name: pokemon.random() }
 });
 

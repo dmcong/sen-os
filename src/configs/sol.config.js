@@ -9,6 +9,11 @@ const NATIVE = {
   icon: 'https://assets.coingecko.com/coins/images/4128/large/coinmarketcap-solana-200.png'
 }
 
+const SOLVARS = {
+  spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+  splataAddress: 'ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL',
+}
+
 /**
  * Contructor
  */
@@ -20,7 +25,8 @@ const configs = {}
 configs.development = {
   node: 'https://api.devnet.solana.com',
   cluster: 'devnet',
-  native: { ...NATIVE }
+  native: { ...NATIVE },
+  ...SOLVARS,
 }
 
 /**
@@ -29,7 +35,8 @@ configs.development = {
 configs.staging = {
   node: 'https://api.devnet.solana.com',
   cluster: 'devnet',
-  native: { ...NATIVE }
+  native: { ...NATIVE },
+  ...SOLVARS,
 }
 
 /**
@@ -38,7 +45,8 @@ configs.staging = {
 configs.production = {
   node: 'https://api.mainnet-beta.solana.com',
   cluster: 'mainnet',
-  native: { ...NATIVE }
+  native: { ...NATIVE },
+  ...SOLVARS,
 }
 
 /**

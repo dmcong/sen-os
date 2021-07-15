@@ -19,35 +19,25 @@ class Deck extends Component {
     }
   }
 
-  componentDidMount() {
-    this.buildPersistentStorage();
-  }
-
-  componentDidUpdate(prevProps) {
-    const { senos: { wallet: { address: prevAddress } } } = prevProps;
-    const { senos: { wallet: { address } } } = this.props;
-    if (prevAddress !== address) this.buildPersistentStorage();
-  }
-
-  buildPersistentStorage = () => {
-    const { senos: { db, wallet: { address } } } = this.props;
-    this.collection = db.createInstance({ storeName: address });
-    return this.updatePokemon();
+  componentDidMount(){
+    this.updatePokemon();
   }
 
   updatePokemon = async () => {
-    const pokemons = await this.collection.keys();
+    const { senos: { pdb } } = this.props;
+    const pokemons = await pdb.keys();
     return this.setState({ pokemons });
   }
 
   catchPokemon = async () => {
-    const { main: { name } } = this.props;
-    await this.collection.setItem(name, new Date());
+    const { senos: { pdb }, main: { name } } = this.props;
+    await pdb.setItem(name, new Date());
     return await this.updatePokemon();
   }
 
   releasePokemon = async (pokemon) => {
-    await this.collection.removeItem(pokemon);
+    const { senos: { pdb } } = this.props;
+    await pdb.removeItem(pokemon);
     return await this.updatePokemon();
   }
 

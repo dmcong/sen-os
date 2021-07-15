@@ -8,7 +8,7 @@ import ssjs from 'senswapjs';
 import { Row, Col, Button, Icon, Card } from 'sen-kit';
 import Markdown from 'components/markdown';
 
-import { dropPDB } from 'helpers/pdb';
+import { dropInstance } from 'helpers/pdb';
 import { updateApps } from 'store/babysitter.reducer';
 
 
@@ -19,7 +19,7 @@ class Description extends Component {
     if (!this.isInstalled()) return;
     const newApps = apps.map(page => page.filter(name => name !== appName));
     await updateApps(newApps);
-    return await dropPDB(appName);
+    return await dropInstance(appName);
   }
 
   installApp = async () => {
@@ -37,7 +37,7 @@ class Description extends Component {
   }
 
   isInstalled = () => {
-    const { babysitter: { address, apps }, appName } = this.props;
+    const { wallet: { address }, babysitter: { apps }, appName } = this.props;
     return ssjs.isAddress(address) && apps.flat().includes(appName);
   }
 
@@ -48,11 +48,9 @@ class Description extends Component {
       <Col>
         {this.isInstalled() ? <Button
           type="primary"
-          size="large"
           onClick={this.toApp}
         >Open</Button> : <Button
           type="primary"
-          size="large"
           icon={<Icon name="cloud-download-outline" />}
           onClick={this.installApp}
         >Install</Button>}
@@ -61,7 +59,6 @@ class Description extends Component {
         {this.isInstalled() ? <Button
           type="text"
           className="contained"
-          size="large"
           icon={<Icon name="trash-outline" />}
           onClick={this.uninstallApp}
         >Uninstall</Button> : null}
@@ -76,6 +73,7 @@ class Description extends Component {
 }
 
 const mapStateToProps = state => ({
+  wallet: state.wallet,
   babysitter: state.babysitter,
 });
 

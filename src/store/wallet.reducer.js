@@ -1,4 +1,30 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import ssjs from 'senswapjs';
+
+import configs from 'configs';
+
+
+/**
+ * Utility
+ */
+
+const initializeWindowSenOs = async (wallet) => {
+  const { sol: { spltAddress, splataAddress, node } } = configs;
+  window.senos = {
+    wallet: wallet,
+    lamports: new ssjs.Lamports(node),
+    splt: new ssjs.SPLT(spltAddress, splataAddress, node),
+  }
+}
+
+const destroyWindowSenOs = async () => {
+  if (window.senos?.wallet) window.senos.wallet.disconnect();
+  await initializeWindowSenOs(null);
+}
+
+/**
+ * Store constructor
+ */
 
 const NAME = 'wallet';
 const initialState = {
@@ -21,17 +47,14 @@ export const closeWallet = createAsyncThunk(`${NAME}/closeWallet`, async () => {
 
 export const connectWallet = createAsyncThunk(`${NAME}/connectWallet`, async (wallet) => {
   if (!wallet) throw new Error('Invalid wallet instance');
-  window.senos.wallet = wallet;
+  await initializeWindowSenOs(wallet);
   const address = await wallet.getAccount();
   const lamports = await window.senos.lamports.get(address);
   return { address, lamports: global.BigInt(lamports), visible: false }
 });
 
 export const disconnectWallet = createAsyncThunk(`${NAME}/disconnectWallet`, async () => {
-  if (window.senos && window.senos.wallet) {
-    window.senos.wallet.disconnect();
-    window.senos.wallet = null;
-  }
+  await destroyWindowSenOs();
   window.location.reload(); // Reset all redux store
 });
 

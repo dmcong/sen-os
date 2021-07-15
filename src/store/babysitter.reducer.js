@@ -1,17 +1,25 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+
 import ssjs from 'senswapjs';
 import { createPDB } from 'helpers/pdb';
 
-const db = createPDB('senos');
+
+/**
+ * Utility
+ */
+
 const troubleshoot = (apps) => {
   if (!apps || !Array.isArray(apps)) return [[]];
   if (!apps.length) return [[]];
   return apps.map(row => row.filter(appName => appName));
 }
 
+/**
+ * Store constructor
+ */
+
 const NAME = 'babysitter';
 const initialState = {
-  address: '',
   apps: [[]],
 }
 
@@ -19,18 +27,20 @@ const initialState = {
  * Actions
  */
 
-export const loadApps = createAsyncThunk(`${NAME}/loadApps`, async (address) => {
-  if (!ssjs.isAddress(address)) return initialState;
-  const collection = db.createInstance({ storeName: address });
-  const apps = troubleshoot(await collection.getItem('apps'));
-  return { address, apps }
+export const loadApps = createAsyncThunk(`${NAME}/loadApps`, async (_, { getState }) => {
+  const { wallet: { address } } = getState();
+  if (!ssjs.isAddress(address)) throw new Error('Wallet is not connected yet');
+  const db = createPDB(address).createInstance({ storeName: 'senos' });
+  const apps = troubleshoot(await db.getItem('apps'));
+  return { apps }
 });
 
 export const updateApps = createAsyncThunk(`${NAME}/updateApps`, async (apps, { getState }) => {
-  const { babysitter: { address } } = getState();
-  if (!ssjs.isAddress(address)) throw new Error('You need to load apps first');
-  const collection = db.createInstance({ storeName: address });
-  await collection.setItem('apps', apps);
+  const { wallet: { address } } = getState();
+  if (!ssjs.isAddress(address)) throw new Error('Wallet is not connected yet');
+  const db = createPDB(address).createInstance({ storeName: 'senos' });
+  apps = troubleshoot(apps);
+  await db.setItem('apps', apps);
   return { apps }
 });
 

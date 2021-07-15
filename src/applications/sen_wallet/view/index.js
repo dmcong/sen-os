@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 import isEqual from 'react-fast-compare';
-import ssjs from 'senswapjs';
 
 import { Row, Col } from 'sen-kit';
 import LazyLoad from 'react-lazyload';
@@ -16,15 +15,6 @@ import Interaction from './interaction';
 
 import { withSenOs } from 'helpers/senos';
 import mintConfig from '@/sen_wallet/config/mint.config';
-import solConfig from '@/sen_wallet/config/sol.config';
-
-
-/**
- * Setup env
- */
-const { spltAddress, splataAddress, node } = solConfig;
-window.senos = window.senos || {}
-window.senos.splt = new ssjs.SPLT(spltAddress, splataAddress, node);
 
 
 class View extends Component {

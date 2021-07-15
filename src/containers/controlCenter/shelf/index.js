@@ -11,10 +11,9 @@ import { MultipleDnd } from 'components/dnd';
 import Container from './container';
 import Item from './item';
 
-import { dropPDB } from 'helpers/pdb';
+import { dropInstance } from 'helpers/pdb';
 import { loadApps, updateApps } from 'store/babysitter.reducer';
 import { notify } from 'store/ui.reducer';
-
 
 
 class Shelf extends Component {
@@ -43,7 +42,8 @@ class Shelf extends Component {
 
   getApps = async () => {
     const { wallet: { address }, loadApps, notify } = this.props;
-    const { error, payload } = await loadApps(address);
+    if (!ssjs.isAddress(address)) return;
+    const { error, payload } = await loadApps();
     if (error) return await notify({ type: 'error', description: error.message });
     const { apps } = payload;
     return this.setState({ apps });
@@ -61,7 +61,7 @@ class Shelf extends Component {
     const { babysitter: { apps }, updateApps } = this.props;
     const newApps = apps.map(page => page.filter(name => name !== appName));
     await updateApps(newApps);
-    return await dropPDB(appName);
+    return await dropInstance(appName);
   }
 
   onAddPage = () => {

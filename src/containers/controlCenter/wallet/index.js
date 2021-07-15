@@ -8,20 +8,11 @@ import numeral from 'numeral';
 import { Space, Typography, Tooltip, Button, Icon, Divider } from 'sen-kit';
 import Login from './login';
 
-import configs from 'configs';
 import util from 'helpers/util';
 import session from 'helpers/session';
 import { connectWallet, openWallet, disconnectWallet } from 'store/wallet.reducer';
 
 class Wallet extends Component {
-  constructor() {
-    super();
-
-    const { sol: { node } } = configs;
-    window.senos = {
-      lamports: new ssjs.Lamports(node),
-    }
-  }
 
   componentDidMount() {
     const { connectWallet } = this.props;

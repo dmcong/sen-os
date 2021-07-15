@@ -1,7 +1,9 @@
 import React, { createContext, useContext, Children, cloneElement, Component, forwardRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import ssjs from 'senswapjs';
 
 import { createPDB } from 'helpers/pdb';
+import util from 'helpers/util';
 import { notify } from 'store/ui.reducer';
 
 
@@ -16,7 +18,10 @@ const SenOsProvider = ({ children, appName }) => {
   // Wallet instance
   senos.wallet = useSelector(state => state.wallet);
   // DB instance
-  senos.db = createPDB(appName);
+  const address = senos.wallet?.address;
+  const instanceName = util.normalizeAppName(appName);
+  const pdb = ssjs.isAddress(address) ? createPDB(address) : null;
+  senos.pdb = pdb?.createInstance({ storeName: instanceName });
   // Context provider
   return <Context.Provider value={{ senos }}>
     {children}
