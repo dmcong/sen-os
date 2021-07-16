@@ -5,6 +5,7 @@ import ssjs from 'senswapjs';
 import numeral from 'numeral';
 
 import { Row, Col, Card, Typography, Icon, Space, Divider, Avatar } from 'sen-kit';
+import PriceChange from '@/sen_wallet/view/components/priceChange';
 
 import { getCGK } from '@/sen_wallet/controller/cgk.controller';
 import { getMint } from '@/sen_wallet/controller/mints.controller';
@@ -46,37 +47,13 @@ const Info = ({ accountData, reset }) => {
     }
   }, [reset]);
 
-  const arrow = () => {
-    if (priceChange > 0) return <Typography.Text type="success">
-      <Icon name="arrow-up-circle" />
-    </Typography.Text>
-    if (priceChange < 0) return <Typography.Text type="danger">
-      <Icon name="arrow-down-circle" />
-    </Typography.Text>
-    return <Typography.Text type="warning">
-      <Icon name="remove-circle" />
-    </Typography.Text>
-  }
-
-  const percentage = () => {
-    if (priceChange > 0) return <Typography.Text type="success">
-      {numeral(Math.abs(priceChange)).format('0.[0]')}%
-    </Typography.Text>
-    if (priceChange < 0) return <Typography.Text type="danger">
-      {numeral(Math.abs(priceChange)).format('0.[0]')}%
-    </Typography.Text>
-    return <Typography.Text type="warning">
-      {numeral(Math.abs(priceChange)).format('0.[0]')}%
-    </Typography.Text>
-  }
-
   return <Card bordered={false}>
     <Row gutter={[16, 16]}>
       <Col span={24}>
         <Typography.Text type="secondary" style={{ margin: 0 }}>Your Balance</Typography.Text>
       </Col>
       <Col span={24}>
-        <Space>
+        <Space size={12}>
           <Typography.Title level={3} style={{ margin: 0 }}>{numeral(balance).format('0,0.[0000]')}</Typography.Title>
           <Avatar size={20} src={icon} >
             <Icon name="diamond-outline" />
@@ -86,8 +63,7 @@ const Info = ({ accountData, reset }) => {
       </Col>
       <Col span={24}>
         <Space>
-          {arrow()}
-          {percentage()}
+          <PriceChange value={priceChange} />
           <Divider type="vertical" />
           <Typography.Text>${price}</Typography.Text>
         </Space>

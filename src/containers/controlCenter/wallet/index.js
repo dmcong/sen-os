@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
@@ -7,6 +7,7 @@ import numeral from 'numeral';
 
 import { Space, Typography, Tooltip, Button, Icon, Divider } from 'sen-kit';
 import Login from './login';
+import WalletWatcher from './walletWatcher';
 
 import util from 'helpers/util';
 import session from 'helpers/session';
@@ -37,20 +38,18 @@ class Wallet extends Component {
     const fontSize = infix === 'xs' ? 10 : 12;
     const balance = numeral(ssjs.undecimalize(lamports, 9)).format('0.[00]');
 
-    if (!ssjs.isAddress(address)) return <Fragment>
-      <Space size={2}>
-        <Typography.Text style={{ fontSize }} >Connect Wallet</Typography.Text>
-        <Divider type="vertical" />
-        <Button
-          type="primary"
-          icon={<Icon name="wallet-outline" />}
-          onClick={openWallet}
-        />
-      </Space>
+    if (!ssjs.isAddress(address)) return <Space size={2}>
+      <Typography.Text style={{ fontSize }} >Connect Wallet</Typography.Text>
+      <Divider type="vertical" />
+      <Button
+        type="primary"
+        icon={<Icon name="wallet-outline" />}
+        onClick={openWallet}
+      />
       <Login />
-    </Fragment>
-    return <Space size={0}>
+    </Space>
 
+    return <Space size={0}>
       <Typography.Link
         style={{ color: '#ffffffd9', fontSize }}
         href={util.explorer(address)}
@@ -69,6 +68,7 @@ class Wallet extends Component {
         icon={<Icon name="power-outline" />}
         onClick={disconnectWallet}
       />
+      <WalletWatcher />
     </Space >
   }
 }

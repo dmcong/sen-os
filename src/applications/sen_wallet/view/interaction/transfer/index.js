@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ssjs from 'senswapjs';
 
@@ -10,7 +10,7 @@ import util from 'helpers/util';
 import { useSenOs } from 'helpers/senos';
 
 
-const Transfer = ({ accountData, reset, onChange }) => {
+const Transfer = ({ accountData, onChange }) => {
   const [srcValue, setSrcValue] = useState('');
   const [srcError, setSrcError] = useState('');
   const [srcMeta, setSrcMeta] = useState({});
@@ -19,16 +19,6 @@ const Transfer = ({ accountData, reset, onChange }) => {
   const [dstMeta, setDstMeta] = useState({});
 
   const { senos: { notify } } = useSenOs();
-  useEffect(() => {
-    return () => {
-      setSrcValue('');
-      setSrcError('');
-      setSrcMeta({});
-      setDstValue('');
-      setDstError('');
-      setDstMeta({});
-    }
-  }, [reset]);
 
   const { address, mint, symbol, amount: maxAmount } = accountData;
   const transfer = async () => {
@@ -49,7 +39,7 @@ const Transfer = ({ accountData, reset, onChange }) => {
       });
       return onChange(txId);
     } catch (er) {
-      return setDstError(er.message)
+      return setDstError(er.message);
     }
   }
 
@@ -90,13 +80,11 @@ const Transfer = ({ accountData, reset, onChange }) => {
 }
 
 Transfer.defaultProps = {
-  reset: false,
   accountData: {},
   onChange: () => { },
 }
 
 Transfer.propTypes = {
-  reset: PropTypes.bool,
   accountData: PropTypes.object,
   onChange: PropTypes.func,
 }

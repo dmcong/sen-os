@@ -11,7 +11,7 @@ import { getMint } from '@/sen_wallet/controller/mints.controller';
 import { deleteAccount } from '@/sen_wallet/controller/accounts.controller';
 
 
-const Unwrap = ({ accountData, reset, onChange }) => {
+const Unwrap = ({ accountData, onChange }) => {
   const [decimals, setDecimals] = useState(0);
   const [error, setError] = useState('');
   const dispatch = useDispatch();
@@ -25,12 +25,6 @@ const Unwrap = ({ accountData, reset, onChange }) => {
       setDecimals(decimals);
     })();
   }, [dispatch, mint]);
-  useEffect(() => {
-    return () => {
-      setDecimals(0);
-      setError('');
-    }
-  }, [reset]);
 
   const wsol = ssjs.undecimalize(amount, decimals);
   const { senos: { notify } } = useSenOs();
@@ -93,13 +87,11 @@ const Unwrap = ({ accountData, reset, onChange }) => {
 }
 
 Unwrap.defaultProps = {
-  reset: false,
   accountData: {},
   onChange: () => { },
 }
 
 Unwrap.propTypes = {
-  reset: PropTypes.bool,
   accountData: PropTypes.object,
   onChange: PropTypes.func,
 }

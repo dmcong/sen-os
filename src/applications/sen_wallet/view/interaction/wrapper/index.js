@@ -6,33 +6,24 @@ import Wrap from './wrap';
 import Unwrap from './unwrap';
 
 
-const Wrapper = ({ accountData, reset, onChange }) => {
+const Wrapper = ({ accountData, onChange }) => {
   const { state } = accountData;
   return <Card bordered={false}>
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        {!state ? <Wrap
-          accountData={accountData}
-          reset={reset}
-          onChange={onChange}
-        /> : <Unwrap
-          accountData={accountData}
-          reset={reset}
-          onChange={onChange}
-        />}
+        {!state ? <Wrap accountData={accountData} onChange={onChange} />
+          : <Unwrap accountData={accountData} onChange={onChange} />}
       </Col>
     </Row>
   </Card>
 }
 
 Wrapper.defaultProps = {
-  reset: false,
   accountData: {},
   onChange: () => { },
 }
 
 Wrapper.propTypes = {
-  reset: PropTypes.bool,
   accountData: PropTypes.object,
   onChange: PropTypes.func,
 }

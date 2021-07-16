@@ -53,6 +53,10 @@ export const connectWallet = createAsyncThunk(`${NAME}/connectWallet`, async (wa
   return { address, lamports: global.BigInt(lamports), visible: false }
 });
 
+export const updateWallet = createAsyncThunk(`${NAME}/updateWallet`, async ({ lamports }) => {
+  return { lamports }
+});
+
 export const disconnectWallet = createAsyncThunk(`${NAME}/disconnectWallet`, async () => {
   await destroyWindowSenOs();
   window.location.reload(); // Reset all redux store
@@ -69,6 +73,7 @@ const slice = createSlice({
     .addCase(openWallet.fulfilled, (state, { payload }) => void Object.assign(state, payload))
     .addCase(closeWallet.fulfilled, (state, { payload }) => void Object.assign(state, payload))
     .addCase(connectWallet.fulfilled, (state, { payload }) => void Object.assign(state, payload))
+    .addCase(updateWallet.fulfilled, (state, { payload }) => void Object.assign(state, payload))
     .addCase(disconnectWallet.fulfilled, (state, { payload }) => void Object.assign(state, payload))
 });
 

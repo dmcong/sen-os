@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import numeral from 'numeral';
 import ssjs from 'senswapjs';
@@ -9,7 +9,7 @@ import { useSenOs } from 'helpers/senos';
 import util from 'helpers/util';
 
 
-const Wrap = ({ accountData, reset, onChange }) => {
+const Wrap = ({ accountData, onChange }) => {
   const [value, setValue] = useState('');
   const [error, setError] = useState('');
 
@@ -17,12 +17,6 @@ const Wrap = ({ accountData, reset, onChange }) => {
   const { address, symbol } = accountData;
   const sol = ssjs.undecimalize(lamports, 9);
   const handleMax = () => setValue(sol);
-  useEffect(() => {
-    return () => {
-      setValue('');
-      setError('');
-    }
-  }, [reset]);
 
   const { senos: { wallet: { address: ownerAddress }, notify } } = useSenOs();
   const wrap = async () => {
@@ -92,13 +86,11 @@ const Wrap = ({ accountData, reset, onChange }) => {
 }
 
 Wrap.defaultProps = {
-  reset: false,
   accountData: {},
   onChange: () => { },
 }
 
 Wrap.propTypes = {
-  reset: PropTypes.bool,
   accountData: PropTypes.object,
   onChange: PropTypes.func,
 }

@@ -1,4 +1,5 @@
 import configs from 'configs';
+import ssjs from 'senswapjs';
 
 const { env } = configs;
 
@@ -8,6 +9,13 @@ const mint = {}
  * Development mint
  */
 mint.development = [
+  {
+    ticket: 'solana',
+    symbol: 'SOL',
+    name: 'Solana',
+    address: ssjs.DEFAULT_EMPTY_ADDRESS,
+    decimals: 9,
+  },
   {
     ticket: 'bitcoin',
     symbol: 'WBTC',

@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { withRouter } from 'react-router-dom';
 import isEqual from 'react-fast-compare';
+import ssjs from 'senswapjs';
 
 import { Row, Col } from 'sen-kit';
 import LazyLoad from 'react-lazyload';
@@ -12,6 +13,7 @@ import Search from './search';
 import AccountCard from './accountCard';
 import Settings from './settings';
 import Interaction from './interaction';
+import SolCard from './solCard';
 
 import { withSenOs } from 'helpers/senos';
 import mintConfig from '@/sen_wallet/config/mint.config';
@@ -30,15 +32,31 @@ class View extends Component {
     }
   }
 
+  get pseudoSolAccount() {
+    const { senos: { wallet: { address, lamports } } } = this.props;
+    return {
+      mint: ssjs.DEFAULT_EMPTY_ADDRESS,
+      amount: lamports,
+      address,
+      ticket: 'solana',
+      symbol: 'SOL',
+      name: 'Solana',
+    }
+  }
+
   componentDidMount() {
-    const { accounts } = this.props;
-    this.sort(Object.keys(accounts));
+    this.reset();
   }
 
   componentDidUpdate(prevProps) {
     const { accounts: prevAccounts } = prevProps;
     const { accounts } = this.props;
-    if (!isEqual(prevAccounts, accounts)) this.sort(Object.keys(accounts));
+    if (!isEqual(prevAccounts, accounts)) this.reset();
+  }
+
+  reset = () => {
+    const { accounts } = this.props;
+    return this.sort(Object.keys(accounts));
   }
 
   sort = async (accountAddresses) => {
@@ -51,56 +69,30 @@ class View extends Component {
       const data = accounts[address];
       const { mint } = data;
       const index = mintAddresses.indexOf(mint);
-      if (index < 0) return rest.push({ address, ...data });
+      if (index < 0) return rest.push({ ...data, address });
       const { ticket, symbol, name } = mintConfig[index];
       return priority.push({ ...data, address, ticket, symbol, name });
     });
-    // We always add WSOL as default
-    const { splt } = window.senos;
-    const { senos: { wallet: { address: walletAddress } } } = this.props;
-    const wsolMint = mintConfig.find(({ symbol }) => (symbol === 'WSOL'));
-    const wsolAssociatedAddress = await splt.deriveAssociatedAddress(walletAddress, wsolMint.address);
-    if (!accountAddresses.includes(wsolAssociatedAddress)) {
-      priority.push({
-        address: wsolAssociatedAddress,
-        mint: wsolMint.address,
-        ticket: wsolMint.ticket,
-        symbol: wsolMint.symbol,
-        name: wsolMint.name,
-      });
-    }
     // Unknown mints
     const orderedAccounts = priority.concat(rest);
     return this.setState({ orderedAccounts });
   }
 
   onSearch = (accountAddress) => {
-    const { accounts } = this.props;
-    if (!accountAddress) return this.sort(Object.keys(accounts));
+    if (!accountAddress) return this.reset();
     return this.sort(accountAddress);
-  }
-
-  onSettings = (settings) => {
-    return this.setState({ settings });
-  }
-
-  onCard = (accountIndex) => {
-    return this.setState({ accountIndex });
-  }
-
-  onClose = () => {
-    return this.setState({ accountIndex: -1 });
   }
 
   render() {
     const { orderedAccounts, settings, accountIndex } = this.state;
     const { hiddenZeros } = settings;
 
-    return <Row gutter={[16, 32]}>
+    return <Row gutter={[16, 16]}>
       <AccountWatcher />
       <Col span={24}>
         <WalletInfo />
       </Col>
+      <Col span={24} />
       <Col span={24}>
         <Row gutter={[16, 12]} justify="center">
           <Col span={24}>
@@ -109,22 +101,28 @@ class View extends Component {
                 <Search onChange={this.onSearch} />
               </Col>
               <Col>
-                <Settings value={settings} onChange={this.onSettings} />
+                <Settings
+                  value={settings}
+                  onChange={value => this.setState({ settings: value })}
+                />
               </Col>
             </Row>
           </Col>
+          <Col span={24}>
+            <SolCard />
+          </Col>
           {orderedAccounts.map((accountData, i) => {
-            const { amount } = accountData;
+            const { amount, address } = accountData;
             if (!amount && hiddenZeros) return null;
-            return <Col span={24} key={i}>
-              <LazyLoad height={76} overflow unmountIfInvisible>
-                <AccountCard data={accountData} onClick={() => this.onCard(i)} />
+            return <Col span={24} key={address + i /* Trick to clear memo */}>
+              <LazyLoad height={76} overflow>
+                <AccountCard data={accountData} onClick={() => this.setState({ accountIndex: i })} />
               </LazyLoad>
             </Col>
           })}
           <Interaction
             visible={accountIndex >= 0}
-            onClose={this.onClose}
+            onClose={() => this.setState({ accountIndex: -1 })}
             accountData={orderedAccounts[accountIndex]}
           />
         </Row>

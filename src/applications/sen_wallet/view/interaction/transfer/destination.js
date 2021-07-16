@@ -77,10 +77,11 @@ const Destination = ({ mintAddress, value, onChange, onCallback, error }) => {
       />
     </Col>
     <Col span={24}>
-      {error ? <Typography.Text type="danger" style={{ fontSize: 11 }}><Space>
-        <Icon name="warning-outline" />
-        {error}
-      </Space>
+      {error ? <Typography.Text type="danger" style={{ fontSize: 11 }}>
+        <Space>
+          <Icon name="warning-outline" />
+          {error}
+        </Space>
       </Typography.Text> : null}
     </Col>
   </Row>

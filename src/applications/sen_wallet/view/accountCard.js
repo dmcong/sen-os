@@ -5,6 +5,7 @@ import ssjs from 'senswapjs';
 import numeral from 'numeral';
 
 import { Row, Col, Card, Avatar, Icon, Typography, Divider, Space, Button } from 'sen-kit';
+import PriceChange from '@/sen_wallet/view/components/priceChange';
 
 import { getCGK } from '@/sen_wallet/controller/cgk.controller';
 import { getMint } from '@/sen_wallet/controller/mints.controller';
@@ -18,6 +19,7 @@ const AccountCard = ({ data, onClick }) => {
   const dispatch = useDispatch();
 
   const { ticket, name, amount, symbol, mint } = data;
+  const balance = ssjs.undecimalize(amount, decimals);
   useEffect(() => {
     (async () => {
       const { error, payload } = await dispatch(getMint({ address: mint }));
@@ -36,19 +38,6 @@ const AccountCard = ({ data, onClick }) => {
       setPriceChange(priceChange);
     })();
   }, [ticket, dispatch]);
-
-  const balance = ssjs.undecimalize(amount, decimals);
-  const arrow = () => {
-    if (priceChange > 0) return <Typography.Text type="success">
-      <Icon name="arrow-up-circle" /> {numeral(Math.abs(priceChange)).format('0.[0]')}%
-    </Typography.Text>
-    if (priceChange < 0) return <Typography.Text type="danger">
-      <Icon name="arrow-down-circle" /> {numeral(Math.abs(priceChange)).format('0.[0]')}%
-    </Typography.Text>
-    return <Typography.Text type="warning">
-      <Icon name="remove-circle" /> {numeral(Math.abs(priceChange)).format('0.[0]')}%
-    </Typography.Text>
-  }
 
   const onSend = (e) => {
     e.stopPropagation();
@@ -71,7 +60,7 @@ const AccountCard = ({ data, onClick }) => {
           <Space style={{ fontSize: 11, whiteSpace: 'nowrap' }}>
             <Typography.Text>{name || mint.substring(0, 6)}</Typography.Text>
             <Divider type="vertical" style={{ margin: 0 }} />
-            {arrow()}
+            <PriceChange value={priceChange}/>
             <Typography.Text>${price}</Typography.Text>
           </Space>
         </Space>
