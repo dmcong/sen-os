@@ -5,7 +5,7 @@ import numeral from 'numeral';
 
 import { Row, Col, Card, Avatar, Tooltip, Divider, Space, Icon, Typography } from 'sen-kit';
 import PriceChange from '@/sen_wallet/view/components/priceChange';
-import Interaction from '@/sen_wallet/view/solCard/iteraction';
+import Actions from '@/sen_wallet/view/solCard/actions';
 
 import { useSenOs } from 'helpers/senos';
 import { getCGK } from '@/sen_wallet/controller/cgk.controller';
@@ -66,7 +66,7 @@ const Sol = () => {
         </Col>
       </Row>
     </Card>
-    <Interaction
+    <Actions
       visible={visible}
       onClose={() => setVisible(false)}
       accountData={accountData}

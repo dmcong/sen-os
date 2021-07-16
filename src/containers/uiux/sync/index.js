@@ -100,7 +100,7 @@ class Sync extends Component {
               size="small"
               style={{ marginLeft: -7 }}
               icon={<Icon name="cube-outline" />}
-              href={link || 'https://ipfs.io/ipfs/QmT2riVFg143e8HWBxZCisRnHvDRVMfNHhcFYBnQgTsYtU'}
+              href={link || 'https://ipfs.io/ipfs/QmU272qrKY9LGNBFqHVUkVgycdvSs766L2hAsRUELYr19B'}
               target="_blank"
               rel="noopener noreferrer"
             />}

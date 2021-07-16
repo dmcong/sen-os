@@ -12,7 +12,7 @@ import WalletInfo from './walletInfo';
 import Search from './search';
 import AccountCard from './accountCard';
 import Settings from './settings';
-import Interaction from './interaction';
+import AccountActions from './accountActions';
 import SolCard from './solCard';
 
 import { withSenOs } from 'helpers/senos';
@@ -120,7 +120,7 @@ class View extends Component {
               </LazyLoad>
             </Col>
           })}
-          <Interaction
+          <AccountActions
             visible={accountIndex >= 0}
             onClose={() => this.setState({ accountIndex: -1 })}
             accountData={orderedAccounts[accountIndex]}

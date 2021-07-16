@@ -10,7 +10,7 @@ import Wrapper from './wrapper';
 import mintConfig from '@/sen_wallet/config/mint.config';
 
 
-const Interaction = ({ visible, onClose, accountData }) => {
+const AccountActions = ({ visible, onClose, accountData }) => {
   const { mint } = accountData;
   const { address: wsolAddress } = mintConfig.find(({ symbol }) => (symbol === 'WSOL')) || {};
 
@@ -52,16 +52,16 @@ const Interaction = ({ visible, onClose, accountData }) => {
   </Modal>
 }
 
-Interaction.defaultProps = {
+AccountActions.defaultProps = {
   accountData: {},
   visible: false,
   onClose: () => { }
 }
 
-Interaction.propTypes = {
+AccountActions.propTypes = {
   accountData: PropTypes.object,
   visible: PropTypes.bool,
   onClose: PropTypes.func,
 }
 
-export default Interaction;
+export default AccountActions;

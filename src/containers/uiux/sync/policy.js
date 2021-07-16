@@ -69,7 +69,7 @@ const Policy = ({ value, onChange }) => {
           <Typography.Text type="secondary">Make sure that no sensitive data is in the store.</Typography.Text>
         </li>
         <li>
-          <Typography.Text type="secondary">It's rarely happened, but there is a little chance to lose your data on IPFS.</Typography.Text>
+          <Typography.Text type="secondary">It's rarely happened, but there is a little chance of losing your data on IPFS.</Typography.Text>
         </li>
       </ul>
     </Col>

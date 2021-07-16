@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import ssjs from 'senswapjs';
 import numeral from 'numeral';
@@ -8,13 +9,13 @@ import {
   Modal, Tabs,
 } from 'sen-kit';
 import PriceChange from '@/sen_wallet/view/components/priceChange';
-import Wrapper from '@/sen_wallet/view/interaction/wrapper';
+import Wrapper from '@/sen_wallet/view/accountActions/wrapper';
 import Transfer from './transfer';
 
 import { getCGK } from '@/sen_wallet/controller/cgk.controller';
 
 
-const Interaction = ({ visible, onClose, accountData }) => {
+const Actions = ({ visible, onClose, accountData }) => {
   const [icon, setIcon] = useState('#');
   const [price, setPrice] = useState(0);
   const [priceChange, setPriceChange] = useState(0);
@@ -111,4 +112,16 @@ const Interaction = ({ visible, onClose, accountData }) => {
   </Modal>
 }
 
-export default Interaction;
+Actions.defaultProps = {
+  accountData: {},
+  visible: false,
+  onClose: () => { },
+}
+
+Actions.propTypes = {
+  accountData: PropTypes.object,
+  visible: PropTypes.bool,
+  onClose: PropTypes.func,
+}
+
+export default Actions;
