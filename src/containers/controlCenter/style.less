@@ -1,27 +1,21 @@
 .controll-center {
-  backdrop-filter: blur(15px);
+  backdrop-filter: blur(15px) !important;
   background: linear-gradient(
     135deg,
     rgba(26, 30, 56, 0.25) 0%,
     rgba(35, 31, 54, 0.65) 100%
   );
-  bottom: 0px;
+  bottom: 0px !important;
   box-shadow: 0px -4px 20px rgba(0, 4, 38, 0.35);
   .ant-drawer-content-wrapper {
     box-shadow: none !important;
   }
   &.open {
-    border-radius: none !important;
+    border-radius: 0px 0px 0px 0px !important;
     transform: translateY(0px) !important;
-    .ant-drawer-content {
-      border-radius: none !important;
-    }
   }
   &.close {
     border-radius: 16px 16px 0px 0px;
     transform: translateY(calc(100% - 64px)) !important;
-    .ant-drawer-content {
-      border-radius: 16px 16px 0px 0px !important;
-    }
   }
 }

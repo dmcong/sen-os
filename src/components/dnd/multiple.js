@@ -103,7 +103,7 @@ const MultipleDnD = ({
   const onDragEnd = ({ active, over }) => {
     const [activeContainerIndex] = findContainer(active);
     const [overContainerIndex] = findContainer(over);
-    if (active.id !== over.id && activeContainerIndex === overContainerIndex) {
+    if (activeContainerIndex === overContainerIndex) {
       const newItems = [...items];
       const container = [...newItems[activeContainerIndex]];
       const newContainer = arrayMove(container, container.indexOf(active.id), container.indexOf(over.id));

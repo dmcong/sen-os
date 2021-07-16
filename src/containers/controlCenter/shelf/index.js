@@ -13,49 +13,28 @@ import Item from './item';
 
 import PDB from 'helpers/pdb';
 import { loadApps, updateApps } from 'store/babysitter.reducer';
-import { notify } from 'store/ui.reducer';
+import { notify, toggleControlCenter } from 'store/ui.reducer';
 
 
 class Shelf extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      apps: [],
-      editable: false,
-    }
-  }
 
   componentDidMount() {
     this.getApps();
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const { wallet: { address: prevAddress }, babysitter: { apps: prevApps } } = prevProps;
-    const { wallet: { address }, babysitter: { apps } } = this.props;
+  componentDidUpdate(prevProps) {
+    const { wallet: { address: prevAddress } } = prevProps;
+    const { wallet: { address } } = this.props;
     if (!isEqual(prevAddress, address)) this.getApps();
-    if (!isEqual(prevApps, apps)) this.setState({ apps });
-    const { apps: prevAppsInState } = prevState;
-    const { apps: appsInState } = this.state;
-    if (!isEqual(prevAppsInState, appsInState)) this.setApps();
   }
 
   getApps = async () => {
     const { wallet: { address }, loadApps, notify } = this.props;
     if (!ssjs.isAddress(address)) return;
-    const { error, payload } = await loadApps();
+    const { error } = await loadApps();
     if (error) return await notify({ type: 'error', description: error.message });
-    const { apps } = payload;
-    return this.setState({ apps });
   }
 
-  setApps = async () => {
-    const { wallet: { address }, updateApps, notify } = this.props;
-    const { apps } = this.state;
-    if (!ssjs.isAddress(address)) return;
-    const { error } = await updateApps(apps);
-    if (error) return await notify({ type: 'error', description: error.message });
-  }
 
   uninstallApp = async (appName) => {
     const { wallet: { address }, babysitter: { apps }, updateApps } = this.props;
@@ -79,18 +58,31 @@ class Shelf extends Component {
   }
 
   onSort = (newApps) => {
-    return this.setState({ apps: newApps });
+    const { updateApps } = this.props;
+    return updateApps(newApps);
+  }
+
+  to = async (id) => {
+    const { babysitter: { apps }, settings, history, toggleControlCenter } = this.props;
+    if (settings) return;
+    const page = apps.findIndex(row => row.includes(id));
+    await toggleControlCenter(false);
+    return history.push(`/home?page=${page}&appName=${id}`);
   }
 
   render() {
-    const { settings } = this.props;
-    const { apps } = this.state;
+    const { settings, babysitter: { apps } } = this.props;
 
     return <Row gutter={[16, 16]}>
       <MultipleDnd
         ids={apps}
         Item={Item}
-        itemPropsFunc={id => ({ disabled: !settings, id, onClose: this.uninstallApp })}
+        itemPropsFunc={id => ({
+          id,
+          disabled: !settings,
+          onClose: this.uninstallApp,
+          onClick: () => this.to(id)
+        })}
         Container={Container}
         containerPropsFunc={index => ({ disabled: !settings, index, onClose: this.onRemovePage })}
         disabled={!settings}
@@ -121,7 +113,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  notify,
+  notify, toggleControlCenter,
   loadApps, updateApps
 }, dispatch);
 
