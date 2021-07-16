@@ -55,8 +55,8 @@ const AccountCard = ({ data, onClick }) => {
     return onClick();
   }
 
-  return <Card bodyStyle={{ padding: 16 }} bordered={false} hoverable >
-    <Row gutter={[16, 16]} align="middle" wrap={false}>
+  return <Card bodyStyle={{ padding: `16px 12px` }} bordered={false} hoverable >
+    <Row gutter={[12, 16]} align="middle" wrap={false}>
       <Col>
         <Avatar src={icon} size={32} >
           <Icon name="diamond-outline" />
@@ -64,11 +64,11 @@ const AccountCard = ({ data, onClick }) => {
       </Col>
       <Col flex="auto">
         <Space direction="vertical" size={0}>
-          <Space>
+          <Space style={{ whiteSpace: 'nowrap' }}>
             <Typography.Text>{numeral(balance).format('0,0.[00]')} </Typography.Text>
             <Typography.Text type="secondary">{symbol || 'TOKEN'}</Typography.Text>
           </Space>
-          <Space style={{ fontSize: 11 }}>
+          <Space style={{ fontSize: 11, whiteSpace: 'nowrap' }}>
             <Typography.Text>{name || mint.substring(0, 6)}</Typography.Text>
             <Divider type="vertical" style={{ margin: 0 }} />
             {arrow()}
