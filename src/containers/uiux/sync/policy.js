@@ -38,16 +38,16 @@ const Policy = ({ value, onChange }) => {
 
   const policy = <Row gutter={[16, 16]}>
     <Col span={24}>
-      <Typography.Title level={5}>Why should I backup?</Typography.Title>
+      <Typography.Title level={5}>Why should I create a backup?</Typography.Title>
       <ul style={{ paddingLeft: 16 }}>
         <li>
-          <Typography.Text type="secondary">Because we never keep your data.</Typography.Text>
+          <Typography.Text type="secondary">Because SenSwap never collects your data, so the data is locally available.</Typography.Text>
         </li>
         <li>
-          <Typography.Text type="secondary">You can migrate data in the device machine to a new one.</Typography.Text>
+          <Typography.Text type="secondary">You can move data in the current device to a new one.</Typography.Text>
         </li>
         <li>
-          <Typography.Text type="secondary">Restore data in case your device is broken and lost all data.</Typography.Text>
+          <Typography.Text type="secondary">Restore data in case your device is broken or suddenly lost.</Typography.Text>
         </li>
       </ul>
     </Col>
@@ -55,10 +55,21 @@ const Policy = ({ value, onChange }) => {
       <Typography.Title level={5}>What is IPFS?</Typography.Title>
       <ul style={{ paddingLeft: 16 }}>
         <li>
-          <Typography.Text type="secondary">IPFS is a decentralized database. Everyone can publicly access data on it even your stored data.</Typography.Text>
+          <Typography.Text type="secondary">IPFS is a decentralized database. By high availability, data can be fetched via an internet connection.</Typography.Text>
         </li>
         <li>
+          <Typography.Text type="secondary">Everyone can publicly access data on it, and even your stored data.</Typography.Text>
+        </li>
+      </ul>
+    </Col>
+    <Col span={24}>
+      <Typography.Title level={5} type="danger">Be aware of privacy!</Typography.Title>
+      <ul style={{ paddingLeft: 16 }}>
+        <li>
           <Typography.Text type="secondary">Make sure that no sensitive data is in the store.</Typography.Text>
+        </li>
+        <li>
+          <Typography.Text type="secondary">It's rarely happened, but there is a little chance to lose your data on IPFS.</Typography.Text>
         </li>
       </ul>
     </Col>
@@ -67,7 +78,7 @@ const Policy = ({ value, onChange }) => {
     </Col>
   </Row>
 
-  return <Card bordered={false} bodyStyle={{ maxHeight: 336, overflow: 'scroll' }}>
+  return <Card bordered={false} bodyStyle={{ maxHeight: 512, overflow: 'scroll' }}>
     {value ? store : policy}
   </Card>
 }
