@@ -16,7 +16,7 @@ const Settings = ({ value, onChange }) => {
             checked={hiddenZeros}
             onChange={onHiddenZeros}
           />
-          <Typography.Text>Hidden zeros</Typography.Text>
+          <Typography.Text>Hide zero balances</Typography.Text>
         </Space>
       </Col>
     </Row>}
