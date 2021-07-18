@@ -16,7 +16,7 @@ const Main = forwardRef(({ appName, ...rest }, ref) => {
   return <ErrorBoundary appName={appName} version={version} email={email}>
     <SenOsProvider appName={appName}>
       <Provider store={model}>
-        <Widget  {...rest} type="glass" size="medium" ref={ref}>
+        <Widget  {...rest} type="glass" size="middle" ref={ref}>
           <View />
         </Widget>
       </Provider>
