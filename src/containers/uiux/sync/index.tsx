@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
@@ -114,7 +114,9 @@ const Sync = () => {
               </Tooltip>
             }
             value={link}
-            onChange={(e: any) => setLink(e.target.value || '')}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setLink(e.target.value || '')
+            }
           />
         </Col>
         <Col span={24}>

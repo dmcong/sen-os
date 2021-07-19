@@ -34,7 +34,8 @@ const SenOsProvider = ({
     | any = {}
   // UI instance
   senos.ui = useSelector((state: RootState) => state.ui)
-  senos.notify = (agrs: Parameters<typeof notify>[0]) => dispatch(notify(agrs))
+  senos.notify = (...agrs: Parameters<typeof notify>) =>
+    dispatch(notify(...agrs))
   // Wallet instance
   senos.wallet = useSelector((state: RootState) => state.wallet)
   // DB instance
