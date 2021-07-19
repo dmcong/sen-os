@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import numeral from 'numeral';
 
-import { Typography, Icon, Space } from 'sen-kit'
+import { Typography, Icon, Space } from 'sen-kit';
 
 const arrow = (value) => {
   if (value > 0) return <Typography.Text type="success">

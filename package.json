@@ -5,6 +5,10 @@
     "@dnd-kit/core": "^3.1.1",
     "@dnd-kit/sortable": "^4.0.0",
     "@reduxjs/toolkit": "^1.6.0",
+    "@types/jest": "^26.0.24",
+    "@types/node": "^16.3.3",
+    "@types/react": "^17.0.14",
+    "@types/react-dom": "^17.0.9",
     "axios": "^0.21.1",
     "flexsearch": "^0.7.2",
     "ipfs-core": "^0.8.0",
@@ -24,6 +28,7 @@
     "remarkable": "^2.0.1",
     "sen-kit": "^1.0.41",
     "senswapjs": "^2.0.11",
+    "typescript": "^4.3.5",
     "web-vitals": "^1.1.2"
   },
   "scripts": {

@@ -1,7 +1,7 @@
 const CracoAlias = require('craco-alias');
 const CracoLessPlugin = require('craco-less');
 const theme = require('sen-kit/styles/theme.js');
-const { compilerOptions: { baseUrl } } = require('./jsconfig.json');
+const { compilerOptions: { baseUrl } } = require('./tsconfig.json');
 
 
 module.exports = {
@@ -9,8 +9,9 @@ module.exports = {
     {
       plugin: CracoAlias,
       options: {
-        source: 'jsconfig',
-        baseUrl
+        source: 'tsconfig',
+        baseUrl,
+        tsConfigPath: './tsconfig.json'
       }
     },
     {
