@@ -8,13 +8,13 @@ import { SortableDnD } from 'components/dnd'
 import FooterAction from './footerAction'
 
 import { DynamicApp } from 'helpers/loader'
-import { RootState } from 'store'
+import { RootState, RootDispatch } from 'store'
 import { updateApps } from 'store/babysitter.reducer'
 
 const Home = () => {
   const [editable, setEditable] = useState<boolean>(false)
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<RootDispatch>()
   const history = useHistory()
   const { search } = useLocation()
   const { apps } = useSelector((state: RootState) => state.babysitter)

@@ -7,7 +7,7 @@ import { Row, Col, Typography, Widget, Button, Icon } from 'sen-kit'
 
 import PDB from 'helpers/pdb'
 import { DynamicLogo } from 'helpers/loader'
-import { RootState, Dispatch } from 'store'
+import { RootState, RootDispatch } from 'store'
 import { updateApps } from 'store/babysitter.reducer'
 
 interface Props extends ConnectedProps<typeof connector>, RouteComponentProps {
@@ -116,7 +116,7 @@ const mapStateToProps = (state: RootState) => ({
   babysitter: state.babysitter,
 })
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
+const mapDispatchToProps = (dispatch: RootDispatch) => {
   return bindActionCreators(
     {
       updateApps,

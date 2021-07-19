@@ -16,7 +16,7 @@ import Policy from './policy'
 
 import PDB from 'helpers/pdb'
 import util from 'helpers/util'
-import { RootState } from 'store'
+import { RootState, RootDispatch } from 'store'
 import { toggleSync, notify } from 'store/ui.reducer'
 
 const parseCID = (link: string): string | undefined => {
@@ -32,7 +32,7 @@ const Sync = () => {
   const [copied, setCopied] = useState(false)
   const [reviewed, setReviewed] = useState(false)
   const [link, setLink] = useState('')
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<RootDispatch>()
 
   const { visibleSync } = useSelector((state: RootState) => state.ui)
   const { address } = useSelector((state: RootState) => state.wallet)

@@ -4,3 +4,4 @@ declare module 'senswapjs'
 declare module 'react-copy-to-clipboard'
 declare module 'remarkable'
 declare module 'randomcolor';
+declare module 'numeral';

@@ -10,9 +10,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import ssjs from 'senswapjs'
 
 import PDB from 'helpers/pdb'
-import { RootState, Dispatch } from 'store'
-import { notify, State as UIState } from 'store/ui.reducer'
-import { State as WalletState } from 'store/wallet.reducer'
+import { RootState, RootDispatch } from 'store'
+import { notify } from 'store/ui.reducer'
 
 const Context = createContext({})
 
@@ -23,25 +22,20 @@ const SenOsProvider = ({
   children: JSX.Element
   appName: string
 }) => {
-  const dispatch = useDispatch()
-  let senos:
-    | {
-        ui: UIState
-        notify: Dispatch
-        db: any
-        wallet: WalletState
-      }
-    | any = {}
-  // UI instance
-  senos.ui = useSelector((state: RootState) => state.ui)
-  senos.notify = (...agrs: Parameters<typeof notify>) =>
-    dispatch(notify(...agrs))
-  // Wallet instance
-  senos.wallet = useSelector((state: RootState) => state.wallet)
-  // DB instance
-  const address = senos.wallet?.address
-  const pdb = ssjs.isAddress(address) ? new PDB(address) : null
-  senos.db = pdb?.createInstance(appName)
+  const dispatch = useDispatch<RootDispatch>()
+  const senos = {
+    // UI instance
+    ui: useSelector((state: RootState) => state.ui),
+    notify: (...agrs: Parameters<typeof notify>) => dispatch(notify(...agrs)),
+    // Wallet instance
+    wallet: useSelector((state: RootState) => state.wallet),
+    // DB instance
+    get db() {
+      const address = this.wallet.address
+      const pdb = ssjs.isAddress(address) ? new PDB(address) : null
+      return pdb?.createInstance(appName)
+    },
+  }
   // Context provider
   return <Context.Provider value={{ senos }}>{children}</Context.Provider>
 }

@@ -76,7 +76,7 @@ export const connectWallet = createAsyncThunk(
 
 export const updateWallet = createAsyncThunk(
   `${NAME}/updateWallet`,
-  async ({ lamports }: State) => {
+  async ({ lamports }: Partial<State>) => {
     return { lamports }
   },
 )
