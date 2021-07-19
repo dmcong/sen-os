@@ -69,7 +69,7 @@ const SortableDnD = ({
   ids: string[]
   disabled?: boolean
   onChange?: (ids: string[]) => void
-  Item: typeof Component | ExoticComponent
+  Item: ExoticComponent
   itemPropsFunc?: (id: string) => object
   Wrapper?: typeof Component | ExoticComponent
   wrapperProps?: object

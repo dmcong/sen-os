@@ -93,7 +93,7 @@ const MultipleDnD = ({
   ids: string[][]
   disabled?: boolean
   onChange?: (ids: string[][]) => void
-  Item: typeof Component | ExoticComponent
+  Item: ExoticComponent
   itemPropsFunc?: (id: string) => object
   Container?: typeof Component | ExoticComponent
   containerPropsFunc?: (id: string | number) => object
