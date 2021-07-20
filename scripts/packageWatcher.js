@@ -1,10 +1,9 @@
 const path = require('path');
 const fs = require('fs');
 const chokidar = require('chokidar');
+const { printError, printInfo } = require('./print');
 
 const env = process.env.REACT_APP_ENV || process.env.NODE_ENV || 'development';
-const printError = (er) => console.error('\x1b[31m%s\x1b[0m', er);
-const printInfo = (info) => console.error('\x1b[36m%s\x1b[0m', info);
 
 
 /**

@@ -13,17 +13,6 @@ export type State = {
   lamports: bigint
 }
 
-declare global {
-  interface Window {
-    senos: {
-      wallet: any
-      lamports: any
-      splt: any
-      ipfs?: any
-    }
-  }
-}
-
 const initializeWindowSenOs = async (wallet: any) => {
   const {
     sol: { spltAddress, splataAddress, node },

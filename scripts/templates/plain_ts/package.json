@@ -1,6 +1,6 @@
 {
-  "name": "sen_template",
-  "appName": "Sen Template",
+  "name": "__app_name__",
+  "appName": "__APP_NAME__",
   "version": "1.0.0",
   "description": "The application default template",
   "main": "index.js",
@@ -11,8 +11,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": {
-    "name": "Tu Phan",
-    "email": "tuphan@descartes.network"
+    "name": "__author_name__",
+    "email": "__author_email__"
   },
   "contributors": [
     {

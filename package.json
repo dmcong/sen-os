@@ -42,6 +42,7 @@
     "serve": "serve -s build -l 80",
     "analyze": "npm run prod && source-map-explorer 'build/static/js/*.js'",
     "postinstall": "find ./src/applications/* -name package.json -maxdepth 1 -execdir npm install \\;",
+    "new": "node ./scripts/templateGenerator.js",
     "test": "craco test"
   },
   "eslintConfig": {
@@ -71,7 +72,10 @@
     "concurrently": "^6.2.0",
     "craco-alias": "^3.0.1",
     "craco-less": "^1.18.0",
+    "fs-extra": "^10.0.0",
     "nodemon": "^2.0.7",
+    "prompts": "^2.4.1",
+    "replace-in-file": "^6.2.0",
     "serve": "^12.0.0",
     "source-map-explorer": "^2.5.2"
   }
