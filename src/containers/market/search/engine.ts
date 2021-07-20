@@ -6,7 +6,6 @@ const PRESET = {
   minlength: 3,
 }
 
-type Universe = Record<string, any>
 type SearchResult = {
   result: string[]
 }
