@@ -29,3 +29,6 @@ universe.json
 
 # autogen
 *-lock.json
+
+# tutorial
+my_example
