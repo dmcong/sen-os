@@ -70,7 +70,7 @@ const Sync = () => {
   return (
     <Modal
       visible={visibleSync}
-      onCancel={() => toggleSync(false)}
+      onCancel={() => dispatch(toggleSync(false))}
       closeIcon={<Icon name="close" />}
       footer={null}
       destroyOnClose={true}
