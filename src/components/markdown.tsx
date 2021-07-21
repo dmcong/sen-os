@@ -1,5 +1,4 @@
 import { useEffect, createRef } from 'react'
-import PropTypes from 'prop-types'
 import { Remarkable } from 'remarkable'
 
 import { Row, Col } from 'sen-kit'
@@ -32,10 +31,6 @@ const Markdown = ({ appName }: { appName: string }) => {
       <Col span={24} ref={ref} />
     </Row>
   )
-}
-
-Markdown.propTypes = {
-  appName: PropTypes.string.isRequired,
 }
 
 export default Markdown

@@ -16,7 +16,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "pokemon": "^2.2.0"
+    "pokemon": "^2.2.0",
+    "prop-types": "^15.7.2"
   },
   "devDependencies": {}
 }

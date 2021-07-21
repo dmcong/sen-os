@@ -1,5 +1,4 @@
 import { forwardRef } from 'react'
-import PropTypes from 'prop-types'
 
 import { Typography } from 'sen-kit'
 
@@ -47,14 +46,5 @@ const AppPanel = forwardRef<HTMLDivElement, { appName: string; src?: string }>(
     )
   },
 )
-
-AppPanel.defaultProps = {
-  src: '',
-}
-
-AppPanel.propTypes = {
-  src: PropTypes.string,
-  appName: PropTypes.string.isRequired,
-}
 
 export default AppPanel
