@@ -6,12 +6,13 @@ import util from 'helpers/util'
 /**
  * Persistent Database
  */
-
 class PDB {
   dbName: string
+  private driver: any
 
   constructor(walletAddress: string) {
     this.dbName = walletAddress
+    this.driver = [localForage.WEBSQL, localForage.LOCALSTORAGE]
   }
 
   _IPFS = async () => {
@@ -22,6 +23,7 @@ class PDB {
   createInstance = (appName: string): any => {
     const instanceName = util.normalizeAppName(appName)
     return localForage.createInstance({
+      driver: this.driver,
       name: this.dbName,
       storeName: instanceName,
     })
@@ -29,6 +31,8 @@ class PDB {
 
   dropInstance = async (appName: string): Promise<void> => {
     const instanceName = util.normalizeAppName(appName)
+    const instance = this.createInstance(appName)
+    await instance.clear()
     return await localForage.dropInstance({
       name: this.dbName,
       storeName: instanceName,
