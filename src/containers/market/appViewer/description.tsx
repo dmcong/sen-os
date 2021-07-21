@@ -5,9 +5,8 @@ import ssjs from 'senswapjs'
 import { Row, Col, Button, Icon, Card } from 'sen-kit'
 import Markdown from 'components/markdown'
 
-import PDB from 'helpers/pdb'
 import { RootDispatch, RootState } from 'store'
-import { updateApps } from 'store/babysitter.reducer'
+import { installApp, uninstallApp } from 'store/babysitter.reducer'
 
 const Description = ({ appName }: { appName: string }) => {
   const dispatch = useDispatch<RootDispatch>()
@@ -17,21 +16,6 @@ const Description = ({ appName }: { appName: string }) => {
 
   const isInstalled = () => {
     return ssjs.isAddress(address) && apps.flat().includes(appName)
-  }
-
-  const installApp = async () => {
-    if (isInstalled()) return
-    const newApps = apps.map((page) => [...page])
-    newApps[newApps.length - 1].push(appName)
-    return await dispatch(updateApps(newApps))
-  }
-
-  const uninstallApp = async () => {
-    const pdb = new PDB(address)
-    if (!isInstalled()) return
-    const newApps = apps.map((page) => page.filter((name) => name !== appName))
-    await dispatch(updateApps(newApps))
-    return await pdb.dropInstance(appName)
   }
 
   const toApp = () => {
@@ -50,7 +34,7 @@ const Description = ({ appName }: { appName: string }) => {
           <Button
             type="primary"
             icon={<Icon name="cloud-download-outline" />}
-            onClick={installApp}
+            onClick={() => dispatch(installApp(appName))}
           >
             Install
           </Button>
@@ -62,7 +46,7 @@ const Description = ({ appName }: { appName: string }) => {
             type="text"
             className="contained"
             icon={<Icon name="trash-outline" />}
-            onClick={uninstallApp}
+            onClick={() => dispatch(uninstallApp(appName))}
           >
             Uninstall
           </Button>

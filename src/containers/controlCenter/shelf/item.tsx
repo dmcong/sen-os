@@ -1,28 +1,22 @@
 import { forwardRef } from 'react'
 
-import { Badge, Col, Button, Icon } from 'sen-kit'
+import { Badge, Col, Button, Icon, Spin } from 'sen-kit'
 import { DynamicLogo } from 'helpers/loader'
 
 const Item = forwardRef<HTMLElement, any>(
-  ({ id, disabled = false, onClose = () => {}, ...rest }, ref) => {
+  ({ id, disabled = false, onClose = () => {}, loading, ...rest }, ref) => {
+    const action = () => {
+      if (disabled) return 0
+      if (loading) return <Spin />
+      return (
+        <Button type="primary" size="small" shape="circle" onClick={onClose}>
+          <Icon name="close-outline" />
+        </Button>
+      )
+    }
     return (
       <Col>
-        <Badge
-          count={
-            disabled ? (
-              0
-            ) : (
-              <Button
-                type="primary"
-                size="small"
-                shape="circle"
-                onClick={() => onClose(id)}
-              >
-                <Icon name="close-outline" />
-              </Button>
-            )
-          }
-        >
+        <Badge count={action()}>
           <DynamicLogo {...rest} name={id} ref={ref} />
         </Badge>
       </Col>

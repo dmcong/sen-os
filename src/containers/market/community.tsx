@@ -6,7 +6,7 @@ import { Row, Col, Typography } from 'sen-kit'
 import AppTicket from './appTicket'
 
 import universe from 'universe.json'
-import { updateApps } from 'store/babysitter.reducer'
+import { installApp } from 'store/babysitter.reducer'
 import { RootDispatch, RootState } from 'store'
 
 const Community = () => {
@@ -25,13 +25,6 @@ const Community = () => {
     return history.push(`/market/${subRoute}`)
   }
 
-  const installApp = async (appName: string) => {
-    if (isInstalled(appName)) return
-    const newApps = apps.map((page) => [...page])
-    newApps[newApps.length - 1].push(appName)
-    return await dispatch(updateApps(newApps))
-  }
-
   const isInstalled = (appName: string) => {
     return ssjs.isAddress(address) && apps.flat().includes(appName)
   }
@@ -47,9 +40,9 @@ const Community = () => {
         <Col key={appName} xs={{ span: 24 }} md={{ span: 12 }} lg={{ span: 8 }}>
           <AppTicket
             appName={appName}
-            installed={apps.flat().includes(appName)}
+            installed={isInstalled(appName)}
             onClick={() => to(appName)}
-            onAdd={() => installApp(appName)}
+            onAdd={() => dispatch(installApp(appName))}
           />
         </Col>
       ))}

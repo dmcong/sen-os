@@ -5,10 +5,9 @@ import { withRouter, RouteComponentProps } from 'react-router-dom'
 
 import { Row, Col, Typography, Widget, Button, Icon } from 'sen-kit'
 
-import PDB from 'helpers/pdb'
 import { DynamicLogo } from 'helpers/loader'
 import { RootState, RootDispatch } from 'store'
-import { updateApps } from 'store/babysitter.reducer'
+import { updateApps, uninstallApp } from 'store/babysitter.reducer'
 
 interface Props extends ConnectedProps<typeof connector>, RouteComponentProps {
   appName: string
@@ -36,19 +35,6 @@ class ErrorBoundary extends Component<Props, State> {
     return this.setState({ failed: Boolean(error) })
   }
 
-  uninstallApp = async () => {
-    const {
-      wallet: { address },
-      babysitter: { apps },
-      updateApps,
-      appName,
-    } = this.props
-    const pdb = new PDB(address)
-    const newApps = apps.map((page) => page.filter((name) => name !== appName))
-    await updateApps(newApps)
-    return await pdb.dropInstance(appName)
-  }
-
   support = () => {
     const { email, appName } = this.props
     return window.open(
@@ -59,7 +45,7 @@ class ErrorBoundary extends Component<Props, State> {
 
   render() {
     const { failed } = this.state
-    const { appName, version, children } = this.props
+    const { appName, version, children, uninstallApp } = this.props
 
     if (failed || !children)
       return (
@@ -88,7 +74,7 @@ class ErrorBoundary extends Component<Props, State> {
               <Button
                 type="primary"
                 icon={<Icon name="trash-outline" />}
-                onClick={this.uninstallApp}
+                onClick={() => uninstallApp(appName)}
                 block
               >
                 Uninstall
@@ -120,6 +106,7 @@ const mapDispatchToProps = (dispatch: RootDispatch) => {
   return bindActionCreators(
     {
       updateApps,
+      uninstallApp,
     },
     dispatch,
   )

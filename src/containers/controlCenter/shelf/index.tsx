@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import ssjs from 'senswapjs'
@@ -8,12 +8,13 @@ import { MultipleDnd } from 'components/dnd'
 import Container from './container'
 import Item from './item'
 
-import PDB from 'helpers/pdb'
 import { RootDispatch, RootState } from 'store'
-import { loadApps, updateApps } from 'store/babysitter.reducer'
+import { loadApps, updateApps, uninstallApp } from 'store/babysitter.reducer'
 import { notify, toggleControlCenter } from 'store/ui.reducer'
 
 const Shelf = ({ settings = false }: { settings: boolean }) => {
+  const [uninstallingId, setUninstallingId] = useState('')
+
   const dispatch = useDispatch<RootDispatch>()
   const history = useHistory()
   const { address } = useSelector((state: RootState) => state.wallet)
@@ -28,13 +29,6 @@ const Shelf = ({ settings = false }: { settings: boolean }) => {
     }
   }, [address, dispatch])
 
-  const uninstallApp = async (appName: string) => {
-    const pdb = new PDB(address)
-    const newApps = apps.map((page) => page.filter((name) => name !== appName))
-    await dispatch(updateApps(newApps))
-    return await pdb.dropInstance(appName)
-  }
-
   const onAddPage = async () => {
     const newApps = [...apps]
     newApps.push([])
@@ -44,6 +38,12 @@ const Shelf = ({ settings = false }: { settings: boolean }) => {
   const onRemovePage = async (index: number) => {
     const newApps = apps.filter((row, i) => row.length || i !== index)
     return await dispatch(updateApps(newApps))
+  }
+
+  const uninstall = async (appName: string) => {
+    await setUninstallingId(appName)
+    await dispatch(uninstallApp(appName))
+    await setUninstallingId('')
   }
 
   const to = async (id: string) => {
@@ -64,9 +64,10 @@ const Shelf = ({ settings = false }: { settings: boolean }) => {
         Item={Item}
         itemPropsFunc={(id) => ({
           id,
-          disabled: !settings,
-          onClose: uninstallApp,
+          disabled: !settings || (uninstallingId && uninstallingId !== id),
+          onClose: () => uninstall(id),
           onClick: () => to(id),
+          loading: uninstallingId === id,
         })}
         Container={Container}
         containerPropsFunc={(index) => ({
