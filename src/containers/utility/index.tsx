@@ -4,8 +4,9 @@ import { useDispatch } from 'react-redux'
 import { RootDispatch } from 'store'
 import { resize } from 'store/ui.reducer'
 import Sync from './sync'
+import Preset from './preset'
 
-const UiUx = () => {
+const Utility = () => {
   const dispatch = useDispatch<RootDispatch>()
 
   useEffect(() => {
@@ -15,8 +16,9 @@ const UiUx = () => {
   return (
     <Fragment>
       <Sync />
+      <Preset />
     </Fragment>
   )
 }
 
-export default UiUx
+export default Utility

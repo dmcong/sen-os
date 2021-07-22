@@ -15,9 +15,14 @@ class PDB {
     this.driver = [localForage.WEBSQL, localForage.LOCALSTORAGE]
   }
 
-  _IPFS = async () => {
-    if (!window.senos?.ipfs) window.senos.ipfs = await IPFS.create()
-    return window.senos.ipfs
+  _IPFS: any = async () => {
+    try {
+      if (!window.senos?.ipfs) window.senos.ipfs = await IPFS.create()
+      return window.senos.ipfs
+    } catch (er) {
+      await util.asyncWait(500)
+      return await this._IPFS()
+    }
   }
 
   createInstance = (appName: string): any => {
@@ -75,13 +80,19 @@ class PDB {
     return cid
   }
 
-  restore = async (cid: string) => {
-    // Download data
+  _fetchAll = async (cid: string) => {
+    // Fetch data from IPFS
     const ipfs = await this._IPFS()
     const stream = await ipfs.cat(cid)
     let raw = ''
     for await (const chunk of stream) raw += Buffer.from(chunk).toString()
     const data = JSON.parse(raw)
+    return data
+  }
+
+  restore = async (cid: string) => {
+    // Download data
+    const data = await this._fetchAll(cid)
     // Apply to storage
     await this._setAll(data)
     return data

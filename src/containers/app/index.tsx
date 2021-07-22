@@ -2,7 +2,7 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 
 import { Layout, Row, Col } from 'sen-kit'
 
-import UiUx from 'containers/uiux'
+import Utility from 'containers/utility'
 import ControlCenter from 'containers/controlCenter'
 import Home from 'containers/home'
 import Market from 'containers/market'
@@ -25,7 +25,7 @@ const App = () => {
         </Row>
       </Layout.Content>
       <ControlCenter />
-      <UiUx />
+      <Utility />
     </Layout>
   )
 }
