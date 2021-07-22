@@ -79,6 +79,7 @@ const Preset = () => {
                 />
               </Col>
             ))}
+            <Col span={24} />
           </Row>
         </Col>
         <Col span={12}>
