@@ -1,11 +1,11 @@
-import { configureStore } from '@reduxjs/toolkit';
-import middleware from 'store/middleware';
-import devTools from 'store/devTools';
+import { configureStore } from '@reduxjs/toolkit'
+import middleware from 'store/middleware'
+import devTools from 'store/devTools'
 
-import { appName } from '../package.json';
-import mints from '../controller/mints.controller';
-import accounts from '../controller/accounts.controller';
-import cgk from '../controller/cgk.controller';
+import { appName } from '../package.json'
+import mints from '../controller/mints.controller'
+import accounts from '../controller/accounts.controller'
+import cgk from '../controller/cgk.controller'
 
 /**
  * Isolated store
@@ -18,6 +18,6 @@ const model = configureStore({
     accounts,
     cgk,
   },
-});
+})
 
-export default model;
+export default model

@@ -1,32 +1,32 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 
-import { Row, Col, Avatar } from 'sen-kit';
-
+import { Row, Col, Avatar } from 'sen-kit'
 
 const Pokemon = ({ name, onClick, ...rest }) => {
   let code = name
-    .replace('\'', '')
+    .replace("'", '')
     .replace('`', '')
     .replace('.', '')
     .replace(' ', '-')
     .replace('♂', '-m')
     .replace('♀', '-f')
-    .toLowerCase();
-  const src = `https://raw.githubusercontent.com/itsjavi/pokemon-assets/master/assets/img/pokemon/${code}.png`;
-  return <Row justify="center">
-    <Col>
-      <Avatar src={src} size={72} onClick={onClick} {...rest} />
-    </Col>
-    <Col span={24} />
-    <Col>
-      <p>{name}</p>
-    </Col>
-  </Row>
+    .toLowerCase()
+  const src = `https://raw.githubusercontent.com/itsjavi/pokemon-assets/master/assets/img/pokemon/${code}.png`
+  return (
+    <Row justify="center">
+      <Col>
+        <Avatar src={src} size={72} onClick={onClick} {...rest} />
+      </Col>
+      <Col span={24} />
+      <Col>
+        <p>{name}</p>
+      </Col>
+    </Row>
+  )
 }
 
 Pokemon.defaultProps = {
-  onClick: () => { }
+  onClick: () => {},
 }
 
 Pokemon.propTypes = {
@@ -34,4 +34,4 @@ Pokemon.propTypes = {
   onClick: PropTypes.func,
 }
 
-export default Pokemon;
+export default Pokemon

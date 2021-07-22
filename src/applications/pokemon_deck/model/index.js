@@ -1,9 +1,9 @@
-import { configureStore } from '@reduxjs/toolkit';
-import middleware from 'store/middleware';
-import devTools from 'store/devTools';
+import { configureStore } from '@reduxjs/toolkit'
+import middleware from 'store/middleware'
+import devTools from 'store/devTools'
 
-import { appName } from '../package.json';
-import main from '../controller/main.controller';
+import { appName } from '../package.json'
+import main from '../controller/main.controller'
 
 /**
  * Isolated store
@@ -14,6 +14,6 @@ const model = configureStore({
   reducer: {
     main,
   },
-});
+})
 
-export default model;
+export default model

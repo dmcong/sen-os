@@ -23,19 +23,18 @@ const SenOsProvider = ({
   appName: string
 }) => {
   const dispatch = useDispatch<RootDispatch>()
-  const senos = {
-    // UI instance
-    ui: useSelector((state: RootState) => state.ui),
-    notify: (...agrs: Parameters<typeof notify>) => dispatch(notify(...agrs)),
-    // Wallet instance
-    wallet: useSelector((state: RootState) => state.wallet),
-    // DB instance
-    get db() {
-      const address = this.wallet.address
-      const pdb = ssjs.isAddress(address) ? new PDB(address) : null
-      return pdb?.createInstance(appName)
-    },
-  }
+  // UI instance
+  const ui = useSelector((state: RootState) => state.ui)
+  const ntf = (...agrs: Parameters<typeof notify>) => dispatch(notify(...agrs))
+  // Wallet instance
+  const wallet = useSelector((state: RootState) => state.wallet)
+  // DB instance
+  const address = wallet.address
+  const db = ssjs.isAddress(address)
+    ? new PDB(address).createInstance(appName)
+    : null
+  // SenOS
+  const senos = { ui, notify: ntf, wallet, db }
   // Context provider
   return <Context.Provider value={{ senos }}>{children}</Context.Provider>
 }

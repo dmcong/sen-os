@@ -1,17 +1,17 @@
-import React, { useState, useMemo, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
-import { Document } from 'flexsearch';
+import { useState, useMemo, useEffect } from 'react'
+import PropTypes from 'prop-types'
+import { useSelector } from 'react-redux'
+import { Document } from 'flexsearch'
 
-import { Row, Col, Card, Input, Icon, Button } from 'sen-kit';
+import { Row, Col, Card, Input, Icon, Button } from 'sen-kit'
 
-import mintConfig from '@/sen_wallet/config/mint.config';
+import mintConfig from '@/sen_wallet/config/mint.config'
 
-const KEYSIZE = 3;
+const KEYSIZE = 3
 const PRESET = {
   tokenize: 'full',
   context: true,
-  minlength: KEYSIZE
+  minlength: KEYSIZE,
 }
 const RULE = {
   document: {
@@ -21,67 +21,76 @@ const RULE = {
       { field: 'symbol', ...PRESET },
       { field: 'name', ...PRESET },
       { field: 'mint', ...PRESET },
-    ]
-  }
+    ],
+  },
 }
 
 const Search = ({ onChange }) => {
-  const [keyword, setKeyword] = useState('');
-  const accounts = useSelector(state => state.accounts);
+  const [keyword, setKeyword] = useState('')
+  const accounts = useSelector((state) => state.accounts)
   const engine = useMemo(() => {
-    const index = new Document(RULE);
-    mintConfig.forEach(mint => index.add(mint));
-    Object.keys(accounts).forEach(address => index.add({ address, ...accounts[address] }));
-    return index;
-  }, [accounts]);
+    const index = new Document(RULE)
+    mintConfig.forEach((mint) => index.add(mint))
+    Object.keys(accounts).forEach((address) =>
+      index.add({ address, ...accounts[address] }),
+    )
+    return index
+  }, [accounts])
 
   useEffect(() => {
-    if (!keyword || keyword.length < KEYSIZE) return onChange(null);
-    let accountAddresses = [];
+    if (!keyword || keyword.length < KEYSIZE) return onChange(null)
+    let accountAddresses = []
     engine.search(keyword).forEach(({ field, result }) => {
-      if (field === 'mint') return result.forEach(address => {
-        if (accountAddresses.includes(address)) return;
-        return accountAddresses.push(address);
-      });
-      return result.forEach(address => {
-        return Object.keys(accounts).forEach(key => {
-          const { mint } = accounts[key];
-          if (mint !== address || accountAddresses.includes(key)) return;
-          return accountAddresses.push(key);
-        });
-      });
-    });
-    return onChange(accountAddresses);
-  }, [keyword, engine, accounts, onChange]);
+      if (field === 'mint')
+        return result.forEach((address) => {
+          if (accountAddresses.includes(address)) return
+          return accountAddresses.push(address)
+        })
+      return result.forEach((address) => {
+        return Object.keys(accounts).forEach((key) => {
+          const { mint } = accounts[key]
+          if (mint !== address || accountAddresses.includes(key)) return
+          return accountAddresses.push(key)
+        })
+      })
+    })
+    return onChange(accountAddresses)
+  }, [keyword, engine, accounts, onChange])
 
-  return <Row gutter={[16, 16]}>
-    <Col span={24}>
-      <Card bodyStyle={{ padding: 8 }} bordered={false}>
-        <Input
-          placeholder="Search"
-          value={keyword}
-          size="small"
-          bordered={false}
-          prefix={<Button
-            type="text"
-            style={{ marginLeft: -7 }}
+  return (
+    <Row gutter={[16, 16]}>
+      <Col span={24}>
+        <Card bodyStyle={{ padding: 8 }} bordered={false}>
+          <Input
+            placeholder="Search"
+            value={keyword}
             size="small"
-            onClick={keyword ? () => setKeyword('') : () => { }}
-            icon={<Icon name={keyword ? 'close-outline' : 'search-outline'} />}
-          />}
-          onChange={e => setKeyword(e.target.value)}
-        />
-      </Card>
-    </Col>
-  </Row>
+            bordered={false}
+            prefix={
+              <Button
+                type="text"
+                style={{ marginLeft: -7 }}
+                size="small"
+                onClick={keyword ? () => setKeyword('') : () => {}}
+                icon={
+                  <Icon name={keyword ? 'close-outline' : 'search-outline'} />
+                }
+              />
+            }
+            onChange={(e) => setKeyword(e.target.value)}
+          />
+        </Card>
+      </Col>
+    </Row>
+  )
 }
 
 Search.defaultProps = {
-  onChange: () => { }
+  onChange: () => {},
 }
 
 Search.propTypes = {
   onChange: PropTypes.func,
 }
 
-export default Search;
+export default Search

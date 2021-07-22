@@ -1,7 +1,7 @@
-import configs from 'configs';
-import ssjs from 'senswapjs';
+import configs from 'configs'
+import ssjs from 'senswapjs'
 
-const { env } = configs;
+const { env } = configs
 
 const mint = {}
 
@@ -57,16 +57,12 @@ mint.development = [
     name: 'Wrapped Solana',
     address: 'So11111111111111111111111111111111111111112',
     decimals: 9,
-  }
+  },
 ]
 
 /**
  * Production mint
  */
-mint.production = [
-  {
+mint.production = [{}]
 
-  }
-]
-
-export default mint[env];
+export default mint[env]
