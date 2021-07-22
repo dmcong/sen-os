@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useHistory } from 'react-router'
+import ssjs from 'senswapjs'
 
 import { Row, Col, Icon, Modal, Typography, Tabs } from 'sen-kit'
 import { parseCID } from './syncLink'
@@ -7,28 +9,41 @@ import Backup from './backup'
 import Restore from './restore'
 
 import { RootState, RootDispatch } from 'store'
+import { openWallet, closeWallet } from 'store/wallet.reducer'
 import { toggleSync } from 'store/ui.reducer'
 
 const Sync = () => {
   const [mode, setMode] = useState('backup')
   const dispatch = useDispatch<RootDispatch>()
+  const history = useHistory()
+  const { address } = useSelector((state: RootState) => state.wallet)
   const { visibleSync } = useSelector((state: RootState) => state.ui)
 
   const sync = parseCID(window.location.href)
+  const onClose = async () => {
+    const {
+      location: { origin, pathname },
+    } = window
+    await history.push(origin + pathname)
+    await dispatch(toggleSync(false))
+  }
 
   useEffect(() => {
     if (!sync) setMode('backup')
-    else {
+    else if (!ssjs.isAddress(address)) {
+      dispatch(openWallet())
+    } else {
+      dispatch(closeWallet())
       setMode('restore')
       dispatch(toggleSync(true))
     }
-  }, [dispatch, sync])
+  }, [dispatch, sync, address])
 
-  console.log(mode)
+  if (!ssjs.isAddress(address)) return <Fragment />
   return (
     <Modal
       visible={visibleSync}
-      onCancel={() => dispatch(toggleSync(false))}
+      onCancel={onClose}
       closeIcon={<Icon name="close" />}
       footer={null}
       destroyOnClose={true}

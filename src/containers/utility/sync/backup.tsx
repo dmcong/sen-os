@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import ssjs from 'senswapjs'
 
 import { Row, Col, Icon, Button } from 'sen-kit'
 import SyncLink from './syncLink'
@@ -17,16 +18,21 @@ const Backup = () => {
   const dispatch = useDispatch<RootDispatch>()
 
   const { address } = useSelector((state: RootState) => state.wallet)
-  const pdb = useMemo(() => new PDB(address), [address])
+  const pdb = useMemo(() => {
+    if (!ssjs.isAddress(address)) return null
+    return new PDB(address)
+  }, [address])
 
   useEffect(() => {
     ;(async () => {
+      if (!pdb) return
       const data = await pdb._getAll()
       return setData(data)
     })()
   }, [pdb, address])
 
   const onBackup = async () => {
+    if (!pdb) return
     const cid = await pdb.backup()
     await setLink(`${window.location.origin}/home/${cid}`)
     await dispatch(

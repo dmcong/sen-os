@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import ssjs from 'senswapjs'
 
 import { Row, Col, Icon, Button } from 'sen-kit'
 import Preview from './preview'
@@ -17,7 +18,10 @@ const Restore = () => {
   const sync = parseCID(window.location.href)
 
   const { address } = useSelector((state: RootState) => state.wallet)
-  const pdb = useMemo(() => new PDB(address), [address])
+  const pdb = useMemo(() => {
+    if (!ssjs.isAddress(address)) return null
+    return new PDB(address)
+  }, [address])
 
   useEffect(() => {
     if (sync)
@@ -30,7 +34,7 @@ const Restore = () => {
     if (link)
       (async () => {
         const cid = parseCID(link)
-        if (!cid) return await setData({})
+        if (!cid || !pdb) return await setData({})
         const data = await pdb._fetchAll(cid)
         return await setData(data)
       })()
@@ -38,6 +42,13 @@ const Restore = () => {
 
   const onRestore = async () => {
     const cid = parseCID(link)
+    if (!pdb)
+      return dispatch(
+        notify({
+          type: 'error',
+          description: 'Please connect he wallet first',
+        }),
+      )
     if (!cid)
       return dispatch(
         notify({

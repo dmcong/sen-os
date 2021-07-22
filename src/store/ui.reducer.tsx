@@ -21,6 +21,7 @@ export type State = {
   touchable: boolean
   visibleControlCenter: boolean
   visibleSync: boolean
+  visiblePreset: boolean
 }
 
 const getInfix = (): Infix => {
@@ -44,6 +45,7 @@ const initialState: State = {
   touchable: util.isTouchable(),
   visibleControlCenter: false,
   visibleSync: false,
+  visiblePreset: false,
 }
 
 /**
@@ -97,6 +99,14 @@ export const toggleSync = createAsyncThunk(
   },
 )
 
+export const togglePreset = createAsyncThunk(
+  `${NAME}/togglePreset`,
+  async (visible: boolean) => {
+    document.body.style.overflow = visible ? 'hidden' : 'scroll'
+    return { visiblePreset: visible }
+  },
+)
+
 /**
  * Usual procedure
  */
@@ -121,6 +131,10 @@ const slice = createSlice({
       )
       .addCase(
         toggleSync.fulfilled,
+        (state, { payload }) => void Object.assign(state, payload),
+      )
+      .addCase(
+        togglePreset.fulfilled,
         (state, { payload }) => void Object.assign(state, payload),
       ),
 })
