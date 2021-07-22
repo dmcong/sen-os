@@ -20,7 +20,8 @@ const SOLVARS = {
  */
 type Config = {
   node: string
-  cluster: 'devnet' | 'mainnet'
+  cluster: 'devnet' | 'testnet' | 'mainnet'
+  chainId: 101 | 102 | 103
   native: typeof NATIVE
 } & typeof SOLVARS
 
@@ -30,6 +31,7 @@ const configs: Record<Env, Config> = {
    */
   development: {
     node: 'https://api.devnet.solana.com',
+    chainId: 103,
     cluster: 'devnet',
     native: { ...NATIVE },
     ...SOLVARS,
@@ -41,6 +43,7 @@ const configs: Record<Env, Config> = {
   staging: {
     node: 'https://api.devnet.solana.com',
     cluster: 'devnet',
+    chainId: 103,
     native: { ...NATIVE },
     ...SOLVARS,
   },
@@ -51,6 +54,7 @@ const configs: Record<Env, Config> = {
   production: {
     node: 'https://api.mainnet-beta.solana.com',
     cluster: 'mainnet',
+    chainId: 101,
     native: { ...NATIVE },
     ...SOLVARS,
   },

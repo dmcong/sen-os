@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import ssjs from 'senswapjs'
 import numeral from 'numeral'
@@ -20,7 +20,6 @@ import QRCode from 'qrcode.react'
 
 import { useSenOs } from 'helpers/senos'
 import util from 'helpers/util'
-import mintConfig from '@/sen_wallet/config/mint.config'
 import { getCGK } from '@/sen_wallet/controller/cgk.controller'
 
 const Copy = ({ address }) => {
@@ -79,50 +78,47 @@ const Balance = ({ value }) => {
   )
 }
 
-const getTotalBalance = async (lamports, accounts, getPrice) => {
-  let usd = 0
-  // Calculate SOL
-  const {
-    payload: {
-      solana: { price: solPrice },
-    },
-  } = await getPrice('solana')
-  usd = usd + ssjs.undecimalize(lamports, 9) * solPrice
-  // Calculate mints
-  const mintAddresses = mintConfig.map(({ address }) => address)
-  const accountAddresses = Object.keys(accounts)
-  for (const accountAddress of accountAddresses) {
-    const { mint: mintAddress, amount } = accounts[accountAddress] || {}
-    const index = mintAddresses.indexOf(mintAddress)
-    if (index < 0) continue
-    const { ticket, decimals } = mintConfig[index]
-    const {
-      payload: {
-        [ticket]: { price },
-      },
-    } = await getPrice(ticket)
-    usd = usd + ssjs.undecimalize(amount, decimals) * price
-  }
-  return usd
-}
-
 const WalletInfo = () => {
   const [value, setValue] = useState(0)
   const accounts = useSelector((state) => state.accounts)
   const dispatch = useDispatch()
   const {
     senos: {
+      tokenProvider,
       wallet: { address, lamports },
     },
   } = useSenOs()
 
+  const getTotalBalance = useCallback(async () => {
+    let usd = 0
+    // Calculate SOL
+    const {
+      payload: {
+        solana: { price: solPrice },
+      },
+    } = await dispatch(getCGK('solana'))
+    usd = usd + ssjs.undecimalize(lamports, 9) * solPrice
+    // Calculate mints
+    for (const accountAddress of Object.keys(accounts)) {
+      const { mint: mintAddress, amount } = accounts[accountAddress] || {}
+      const mintData = await tokenProvider.findByAddress(mintAddress)
+      if (!mintData) continue
+      const { extensions, decimals } = mintData
+      const ticket = extensions?.coingeckoId
+      if (!ticket) continue
+      const {
+        payload: {
+          [ticket]: { price },
+        },
+      } = await dispatch(getCGK(ticket))
+      usd = usd + ssjs.undecimalize(amount, decimals) * price
+    }
+    return setValue(usd)
+  }, [tokenProvider, lamports, accounts, dispatch])
+
   useEffect(() => {
-    ;(async () => {
-      const getPrice = (ticket) => dispatch(getCGK(ticket))
-      const usd = await getTotalBalance(lamports, accounts, getPrice)
-      setValue(usd)
-    })()
-  }, [lamports, accounts, dispatch])
+    getTotalBalance()
+  }, [getTotalBalance])
 
   const shortenAddress = () => {
     const size = 4

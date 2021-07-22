@@ -1,18 +1,30 @@
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
+import ssjs from 'senswapjs'
 
 import { Row, Col, Modal, Icon, Tabs } from 'sen-kit'
-import Header from './header'
-import Info from './info'
+import Header from '@/sen_wallet/view/components/header'
+import Info from '@/sen_wallet/view/components/info'
 import Transfer from './transfer'
 import Wrapper from './wrapper'
 
-import mintConfig from '@/sen_wallet/config/mint.config'
+import { useSenOs } from 'helpers/senos'
 
 const AccountActions = ({ visible, onClose, accountData }) => {
-  const { mint } = accountData
-  const { address: wsolAddress } =
-    mintConfig.find(({ symbol }) => symbol === 'WSOL') || {}
+  const [mintData, setMintData] = useState({})
+  const {
+    senos: { tokenProvider },
+  } = useSenOs()
 
+  const { mint } = accountData
+  useEffect(() => {
+    ;(async () => {
+      const mintData = (await tokenProvider.findByAddress(mint)) || {}
+      await setMintData(mintData)
+    })()
+  }, [mint, tokenProvider])
+
+  const data = { ...mintData, ...accountData }
   return (
     <Modal
       visible={visible}
@@ -24,31 +36,23 @@ const AccountActions = ({ visible, onClose, accountData }) => {
     >
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Header accountData={accountData} reset={visible} />
+          <Header data={data} />
         </Col>
         <Col span={24} />
         <Col span={24}>
-          <Info accountData={accountData} reset={visible} />
+          <Info data={data} />
         </Col>
         <Col span={24}>
           <Tabs>
             <Tabs.TabPane key="transfer" tab="Transfer">
-              <Transfer
-                accountData={accountData}
-                reset={visible}
-                onChange={onClose}
-              />
+              <Transfer data={data} onChange={onClose} />
             </Tabs.TabPane>
             <Tabs.TabPane
               key="wrapper"
               tab="Wrapper"
-              disabled={mint !== wsolAddress}
+              disabled={mint !== ssjs.DEFAULT_WSOL}
             >
-              <Wrapper
-                accountData={accountData}
-                reset={visible}
-                onChange={onClose}
-              />
+              <Wrapper data={data} onChange={onClose} />
             </Tabs.TabPane>
           </Tabs>
         </Col>

@@ -4,18 +4,8 @@ import { useDispatch } from 'react-redux'
 import { getMint } from '@/sen_wallet/controller/mints.controller'
 import ssjs from 'senswapjs'
 
-import {
-  Row,
-  Col,
-  Input,
-  Typography,
-  Button,
-  Space,
-  Tooltip,
-  Icon,
-} from 'sen-kit'
-
-import util from 'helpers/util'
+import { Row, Col, Input, Typography, Button, Space, Icon } from 'sen-kit'
+import Prefix from '@/sen_wallet/view/components/prefix'
 
 const DEFAULT_META = { amount: 0n, decimals: 0 }
 
@@ -61,23 +51,7 @@ const Source = ({
       <Col span={24}>
         <Input
           placeholder={0}
-          prefix={
-            <Tooltip
-              title={`The ${symbol} associated account: ${accountAddress}`}
-            >
-              <Button
-                type="link"
-                style={{ marginLeft: -7, color: 'inherit' }}
-                icon={<Icon name="wallet-outline" />}
-                href={util.explorer(accountAddress)}
-                target="_blank"
-                rel="noopener noreferrer"
-                disabled={!ssjs.isAddress(accountAddress)}
-              >
-                {symbol}
-              </Button>
-            </Tooltip>
-          }
+          prefix={<Prefix address={accountAddress} symbol={symbol} />}
           suffix={
             <Button type="text" style={{ marginRight: -7 }} onClick={handleMax}>
               MAX

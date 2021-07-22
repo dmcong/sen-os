@@ -13,22 +13,22 @@ import {
   Space,
   Tooltip,
 } from 'sen-kit'
+import Prefix from '@/sen_wallet/view/components/prefix'
 
 import util from 'helpers/util'
 import { useSenOs } from 'helpers/senos'
 
-const Transfer = ({ accountData, onChange }) => {
+const Transfer = ({ data, onChange }) => {
   const [srcValue, setSrcValue] = useState('')
   const [dstValue, setDstValue] = useState('')
   const [error, setError] = useState('')
 
-  const { address, amount: maxAmount } = accountData
+  const { address, amount: maxAmount, symbol } = data
   const balance = ssjs.undecimalize(maxAmount, 9)
   const {
     senos: { notify },
   } = useSenOs()
 
-  const handleMax = () => setSrcValue(balance)
   const transfer = async () => {
     try {
       const wallet = window.senos.wallet
@@ -37,7 +37,7 @@ const Transfer = ({ accountData, onChange }) => {
       if (!amount) return setError('Invalid amount')
       if (amount > maxAmount) return setError('Exceed your available balance')
       if (!ssjs.isAddress(dstValue)) return setError('Invalid receiver address')
-      const { txId } = await lamports.transfer(amount, dstValue, wallet)
+      const txId = await lamports.transfer(amount, dstValue, wallet)
       await notify({
         type: 'success',
         description: `Transfer ${srcValue} SOL to ${
@@ -52,6 +52,7 @@ const Transfer = ({ accountData, onChange }) => {
       return setError(er.message)
     }
   }
+
   const icon = () => {
     if (!ssjs.isAddress(dstValue))
       return (
@@ -75,11 +76,12 @@ const Transfer = ({ accountData, onChange }) => {
         <Col span={24}>
           <Input
             placeholder={0}
+            prefix={<Prefix address={address} symbol={symbol} />}
             suffix={
               <Button
                 type="text"
                 style={{ marginRight: -7 }}
-                onClick={handleMax}
+                onClick={() => setSrcValue(balance)}
               >
                 MAX
               </Button>
@@ -96,7 +98,7 @@ const Transfer = ({ accountData, onChange }) => {
         </Col>
         <Col span={24}>
           <Input
-            placeholder={address.substring(0, 6) + '...'}
+            placeholder={address?.substring(0, 6) + '...'}
             suffix={
               <Button
                 type="text"
@@ -133,12 +135,12 @@ const Transfer = ({ accountData, onChange }) => {
 }
 
 Transfer.defaultProps = {
-  accountData: {},
+  data: {},
   onChange: () => {},
 }
 
 Transfer.propTypes = {
-  accountData: PropTypes.object,
+  data: PropTypes.object,
   onChange: PropTypes.func,
 }
 

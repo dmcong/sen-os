@@ -19,19 +19,20 @@ import PriceChange from '@/sen_wallet/view/components/priceChange'
 import { getCGK } from '@/sen_wallet/controller/cgk.controller'
 import { getMint } from '@/sen_wallet/controller/mints.controller'
 
-const Info = ({ accountData, reset }) => {
-  const [icon, setIcon] = useState('#')
+const Info = ({ data }) => {
   const [price, setPrice] = useState(0)
   const [priceChange, setPriceChange] = useState(0)
   const [decimals, setDecimals] = useState(0)
   const dispatch = useDispatch()
 
-  const { mint, amount, ticket, symbol } = accountData
+  const { logoURI, symbol, extensions, mint, amount } = data
   const balance = ssjs.undecimalize(amount, decimals)
+
   useEffect(() => {
     ;(async () => {
+      if (mint === ssjs.DEFAULT_EMPTY_ADDRESS) return setDecimals(9)
       const { error, payload } = await dispatch(getMint({ address: mint }))
-      if (error) return
+      if (error) return setDecimals(0)
       const {
         [mint]: { decimals },
       } = payload
@@ -40,24 +41,17 @@ const Info = ({ accountData, reset }) => {
   }, [dispatch, mint])
   useEffect(() => {
     ;(async () => {
+      const ticket = extensions?.coingeckoId
+      if (!ticket) return
       const { error, payload } = await dispatch(getCGK(ticket))
       if (error) return
       const {
-        [ticket]: { icon, price, priceChange },
+        [ticket]: { price, priceChange },
       } = payload
-      setIcon(icon)
       setPrice(price)
       setPriceChange(priceChange)
     })()
-  }, [ticket, dispatch])
-  useEffect(() => {
-    return () => {
-      setIcon('#')
-      setPrice(0)
-      setPriceChange(0)
-      setDecimals(0)
-    }
-  }, [reset])
+  }, [extensions, dispatch])
 
   return (
     <Card bordered={false}>
@@ -72,7 +66,7 @@ const Info = ({ accountData, reset }) => {
             <Typography.Title level={3} style={{ margin: 0 }}>
               {numeral(balance).format('0,0.[0000]')}
             </Typography.Title>
-            <Avatar size={20} src={icon}>
+            <Avatar size={20} src={logoURI}>
               <Icon name="diamond-outline" />
             </Avatar>
             <Typography.Title level={3} type="secondary" style={{ margin: 0 }}>
@@ -93,13 +87,11 @@ const Info = ({ accountData, reset }) => {
 }
 
 Info.defaultProps = {
-  reset: false,
-  accountData: {},
+  data: {},
 }
 
 Info.propTypes = {
-  reset: PropTypes.bool,
-  accountData: PropTypes.object,
+  data: PropTypes.object,
 }
 
 export default Info

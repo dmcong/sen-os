@@ -19,12 +19,12 @@ import { useSenOs } from 'helpers/senos'
 import { getMint } from '@/sen_wallet/controller/mints.controller'
 import { deleteAccount } from '@/sen_wallet/controller/accounts.controller'
 
-const Unwrap = ({ accountData, onChange }) => {
+const Unwrap = ({ data, onChange }) => {
   const [decimals, setDecimals] = useState(0)
   const [error, setError] = useState('')
   const dispatch = useDispatch()
 
-  const { address, symbol, amount, mint } = accountData
+  const { address, symbol, amount, mint } = data
   useEffect(() => {
     ;(async () => {
       const { error, payload } = await dispatch(getMint({ address: mint }))
@@ -117,12 +117,12 @@ const Unwrap = ({ accountData, onChange }) => {
 }
 
 Unwrap.defaultProps = {
-  accountData: {},
+  data: {},
   onChange: () => {},
 }
 
 Unwrap.propTypes = {
-  accountData: PropTypes.object,
+  data: PropTypes.object,
   onChange: PropTypes.func,
 }
 

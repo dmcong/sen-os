@@ -21,13 +21,12 @@ import { getCGK } from '@/sen_wallet/controller/cgk.controller'
 import { getMint } from '@/sen_wallet/controller/mints.controller'
 
 const AccountCard = ({ data, onClick }) => {
-  const [icon, setIcon] = useState('#')
   const [price, setPrice] = useState(0)
   const [priceChange, setPriceChange] = useState(0)
   const [decimals, setDecimals] = useState(0)
   const dispatch = useDispatch()
 
-  const { ticket, name, amount, symbol, mint } = data
+  const { logoURI, extensions, name, amount, symbol, mint } = data
   const balance = ssjs.undecimalize(amount, decimals)
   useEffect(() => {
     ;(async () => {
@@ -41,16 +40,17 @@ const AccountCard = ({ data, onClick }) => {
   }, [dispatch, mint])
   useEffect(() => {
     ;(async () => {
+      const ticket = extensions?.coingeckoId
+      if (!ticket) return
       const { error, payload } = await dispatch(getCGK(ticket))
       if (error) return
       const {
-        [ticket]: { icon, price, priceChange },
+        [ticket]: { price, priceChange },
       } = payload
-      setIcon(icon)
       setPrice(price)
       setPriceChange(priceChange)
     })()
-  }, [ticket, dispatch])
+  }, [extensions, dispatch])
 
   const onSend = (e) => {
     e.stopPropagation()
@@ -61,7 +61,7 @@ const AccountCard = ({ data, onClick }) => {
     <Card bodyStyle={{ padding: `16px 12px` }} bordered={false} hoverable>
       <Row gutter={[12, 16]} align="middle" wrap={false}>
         <Col>
-          <Avatar src={icon} size={32}>
+          <Avatar src={logoURI} size={32}>
             <Icon name="diamond-outline" />
           </Avatar>
         </Col>

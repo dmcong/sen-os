@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import ssjs from 'senswapjs'
 
 import PDB from 'helpers/pdb'
+import TokenProvider from 'helpers/tokenProvider'
 import { RootState, RootDispatch } from 'store'
 import { notify } from 'store/ui.reducer'
 
@@ -33,8 +34,10 @@ const SenOsProvider = ({
   const db = ssjs.isAddress(address)
     ? new PDB(address).createInstance(appName)
     : null
+  // Token Provider
+  const tokenProvider = new TokenProvider()
   // SenOS
-  const senos = { ui, notify: ntf, wallet, db }
+  const senos = { ui, notify: ntf, wallet, db, tokenProvider }
   // Context provider
   return <Context.Provider value={{ senos }}>{children}</Context.Provider>
 }

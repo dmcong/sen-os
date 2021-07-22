@@ -9,7 +9,7 @@ import Destination from './destination'
 import util from 'helpers/util'
 import { useSenOs } from 'helpers/senos'
 
-const Transfer = ({ accountData, onChange }) => {
+const Transfer = ({ data, onChange }) => {
   const [srcValue, setSrcValue] = useState('')
   const [srcError, setSrcError] = useState('')
   const [srcMeta, setSrcMeta] = useState({})
@@ -21,7 +21,7 @@ const Transfer = ({ accountData, onChange }) => {
     senos: { notify },
   } = useSenOs()
 
-  const { address, mint, symbol, amount: maxAmount } = accountData
+  const { address, mint, symbol, amount: maxAmount } = data
   const transfer = async () => {
     const {
       associatedAddress: dstAddress,
@@ -94,12 +94,12 @@ const Transfer = ({ accountData, onChange }) => {
 }
 
 Transfer.defaultProps = {
-  accountData: {},
+  data: {},
   onChange: () => {},
 }
 
 Transfer.propTypes = {
-  accountData: PropTypes.object,
+  data: PropTypes.object,
   onChange: PropTypes.func,
 }
 

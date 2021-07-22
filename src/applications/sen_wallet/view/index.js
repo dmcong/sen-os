@@ -1,9 +1,5 @@
-import { Component } from 'react'
-import { connect } from 'react-redux'
-import { bindActionCreators } from '@reduxjs/toolkit'
-import { withRouter } from 'react-router-dom'
-import isEqual from 'react-fast-compare'
-import ssjs from 'senswapjs'
+import { useCallback, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 import { Row, Col } from 'sen-kit'
 import LazyLoad from 'react-lazyload'
@@ -15,139 +11,85 @@ import Settings from './settings'
 import AccountActions from './accountActions'
 import SolCard from './solCard'
 
-import { withSenOs } from 'helpers/senos'
-import mintConfig from '@/sen_wallet/config/mint.config'
+import { useSenOs } from 'helpers/senos'
 
-class View extends Component {
-  constructor() {
-    super()
+const View = () => {
+  const [orderedAccounts, setOrderedAccounts] = useState([])
+  const [searchedAccounts, setSearchedAccounts] = useState(null)
+  const [settings, setSettings] = useState({ hiddenZeros: false })
+  const [accountIndex, setAccountIndex] = useState(-1)
+  const {
+    senos: { tokenProvider },
+  } = useSenOs()
+  const accounts = useSelector((state) => state.accounts)
 
-    this.state = {
-      orderedAccounts: [],
-      settings: {
-        hiddenZeros: false,
-      },
-      accountIndex: -1,
+  const sort = useCallback(async () => {
+    const priority = []
+    const rest = []
+    for (const address of Object.keys(accounts)) {
+      const accountData = accounts[address]
+      const { mint } = accountData
+      const mintData = await tokenProvider.findByAddress(mint)
+      if (mintData) priority.push({ ...mintData, ...accountData, address })
+      else rest.push({ ...mintData, ...accountData, address })
     }
-  }
-
-  get pseudoSolAccount() {
-    const {
-      senos: {
-        wallet: { address, lamports },
-      },
-    } = this.props
-    return {
-      mint: ssjs.DEFAULT_EMPTY_ADDRESS,
-      amount: lamports,
-      address,
-      ticket: 'solana',
-      symbol: 'SOL',
-      name: 'Solana',
-    }
-  }
-
-  componentDidMount() {
-    this.reset()
-  }
-
-  componentDidUpdate(prevProps) {
-    const { accounts: prevAccounts } = prevProps
-    const { accounts } = this.props
-    if (!isEqual(prevAccounts, accounts)) this.reset()
-  }
-
-  reset = () => {
-    const { accounts } = this.props
-    return this.sort(Object.keys(accounts))
-  }
-
-  sort = async (accountAddresses) => {
-    const { accounts } = this.props
-    const mintAddresses = mintConfig.map(({ address }) => address)
-    let priority = []
-    let rest = []
-    // Prioritized mints
-    accountAddresses.forEach((address) => {
-      const data = accounts[address]
-      const { mint } = data
-      const index = mintAddresses.indexOf(mint)
-      if (index < 0) return rest.push({ ...data, address })
-      const { ticket, symbol, name } = mintConfig[index]
-      return priority.push({ ...data, address, ticket, symbol, name })
-    })
     // Unknown mints
     const orderedAccounts = priority.concat(rest)
-    return this.setState({ orderedAccounts })
-  }
+    return setOrderedAccounts(orderedAccounts)
+  }, [accounts, tokenProvider])
 
-  onSearch = (accountAddress) => {
-    if (!accountAddress) return this.reset()
-    return this.sort(accountAddress)
-  }
+  useEffect(() => {
+    sort()
+  }, [sort])
 
-  render() {
-    const { orderedAccounts, settings, accountIndex } = this.state
-    const { hiddenZeros } = settings
-
-    return (
-      <Row gutter={[16, 16]}>
-        <AccountWatcher />
-        <Col span={24}>
-          <WalletInfo />
-        </Col>
-        <Col span={24} />
-        <Col span={24}>
-          <Row gutter={[16, 12]} justify="center">
-            <Col span={24}>
-              <Row gutter={[8, 8]} align="middle">
-                <Col flex="auto">
-                  <Search onChange={this.onSearch} />
-                </Col>
-                <Col>
-                  <Settings
-                    value={settings}
-                    onChange={(value) => this.setState({ settings: value })}
+  const { hiddenZeros } = settings
+  const renderedAccounts = searchedAccounts ? searchedAccounts : orderedAccounts
+  return (
+    <Row gutter={[16, 16]}>
+      <AccountWatcher />
+      <Col span={24}>
+        <WalletInfo />
+      </Col>
+      <Col span={24} />
+      <Col span={24}>
+        <Row gutter={[16, 12]} justify="center">
+          <Col span={24}>
+            <Row gutter={[8, 8]} align="middle">
+              <Col flex="auto">
+                <Search onChange={setSearchedAccounts} />
+              </Col>
+              <Col>
+                <Settings value={settings} onChange={setSettings} />
+              </Col>
+            </Row>
+          </Col>
+          <Col span={24}>
+            <SolCard />
+          </Col>
+          {renderedAccounts.map((accountData, i) => {
+            const { amount, address } = accountData
+            if (!amount && hiddenZeros) return null
+            return (
+              <Col span={24} key={address + i /* Trick to clear memo */}>
+                <LazyLoad height={76} overflow>
+                  <AccountCard
+                    data={accountData}
+                    onClick={() => setAccountIndex(i)}
                   />
-                </Col>
-              </Row>
-            </Col>
-            <Col span={24}>
-              <SolCard />
-            </Col>
-            {orderedAccounts.map((accountData, i) => {
-              const { amount, address } = accountData
-              if (!amount && hiddenZeros) return null
-              return (
-                <Col span={24} key={address + i /* Trick to clear memo */}>
-                  <LazyLoad height={76} overflow>
-                    <AccountCard
-                      data={accountData}
-                      onClick={() => this.setState({ accountIndex: i })}
-                    />
-                  </LazyLoad>
-                </Col>
-              )
-            })}
-            <AccountActions
-              visible={accountIndex >= 0}
-              onClose={() => this.setState({ accountIndex: -1 })}
-              accountData={orderedAccounts[accountIndex]}
-            />
-          </Row>
-        </Col>
-        <Col span={24} />
-      </Row>
-    )
-  }
+                </LazyLoad>
+              </Col>
+            )
+          })}
+          <AccountActions
+            visible={accountIndex >= 0}
+            onClose={() => setAccountIndex(-1)}
+            accountData={renderedAccounts[accountIndex]}
+          />
+        </Row>
+      </Col>
+      <Col span={24} />
+    </Row>
+  )
 }
 
-const mapStateToProps = (state) => ({
-  accounts: state.accounts,
-})
-
-const mapDispatchToProps = (dispatch) => bindActionCreators({}, dispatch)
-
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(withSenOs(View)),
-)
+export default View

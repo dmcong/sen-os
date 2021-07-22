@@ -1,61 +1,30 @@
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
-import { Document } from 'flexsearch'
 
 import { Row, Col, Card, Input, Icon, Button } from 'sen-kit'
 
-import mintConfig from '@/sen_wallet/config/mint.config'
+import { useSenOs } from 'helpers/senos'
 
 const KEYSIZE = 3
-const PRESET = {
-  tokenize: 'full',
-  context: true,
-  minlength: KEYSIZE,
-}
-const RULE = {
-  document: {
-    id: 'address',
-    index: [
-      { field: 'ticket', ...PRESET },
-      { field: 'symbol', ...PRESET },
-      { field: 'name', ...PRESET },
-      { field: 'mint', ...PRESET },
-    ],
-  },
-}
 
 const Search = ({ onChange }) => {
   const [keyword, setKeyword] = useState('')
   const accounts = useSelector((state) => state.accounts)
-  const engine = useMemo(() => {
-    const index = new Document(RULE)
-    mintConfig.forEach((mint) => index.add(mint))
-    Object.keys(accounts).forEach((address) =>
-      index.add({ address, ...accounts[address] }),
-    )
-    return index
-  }, [accounts])
+  const {
+    senos: { tokenProvider },
+  } = useSenOs()
 
   useEffect(() => {
-    if (!keyword || keyword.length < KEYSIZE) return onChange(null)
-    let accountAddresses = []
-    engine.search(keyword).forEach(({ field, result }) => {
-      if (field === 'mint')
-        return result.forEach((address) => {
-          if (accountAddresses.includes(address)) return
-          return accountAddresses.push(address)
-        })
-      return result.forEach((address) => {
-        return Object.keys(accounts).forEach((key) => {
-          const { mint } = accounts[key]
-          if (mint !== address || accountAddresses.includes(key)) return
-          return accountAddresses.push(key)
-        })
+    ;(async () => {
+      if (!keyword || keyword.length < KEYSIZE) return onChange(null)
+      const a = Object.keys(accounts).map((address) => accounts[address])
+      const b = (await tokenProvider.find(keyword)).filter(({ address }) => {
+        return a.findIndex(({ mint }) => mint === address) >= 0
       })
-    })
-    return onChange(accountAddresses)
-  }, [keyword, engine, accounts, onChange])
+      return onChange(b)
+    })()
+  }, [keyword, accounts, onChange, tokenProvider])
 
   return (
     <Row gutter={[16, 16]}>

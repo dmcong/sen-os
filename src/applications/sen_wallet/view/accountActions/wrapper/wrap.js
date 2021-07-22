@@ -17,7 +17,7 @@ import {
 import { useSenOs } from 'helpers/senos'
 import util from 'helpers/util'
 
-const Wrap = ({ accountData, onChange }) => {
+const Wrap = ({ data, onChange }) => {
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
 
@@ -26,7 +26,7 @@ const Wrap = ({ accountData, onChange }) => {
       wallet: { lamports },
     },
   } = useSenOs()
-  const { address, symbol } = accountData
+  const { address, symbol } = data
   const sol = ssjs.undecimalize(lamports, 9)
   const handleMax = () => setValue(sol)
 
@@ -129,12 +129,12 @@ const Wrap = ({ accountData, onChange }) => {
 }
 
 Wrap.defaultProps = {
-  accountData: {},
+  data: {},
   onChange: () => {},
 }
 
 Wrap.propTypes = {
-  accountData: PropTypes.object,
+  data: PropTypes.object,
   onChange: PropTypes.func,
 }
 

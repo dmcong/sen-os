@@ -4,16 +4,16 @@ import { Row, Col, Card } from 'sen-kit'
 import Wrap from './wrap'
 import Unwrap from './unwrap'
 
-const Wrapper = ({ accountData, onChange }) => {
-  const { state } = accountData
+const Wrapper = ({ data, onChange }) => {
+  const { state } = data
   return (
     <Card bordered={false}>
       <Row gutter={[16, 16]}>
         <Col span={24}>
           {!state ? (
-            <Wrap accountData={accountData} onChange={onChange} />
+            <Wrap data={data} onChange={onChange} />
           ) : (
-            <Unwrap accountData={accountData} onChange={onChange} />
+            <Unwrap data={data} onChange={onChange} />
           )}
         </Col>
       </Row>
@@ -22,12 +22,12 @@ const Wrapper = ({ accountData, onChange }) => {
 }
 
 Wrapper.defaultProps = {
-  accountData: {},
+  data: {},
   onChange: () => {},
 }
 
 Wrapper.propTypes = {
-  accountData: PropTypes.object,
+  data: PropTypes.object,
   onChange: PropTypes.func,
 }
 
