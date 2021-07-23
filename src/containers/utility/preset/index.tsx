@@ -53,7 +53,7 @@ const Preset = () => {
   return (
     <Modal
       visible={visiblePreset}
-      onCancel={() => dispatch(togglePreset(false))}
+      onCancel={skip}
       closeIcon={<Icon name="close" />}
       footer={null}
       destroyOnClose={true}

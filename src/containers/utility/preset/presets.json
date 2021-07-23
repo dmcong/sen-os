@@ -1,22 +1,17 @@
 [
   {
-    "type": "New Comer",
+    "type": "Newbie",
     "description": "For the first time start with DeFi",
     "preset": ["Sen Wallet"]
   },
   {
-    "type": "Swapper",
-    "description": "I would like to swap my tokens",
-    "preset": ["Sen Wallet"]
-  },
-  {
-    "type": "Liquidity Provider",
-    "description": "I'm a liquidity provider",
+    "type": "Professional",
+    "description": "Have experience of DeFi",
     "preset": ["Sen Wallet"]
   },
   {
     "type": "Developer",
-    "description": "Getting started as a developer",
+    "description": "Develop DeFi applications",
     "preset": ["Sen Wallet", "Pokemon Deck"]
   }
 ]
