@@ -2,6 +2,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import ssjs from 'senswapjs'
 
 import configs from 'configs'
+import IPFS from 'helpers/ipfs'
 
 /**
  * Interface & Utility
@@ -21,6 +22,7 @@ const initializeWindowSenOs = async (wallet: any) => {
     wallet: wallet,
     lamports: new ssjs.Lamports(node),
     splt: new ssjs.SPLT(spltAddress, splataAddress, node),
+    ipfs: new IPFS(),
   }
 }
 

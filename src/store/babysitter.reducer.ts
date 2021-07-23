@@ -34,7 +34,7 @@ const initialState: State = {
  * Actions
  */
 
-export const loadApps = createAsyncThunk<Partial<State>, any, { state: any }>(
+export const loadApps = createAsyncThunk<Partial<State>, void, { state: any }>(
   `${NAME}/loadApps`,
   async (_, { getState }) => {
     const {

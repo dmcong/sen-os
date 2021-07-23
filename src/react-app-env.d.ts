@@ -13,7 +13,7 @@ interface Window {
     wallet: any
     lamports: any
     splt: any
-    ipfs?: any
+    ipfs: any
   }
 }
 

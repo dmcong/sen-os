@@ -26,7 +26,7 @@ const Backup = () => {
   useEffect(() => {
     ;(async () => {
       if (!pdb) return
-      const data = await pdb._getAll()
+      const data = await pdb.all()
       return setData(data)
     })()
   }, [pdb, address])
@@ -34,7 +34,7 @@ const Backup = () => {
   const onBackup = async () => {
     if (!pdb) return
     const cid = await pdb.backup()
-    await setLink(`${window.location.origin}/home/${cid}`)
+    await setLink(`${window.location.origin}/home?sync=${cid}`)
     await dispatch(
       notify({
         type: 'success',

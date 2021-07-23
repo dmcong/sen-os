@@ -23,7 +23,7 @@ const Shelf = ({ settings = false }: { settings: boolean }) => {
   const getApps = useCallback(async () => {
     if (!ssjs.isAddress(address)) return
     try {
-      await dispatch(loadApps(null)).unwrap()
+      await dispatch(loadApps()).unwrap()
     } catch (er) {
       await dispatch(notify({ type: 'error', description: er.message }))
     }

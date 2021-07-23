@@ -35,7 +35,7 @@ const Restore = () => {
       (async () => {
         const cid = parseCID(link)
         if (!cid || !pdb) return await setData({})
-        const data = await pdb._fetchAll(cid)
+        const data = await window.senos.ipfs.get(cid)
         return await setData(data)
       })()
   }, [link, pdb])

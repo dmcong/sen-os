@@ -17,14 +17,8 @@ class PDB {
     this.driver = [localForage.WEBSQL, localForage.LOCALSTORAGE]
   }
 
-  _IPFS: any = async () => {
-    try {
-      if (!window.senos?.ipfs) window.senos.ipfs = await IPFS.create()
-      return window.senos.ipfs
-    } catch (er) {
-      await util.asyncWait(500)
-      return await this._IPFS()
-    }
+  private _ipfs = async () => {
+    return window.senos.ipfs
   }
 
   createInstance = (appName: string): any => {
@@ -46,7 +40,7 @@ class PDB {
     })
   }
 
-  _getAll = async (): Promise<any> => {
+  all = async (): Promise<any> => {
     let data: any = {}
     const apps = (await this.createInstance('senos').getItem('apps'))
       .flat()
@@ -62,7 +56,17 @@ class PDB {
     return data
   }
 
-  _setAll = async (data: any) => {
+  backup = async () => {
+    const data = await this.all()
+    const ipfs = await this._ipfs()
+    return await ipfs.set(data)
+  }
+
+  restore = async (cid: string) => {
+    // Download data
+    const ipfs = await this._ipfs()
+    const data = await ipfs.get(cid)
+    // Apply to storage
     for (const app in data) {
       const instance = await this.createInstance(app)
       for (const key in data[app]) {
@@ -70,33 +74,6 @@ class PDB {
         await instance.setItem(key, value)
       }
     }
-  }
-
-  backup = async () => {
-    // Build data
-    const data = await this._getAll()
-    const raw = JSON.stringify(data)
-    // Upload data
-    const ipfs = await this._IPFS()
-    const { path: cid } = await ipfs.add(raw)
-    return cid
-  }
-
-  _fetchAll = async (cid: string) => {
-    // Fetch data from IPFS
-    const ipfs = await this._IPFS()
-    const stream = await ipfs.cat(cid)
-    let raw = ''
-    for await (const chunk of stream) raw += Buffer.from(chunk).toString()
-    const data = JSON.parse(raw)
-    return data
-  }
-
-  restore = async (cid: string) => {
-    // Download data
-    const data = await this._fetchAll(cid)
-    // Apply to storage
-    await this._setAll(data)
     return data
   }
 
