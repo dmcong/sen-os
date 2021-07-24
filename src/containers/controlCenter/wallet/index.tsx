@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import ssjs, { SecretKeyWallet, Coin98Wallet } from 'senswapjs'
+import ssjs, { SecretKeyWallet, Coin98Wallet, PhantomWallet } from 'senswapjs'
 import numeral from 'numeral'
 
 import { Space, Typography, Tooltip, Button, Icon, Divider } from 'sen-kit'
@@ -25,7 +25,7 @@ const Wallet = () => {
   const fontSize = infix === 'xs' ? 10 : 12
   const balance = numeral(ssjs.undecimalize(lamports, 9)).format('0.[00]')
   const reconnect = () => {
-    const types = ['SecretKey', 'Keystore', 'Coin98']
+    const types = ['SecretKey', 'Keystore', 'Coin98', 'Phantom']
     const walletType = session.get('WalletType')
     if (!types.includes(walletType)) return null
     if (walletType === 'SecretKey')
@@ -33,6 +33,7 @@ const Wallet = () => {
     if (walletType === 'Keystore')
       return new SecretKeyWallet(session.get('SecretKey'))
     if (walletType === 'Coin98') return new Coin98Wallet()
+    if (walletType === 'Phantom') return new PhantomWallet()
   }
 
   useEffect(() => {

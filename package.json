@@ -34,7 +34,7 @@
     "react-scripts": "^4.0.3",
     "remarkable": "^2.0.1",
     "sen-kit": "^1.0.41",
-    "senswapjs": "^2.0.11",
+    "senswapjs": "^2.0.23",
     "typescript": "^4.3.5",
     "web-vitals": "^1.1.2"
   },

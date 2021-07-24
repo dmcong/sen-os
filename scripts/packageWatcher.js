@@ -57,7 +57,9 @@ const updateUniverse = (dir, unlink = false) => {
  * Start for the first time
  */
 if (fs.existsSync(universeDir)) fs.unlinkSync(universeDir)
-const appNames = fs.readdirSync(path.join(__dirname, '../src/applications'))
+const appNames = fs
+  .readdirSync(path.join(__dirname, '../src/applications'))
+  .filter((item) => !/(^|\/)\.[^\/\.]/g.test(item))
 appNames.forEach((appName) => {
   const dir = path.join(__dirname, '../src/applications', appName)
   updateUniverse(dir)

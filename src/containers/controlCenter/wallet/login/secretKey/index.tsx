@@ -43,12 +43,6 @@ const SecretKey = () => {
         </Space>
       </Col>
       <Col span={24}>
-        <Typography.Text>
-          The secret key is a raw form of your wallet, then it's very unsecure
-          and not recommended to use.
-        </Typography.Text>
-      </Col>
-      <Col span={24}>
         <Input
           placeholder="Secret Key"
           onChange={(e: ChangeEvent<HTMLInputElement>) =>

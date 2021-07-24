@@ -1,33 +1,33 @@
 import { useDispatch } from 'react-redux'
-import { Coin98Wallet } from 'senswapjs'
+import { PhantomWallet } from 'senswapjs'
 
 import { Row, Card, Col, Avatar } from 'sen-kit'
 
-import COIN98 from 'static/images/coin98.png'
+import PHANTOM from 'static/images/phantom.png'
 import { RootDispatch } from 'store'
 import { connectWallet } from 'store/wallet.reducer'
 import { notify } from 'store/ui.reducer'
 
 declare global {
   interface Window {
-    coin98: any
+    solana: any
   }
 }
 
-const Coin98 = () => {
+const Phantom = () => {
   const dispatch = useDispatch<RootDispatch>()
 
   const connect = async () => {
-    const { coin98 } = window
-    if (!coin98)
+    const { solana } = window
+    if (!solana?.isPhantom)
       return dispatch(
         notify({
           type: 'warning',
           description:
-            'Coin98 Wallet is not installed. If this is the first time you install Coin98 wallet, please restart your browser to complete the setup.',
+            'Phantom Wallet is not installed. If this is the first time you install Phantom wallet, please restart your browser to complete the setup.',
         }),
       )
-    const wallet = new Coin98Wallet()
+    const wallet = new PhantomWallet()
     try {
       await dispatch(connectWallet(wallet)).unwrap()
     } catch (er) {
@@ -44,14 +44,14 @@ const Coin98 = () => {
     >
       <Row gutter={[16, 16]} justify="center">
         <Col>
-          <Avatar size={64} shape="square" src={COIN98} />
+          <Avatar size={64} shape="square" src={PHANTOM} />
         </Col>
         <Col span={24}>
-          <p style={{ margin: 0, textAlign: 'center' }}>Coin98</p>
+          <p style={{ margin: 0, textAlign: 'center' }}>Phantom</p>
         </Col>
       </Row>
     </Card>
   )
 }
 
-export default Coin98
+export default Phantom

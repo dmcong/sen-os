@@ -10,8 +10,10 @@ import {
   Switch,
   Divider,
   Animate,
+  Typography,
 } from 'sen-kit'
 import Coin98 from './coin98'
+import Phantom from './phantom'
 import Keystore from './keystore'
 import SecretKey from './secretKey'
 
@@ -32,7 +34,13 @@ const Login = () => {
     >
       <Row gutter={[16, 16]}>
         <Col span={24}>
+          <Typography.Title level={3}>Wallet Connection</Typography.Title>
+        </Col>
+        <Col xs={{ span: 12 }} md={{ span: 8 }}>
           <Coin98 />
+        </Col>
+        <Col xs={{ span: 12 }} md={{ span: 8 }}>
+          <Phantom />
         </Col>
         <Col span={24}>
           <Row gutter={[16, 16]} align="middle">

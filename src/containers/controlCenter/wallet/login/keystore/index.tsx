@@ -60,21 +60,18 @@ const KeyStore = () => {
       <Col span={24}>
         <Space align="center">
           <Icon name="document-lock" />
-          <Typography.Text>Keystore</Typography.Text>
+          <Typography.Text>
+            {`Keystore ( `}
+            <Typography.Link
+              href="https://solflare.com"
+              target="_blank"
+              rel="noopener"
+            >
+              SolFlare
+            </Typography.Link>{' '}
+            {`compatible )`}
+          </Typography.Text>
         </Space>
-      </Col>
-      <Col span={24}>
-        <Typography.Text>
-          This keystore format is compatible with{' '}
-          <Typography.Link
-            href="https://solflare.com"
-            target="_blank"
-            rel="noopener"
-          >
-            SolFlare
-          </Typography.Link>{' '}
-          keystore.
-        </Typography.Text>
       </Col>
       <Col xs={{ span: 24 }} md={{ span: 12 }}>
         <Input

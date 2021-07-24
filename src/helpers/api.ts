@@ -9,8 +9,8 @@ const api = {
     if (!wallet) throw new Error('Wallet is not connected')
     const datetime = Number(new Date()) + 10000 // Valid in 10s
     const msg = datetime.toString() + ssjs.salt()
-    const { address, sig } = await wallet.certify(msg)
-    const authHeader = `${address} ${sig}`
+    const data = await wallet.certify(msg)
+    const authHeader = JSON.stringify(data)
     return authHeader
   },
   // Create
