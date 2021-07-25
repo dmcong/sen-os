@@ -1,6 +1,6 @@
 import { useHistory } from 'react-router-dom'
 
-import { Row, Col } from 'sen-kit'
+import { Row, Col } from '@senswap/sen-ui'
 import Search from './search'
 import HeroPanel from './heroPanel'
 import CategoryCard from './categoryCard'

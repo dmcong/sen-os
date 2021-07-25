@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import ssjs from 'senswapjs'
+import { DEFAULT_WSOL } from '@senswap/sen-js'
 
-import { Row, Col, Modal, Icon, Tabs } from 'sen-kit'
+import { Row, Col, Modal, Icon, Tabs } from '@senswap/sen-ui'
 import Header from '@/sen_wallet/view/components/header'
 import Info from '@/sen_wallet/view/components/info'
 import Transfer from './transfer'
@@ -50,7 +50,7 @@ const AccountActions = ({ visible, onClose, accountData }) => {
             <Tabs.TabPane
               key="wrapper"
               tab="Wrapper"
-              disabled={mint !== ssjs.DEFAULT_WSOL}
+              disabled={mint !== DEFAULT_WSOL}
             >
               <Wrapper data={data} onChange={onClose} />
             </Tabs.TabPane>

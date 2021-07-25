@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 
-import { Typography } from 'sen-kit'
+import { Typography } from '@senswap/sen-ui'
 
 import util from 'helpers/util'
 

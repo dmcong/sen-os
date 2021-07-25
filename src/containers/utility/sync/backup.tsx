@@ -1,8 +1,8 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 
-import { Row, Col, Icon, Button } from 'sen-kit'
+import { Row, Col, Icon, Button } from '@senswap/sen-ui'
 import SyncLink from './syncLink'
 import Policy from './policy'
 import Preview from './preview'
@@ -19,7 +19,7 @@ const Backup = () => {
 
   const { address } = useSelector((state: RootState) => state.wallet)
   const pdb = useMemo(() => {
-    if (!ssjs.isAddress(address)) return null
+    if (!account.isAddress(address)) return null
     return new PDB(address)
   }, [address])
 

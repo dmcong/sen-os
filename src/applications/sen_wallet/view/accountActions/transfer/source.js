@@ -2,9 +2,17 @@ import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 import { getMint } from '@/sen_wallet/controller/mints.controller'
-import ssjs from 'senswapjs'
+import { utils } from '@senswap/sen-js'
 
-import { Row, Col, Input, Typography, Button, Space, Icon } from 'sen-kit'
+import {
+  Row,
+  Col,
+  Input,
+  Typography,
+  Button,
+  Space,
+  Icon,
+} from '@senswap/sen-ui'
 import Prefix from '@/sen_wallet/view/components/prefix'
 
 const DEFAULT_META = { amount: 0n, decimals: 0 }
@@ -22,7 +30,7 @@ const Source = ({
   const [meta, setMeta] = useState({ ...DEFAULT_META })
   const dispatch = useDispatch()
 
-  const balance = ssjs.undecimalize(maxAmount, meta.decimals)
+  const balance = utils.undecimalize(maxAmount, meta.decimals)
   const handleMax = () => onChange(balance)
 
   useEffect(() => {
@@ -34,7 +42,7 @@ const Source = ({
         )
         if (error) return setMeta(meta)
         meta.decimals = payload[mintAddress].decimals
-        meta.amount = ssjs.decimalize(value, meta.decimals)
+        meta.amount = utils.decimalize(value, meta.decimals)
       } catch (er) {
         /* Skip errors */
       }

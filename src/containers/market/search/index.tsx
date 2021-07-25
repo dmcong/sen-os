@@ -1,7 +1,7 @@
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { useHistory, useLocation } from 'react-router-dom'
 
-import { Row, Col, Card, Input, Icon, Button } from 'sen-kit'
+import { Row, Col, Card, Input, Icon, Button } from '@senswap/sen-ui'
 
 import universe from 'universe.json'
 import SearchEngine from './engine'

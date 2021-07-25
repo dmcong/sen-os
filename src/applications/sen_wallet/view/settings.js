@@ -9,7 +9,7 @@ import {
   Popover,
   Typography,
   Switch,
-} from 'sen-kit'
+} from '@senswap/sen-ui'
 
 const Settings = ({ value, onChange }) => {
   const { hiddenZeros } = value

@@ -1,4 +1,4 @@
-import { Card, Row, Col, Typography } from 'sen-kit'
+import { Card, Row, Col, Typography } from '@senswap/sen-ui'
 import { DynamicLogo } from 'helpers/loader'
 
 const Intro = ({

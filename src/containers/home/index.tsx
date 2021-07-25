@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useHistory } from 'react-router-dom'
 
-import { Row, Col, Affix } from 'sen-kit'
+import { Row, Col, Affix } from '@senswap/sen-ui'
 import DotPagination from 'components/dotPagination'
 import { SortableDnD } from 'components/dnd'
 import FooterAction from './footerAction'

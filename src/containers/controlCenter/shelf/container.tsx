@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 
-import { Row, Col, Button, Icon } from 'sen-kit'
+import { Row, Col, Button, Icon } from '@senswap/sen-ui'
 import './style.less'
 
 const Container = forwardRef<HTMLElement, any>(

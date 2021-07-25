@@ -1,4 +1,3 @@
-import ssjs from 'senswapjs'
 import axios from 'axios'
 
 const api = {
@@ -8,8 +7,8 @@ const api = {
     const wallet = window.senos.wallet
     if (!wallet) throw new Error('Wallet is not connected')
     const datetime = Number(new Date()) + 10000 // Valid in 10s
-    const msg = datetime.toString() + ssjs.salt()
-    const data = await wallet.certify(msg)
+    const msg = datetime.toString() + Math.floor(Math.random() * 10 ** 16)
+    const data = await wallet.signMessage(msg)
     const authHeader = JSON.stringify(data)
     return authHeader
   },

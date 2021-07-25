@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 
-import { Row, Col, Icon, Input, Tooltip, Button } from 'sen-kit'
+import { Row, Col, Icon, Input, Tooltip, Button } from '@senswap/sen-ui'
 
 import PDB from 'helpers/pdb'
 import util from 'helpers/util'

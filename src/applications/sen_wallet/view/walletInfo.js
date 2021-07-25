@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import ssjs from 'senswapjs'
+import { account, utils } from '@senswap/sen-js'
 import numeral from 'numeral'
 
 import {
@@ -14,7 +14,7 @@ import {
   Button,
   Popover,
   Card,
-} from 'sen-kit'
+} from '@senswap/sen-ui'
 import { CopyToClipboard } from 'react-copy-to-clipboard'
 import QRCode from 'qrcode.react'
 
@@ -29,7 +29,7 @@ const Copy = ({ address }) => {
     await util.asyncWait(1500)
     await setCopied(false)
   }
-  if (!ssjs.isAddress(address)) return null
+  if (!account.isAddress(address)) return null
   return (
     <Tooltip title="Copied" visible={copied}>
       <CopyToClipboard text={address} onCopy={onCopy}>
@@ -97,7 +97,7 @@ const WalletInfo = () => {
         solana: { price: solPrice },
       },
     } = await dispatch(getCGK('solana'))
-    usd = usd + ssjs.undecimalize(lamports, 9) * solPrice
+    usd = usd + utils.undecimalize(lamports, 9) * solPrice
     // Calculate mints
     for (const accountAddress of Object.keys(accounts)) {
       const { mint: mintAddress, amount } = accounts[accountAddress] || {}
@@ -111,7 +111,7 @@ const WalletInfo = () => {
           [ticket]: { price },
         },
       } = await dispatch(getCGK(ticket))
-      usd = usd + ssjs.undecimalize(amount, decimals) * price
+      usd = usd + utils.undecimalize(amount, decimals) * price
     }
     return setValue(usd)
   }, [tokenProvider, lamports, accounts, dispatch])
@@ -131,7 +131,9 @@ const WalletInfo = () => {
     <Card bodyStyle={{ padding: 16 }} bordered={false}>
       <Row gutter={[16, 16]} wrap={false} align="middle">
         <Col>
-          <Avatar size={48}>{ssjs.randEmoji(address)}</Avatar>
+          <Avatar size={48}>
+            <span style={{ fontSize: 24 }}>{utils.randEmoji(address)}</span>
+          </Avatar>
         </Col>
         <Col flex="auto">
           <Row>

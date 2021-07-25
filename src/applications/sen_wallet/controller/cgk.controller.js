@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import ssjs from 'senswapjs'
+import { utils } from '@senswap/sen-js'
 
 import util from 'helpers/util'
 import { appName } from '../package.json'
@@ -23,7 +23,7 @@ export const getCGK = createAsyncThunk(
     } = getState()
     const { timestamp } = data || { timestamp: 0 }
     if (Number(new Date()) - timestamp < 60000) return { [ticket]: data }
-    const raw = await ssjs.parseCGK(ticket)
+    const raw = await utils.parseCGK(ticket)
     return { [ticket]: { ...raw, timestamp: Number(new Date()) } }
   },
 )

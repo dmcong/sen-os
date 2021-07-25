@@ -1,6 +1,6 @@
 const CracoAlias = require('craco-alias');
 const CracoLessPlugin = require('craco-less');
-const theme = require('sen-kit/styles/theme.js');
+const theme = require('@senswap/sen-ui/styles/theme.js');
 const { compilerOptions: { baseUrl } } = require('./tsconfig.json');
 
 

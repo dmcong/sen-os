@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 
 import util from 'helpers/util'
 import { appName } from '../package.json'
@@ -17,10 +17,10 @@ const initialState = {}
 export const getAccounts = createAsyncThunk(
   `${NAME}/getAccounts`,
   async (ownerAddress) => {
-    if (!ssjs.isAddress(ownerAddress))
+    if (!account.isAddress(ownerAddress))
       throw new Error('Invalid owner/wallet address')
     const { splt } = window.senos
-    const ownerPublicKey = ssjs.fromAddress(ownerAddress)
+    const ownerPublicKey = account.fromAddress(ownerAddress)
     const { value } = await splt.connection.getTokenAccountsByOwner(
       ownerPublicKey,
       { programId: splt.spltProgramId },
@@ -38,7 +38,7 @@ export const getAccounts = createAsyncThunk(
 export const getAccount = createAsyncThunk(
   `${NAME}/getAccount`,
   async ({ address }, { getState }) => {
-    if (!ssjs.isAddress(address)) throw new Error('Invalid address')
+    if (!account.isAddress(address)) throw new Error('Invalid address')
     const {
       accounts: { [address]: data },
     } = getState()
@@ -52,7 +52,7 @@ export const getAccount = createAsyncThunk(
 export const upsetAccount = createAsyncThunk(
   `${NAME}/upsetAccount`,
   async ({ address, data }) => {
-    if (!ssjs.isAddress(address)) throw new Error('Invalid address')
+    if (!account.isAddress(address)) throw new Error('Invalid address')
     if (!data) throw new Error('Data is empty')
     return { [address]: data }
   },
@@ -61,7 +61,7 @@ export const upsetAccount = createAsyncThunk(
 export const deleteAccount = createAsyncThunk(
   `${NAME}/deleteAccount`,
   async ({ address }, { getState }) => {
-    if (!ssjs.isAddress(address)) throw new Error('Invalid address')
+    if (!account.isAddress(address)) throw new Error('Invalid address')
     const {
       accounts: { [address]: data },
     } = getState()

@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { withRouter, RouteComponentProps } from 'react-router-dom'
 
-import { Row, Col, Typography, Widget, Button, Icon } from 'sen-kit'
+import { Row, Col, Typography, Widget, Button, Icon } from '@senswap/sen-ui'
 
 import { DynamicLogo } from 'helpers/loader'
 import { RootState, RootDispatch } from 'store'

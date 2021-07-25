@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
-import ssjs from 'senswapjs'
+import { utils, account } from '@senswap/sen-js'
 
 import {
   Row,
@@ -12,7 +12,7 @@ import {
   Icon,
   Tooltip,
   Space,
-} from 'sen-kit'
+} from '@senswap/sen-ui'
 
 import util from 'helpers/util'
 import { useSenOs } from 'helpers/senos'
@@ -36,7 +36,7 @@ const Unwrap = ({ data, onChange }) => {
     })()
   }, [dispatch, mint])
 
-  const wsol = ssjs.undecimalize(amount, decimals)
+  const wsol = utils.undecimalize(amount, decimals)
   const {
     senos: { notify },
   } = useSenOs()
@@ -70,7 +70,7 @@ const Unwrap = ({ data, onChange }) => {
                 href={util.explorer(address)}
                 target="_blank"
                 rel="noopener noreferrer"
-                disabled={!ssjs.isAddress(address)}
+                disabled={!account.isAddress(address)}
               >
                 {symbol}
               </Button>

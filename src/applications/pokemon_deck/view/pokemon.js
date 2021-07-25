@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-import { Row, Col, Avatar } from 'sen-kit'
+import { Row, Col, Avatar } from '@senswap/sen-ui'
 
 const Pokemon = ({ name, onClick, ...rest }) => {
   let code = name

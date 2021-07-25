@@ -7,7 +7,7 @@ import {
   forwardRef,
 } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 
 import PDB from 'helpers/pdb'
 import TokenProvider from 'helpers/tokenProvider'
@@ -31,7 +31,7 @@ const SenOsProvider = ({
   const wallet = useSelector((state: RootState) => state.wallet)
   // DB instance
   const address = wallet.address
-  const db = ssjs.isAddress(address)
+  const db = account.isAddress(address)
     ? new PDB(address).createInstance(appName)
     : null
   // Token Provider

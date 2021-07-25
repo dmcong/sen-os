@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { notification, Icon } from 'sen-kit'
+import { notification, Icon } from '@senswap/sen-ui'
 
 import util from 'helpers/util'
 

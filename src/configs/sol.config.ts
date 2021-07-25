@@ -1,8 +1,8 @@
-import ssjs from 'senswapjs'
+import { DEFAULT_EMPTY_ADDRESS } from '@senswap/sen-js'
 import { Env } from './env'
 
 const NATIVE = {
-  address: ssjs.DEFAULT_EMPTY_ADDRESS,
+  address: DEFAULT_EMPTY_ADDRESS,
   decimals: 9,
   name: 'Solana',
   symbol: 'SOL',

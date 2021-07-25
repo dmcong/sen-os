@@ -1,8 +1,16 @@
 import { ChangeEvent, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import ssjs, { SecretKeyWallet } from 'senswapjs'
+import { account, SecretKeyWallet } from '@senswap/sen-js'
 
-import { Row, Col, Typography, Input, Icon, Button, Space } from 'sen-kit'
+import {
+  Row,
+  Col,
+  Typography,
+  Input,
+  Icon,
+  Button,
+  Space,
+} from '@senswap/sen-ui'
 
 import { RootDispatch } from 'store'
 import { connectWallet } from 'store/wallet.reducer'
@@ -29,8 +37,8 @@ const SecretKey = () => {
   }
 
   const onGen = () => {
-    const account = ssjs.createAccount()
-    const secretKey = Buffer.from(account.secretKey).toString('hex')
+    const acc = account.createAccount()
+    const secretKey = Buffer.from(acc.secretKey).toString('hex')
     return setSecretKey(secretKey)
   }
 

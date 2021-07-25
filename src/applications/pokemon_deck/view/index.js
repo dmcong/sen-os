@@ -1,4 +1,4 @@
-import { Row, Col } from 'sen-kit'
+import { Row, Col } from '@senswap/sen-ui'
 
 import Deck from './deck'
 

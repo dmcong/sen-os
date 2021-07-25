@@ -1,6 +1,6 @@
 import localForage from 'localforage'
 import IPFS from 'ipfs-core'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 
 import util from 'helpers/util'
 
@@ -12,7 +12,7 @@ class PDB {
   private driver: any
 
   constructor(walletAddress: string) {
-    if (!ssjs.isAddress(walletAddress)) throw new Error('Invalid address')
+    if (!account.isAddress(walletAddress)) throw new Error('Invalid address')
     this.dbName = walletAddress
     this.driver = [localForage.WEBSQL, localForage.LOCALSTORAGE]
   }

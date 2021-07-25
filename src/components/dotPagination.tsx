@@ -1,4 +1,4 @@
-import { Space, TweenOne } from 'sen-kit'
+import { Space, TweenOne } from '@senswap/sen-ui'
 
 const Dot = ({
   active = false,

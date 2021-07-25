@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 
-import { Badge } from 'sen-kit'
+import { Badge } from '@senswap/sen-ui'
 import { DynamicLogo } from 'helpers/loader'
 
 const LogoInMarket = forwardRef<

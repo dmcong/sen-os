@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 
 import {
   Row,
@@ -11,17 +11,17 @@ import {
   Tooltip,
   Icon,
   Space,
-} from 'sen-kit'
+} from '@senswap/sen-ui'
 
 const DEFAULT_META = { walletAddress: '', associatedAddress: '', state: 0 }
 const inferAccounts = async (addr, mintAddress) => {
   const { splt } = window.senos
   let meta = { ...DEFAULT_META }
   // Validate inputed addresses
-  if (!ssjs.isAddress(addr) || !ssjs.isAddress(mintAddress)) return meta
+  if (!account.isAddress(addr) || !account.isAddress(mintAddress)) return meta
   // Classify inputed address
   try {
-    if (ssjs.isAssociatedAddress(addr)) meta.associatedAddress = addr
+    if (account.isAssociatedAddress(addr)) meta.associatedAddress = addr
     else {
       meta.walletAddress = addr
       meta.associatedAddress = await splt.deriveAssociatedAddress(
@@ -56,7 +56,7 @@ const Destination = ({ mintAddress, value, onChange, onCallback, error }) => {
   useEffect(() => onCallback({ ...meta }), [meta, onCallback])
 
   const icon = () => {
-    if (!ssjs.isAddress(meta.associatedAddress))
+    if (!account.isAddress(meta.associatedAddress))
       return (
         <Tooltip title="Invalid address">
           <Icon name="warning-outline" style={{ color: '#F2323F' }} />

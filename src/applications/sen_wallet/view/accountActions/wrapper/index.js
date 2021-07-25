@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-import { Row, Col, Card } from 'sen-kit'
+import { Row, Col, Card } from '@senswap/sen-ui'
 import Wrap from './wrap'
 import Unwrap from './unwrap'
 

@@ -1,7 +1,7 @@
 import { forwardRef } from 'react'
 import { Provider } from 'react-redux'
 
-import { Widget } from 'sen-kit'
+import { Widget } from '@senswap/sen-ui'
 
 import SenOsProvider from 'helpers/senos'
 import ErrorBoundary from 'components/errorBoundary'

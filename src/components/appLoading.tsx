@@ -1,4 +1,4 @@
-import { Row, Col, Spin, Widget } from 'sen-kit'
+import { Row, Col, Spin, Widget } from '@senswap/sen-ui'
 
 /**
  * Lazy Loading

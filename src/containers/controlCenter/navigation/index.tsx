@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 
-import { Row, Col, Brand, Button, Icon, Space } from 'sen-kit'
+import { Row, Col, Brand, Button, Icon, Space } from '@senswap/sen-ui'
 import Wallet from '../wallet'
 
 import { RootDispatch, RootState } from 'store'
@@ -43,7 +43,7 @@ const Navigation = () => {
                 name={visibleControlCenter ? 'close-outline' : 'grid-outline'}
               />
             }
-            disabled={!ssjs.isAddress(address)}
+            disabled={!account.isAddress(address)}
           />
           <Button
             type="text"

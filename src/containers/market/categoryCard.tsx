@@ -1,4 +1,4 @@
-import { Row, Col, Card, Typography, Avatar } from 'sen-kit'
+import { Row, Col, Card, Typography, Avatar } from '@senswap/sen-ui'
 
 const CategoryCard = ({
   category,

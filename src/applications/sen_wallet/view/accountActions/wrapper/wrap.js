@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
 import numeral from 'numeral'
-import ssjs from 'senswapjs'
+import { account, utils } from '@senswap/sen-js'
 
 import {
   Row,
@@ -12,7 +12,7 @@ import {
   Typography,
   Icon,
   Tooltip,
-} from 'sen-kit'
+} from '@senswap/sen-ui'
 
 import { useSenOs } from 'helpers/senos'
 import util from 'helpers/util'
@@ -27,7 +27,7 @@ const Wrap = ({ data, onChange }) => {
     },
   } = useSenOs()
   const { address, symbol } = data
-  const sol = ssjs.undecimalize(lamports, 9)
+  const sol = utils.undecimalize(lamports, 9)
   const handleMax = () => setValue(sol)
 
   const {
@@ -39,11 +39,11 @@ const Wrap = ({ data, onChange }) => {
   const wrap = async () => {
     try {
       const { splt, wallet } = window.senos
-      if (!ssjs.isAddress(ownerAddress))
+      if (!account.isAddress(ownerAddress))
         return setError('Please connect your wallet')
       let amount = 0n
       try {
-        amount = ssjs.decimalize(value, 9)
+        amount = utils.decimalize(value, 9)
       } catch (er) {
         /* Skip errors */
       }
@@ -76,7 +76,7 @@ const Wrap = ({ data, onChange }) => {
                     href={util.explorer(address)}
                     target="_blank"
                     rel="noopener noreferrer"
-                    disabled={!ssjs.isAddress(address)}
+                    disabled={!account.isAddress(address)}
                   >
                     {symbol}
                   </Button>

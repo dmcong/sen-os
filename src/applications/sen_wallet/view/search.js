@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 
-import { Row, Col, Card, Input, Icon, Button } from 'sen-kit'
+import { Row, Col, Card, Input, Icon, Button } from '@senswap/sen-ui'
 
 import { useSenOs } from 'helpers/senos'
 

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
-import { Row, Col, Typography, Button, Icon } from 'sen-kit'
+import { Row, Col, Typography, Button, Icon } from '@senswap/sen-ui'
 
 import { updateTime } from '../controller/main.controller'
 

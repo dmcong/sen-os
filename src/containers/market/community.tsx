@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 
-import { Row, Col, Typography } from 'sen-kit'
+import { Row, Col, Typography } from '@senswap/sen-ui'
 import AppTicket from './appTicket'
 
 import universe from 'universe.json'
@@ -26,7 +26,7 @@ const Community = () => {
   }
 
   const isInstalled = (appName: string) => {
-    return ssjs.isAddress(address) && apps.flat().includes(appName)
+    return account.isAddress(address) && apps.flat().includes(appName)
   }
 
   return (

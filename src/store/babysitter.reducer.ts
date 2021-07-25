@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 
 import PDB from 'helpers/pdb'
 
@@ -40,7 +40,8 @@ export const loadApps = createAsyncThunk<Partial<State>, void, { state: any }>(
     const {
       wallet: { address },
     } = getState()
-    if (!ssjs.isAddress(address)) throw new Error('Wallet is not connected yet')
+    if (!account.isAddress(address))
+      throw new Error('Wallet is not connected yet')
     const db = new PDB(address).createInstance('senos')
     const visited = (await db.getItem('visited')) || false
     const apps = troubleshoot((await db.getItem('apps')) || initialState.apps)
@@ -57,7 +58,8 @@ export const installApp = createAsyncThunk<
     wallet: { address },
     babysitter: { apps },
   } = getState()
-  if (!ssjs.isAddress(address)) throw new Error('Wallet is not connected yet')
+  if (!account.isAddress(address))
+    throw new Error('Wallet is not connected yet')
   if (apps.flat().includes(appName)) return {}
   const newApps: Apps = apps.map((page: string[]) => [...page])
   newApps[newApps.length - 1].push(appName)
@@ -74,7 +76,8 @@ export const updateApps = createAsyncThunk<
   const {
     wallet: { address },
   } = getState()
-  if (!ssjs.isAddress(address)) throw new Error('Wallet is not connected yet')
+  if (!account.isAddress(address))
+    throw new Error('Wallet is not connected yet')
   apps = troubleshoot(apps)
   const pdb = new PDB(address)
   await pdb.createInstance('senos').setItem('apps', apps)
@@ -90,7 +93,8 @@ export const uninstallApp = createAsyncThunk<
     wallet: { address },
     babysitter: { apps },
   } = getState()
-  if (!ssjs.isAddress(address)) throw new Error('Wallet is not connected yet')
+  if (!account.isAddress(address))
+    throw new Error('Wallet is not connected yet')
   if (!apps.flat().includes(appName)) return {}
   const newApps = apps.map((page: string[]) =>
     page.filter((name) => name !== appName),

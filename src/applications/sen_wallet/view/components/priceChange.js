@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import numeral from 'numeral'
 
-import { Typography, Icon, Space } from 'sen-kit'
+import { Typography, Icon, Space } from '@senswap/sen-ui'
 
 const arrow = (value) => {
   if (value > 0)

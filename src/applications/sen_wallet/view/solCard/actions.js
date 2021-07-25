@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
-import ssjs from 'senswapjs'
+import { DEFAULT_EMPTY_ADDRESS, DEFAULT_WSOL } from '@senswap/sen-js'
 
-import { Row, Col, Icon, Modal, Tabs } from 'sen-kit'
+import { Row, Col, Icon, Modal, Tabs } from '@senswap/sen-ui'
 import Header from '@/sen_wallet/view/components/header'
 import Info from '@/sen_wallet/view/components/info'
 import Wrapper from '@/sen_wallet/view/accountActions/wrapper'
@@ -23,7 +23,7 @@ const Actions = ({ visible, onClose }) => {
 
   const accountData = useSelector((state) => state.accounts[wsolAccountAddress])
   const solData = {
-    mint: ssjs.DEFAULT_EMPTY_ADDRESS,
+    mint: DEFAULT_EMPTY_ADDRESS,
     extensions: { coingeckoId: 'solana' },
     name: 'Solana',
     symbol: 'SOL',
@@ -37,7 +37,7 @@ const Actions = ({ visible, onClose }) => {
 
   useEffect(() => {
     ;(async () => {
-      const mintData = await tokenProvider.findByAddress(ssjs.DEFAULT_WSOL)
+      const mintData = await tokenProvider.findByAddress(DEFAULT_WSOL)
       await setMintData(mintData)
     })()
   }, [tokenProvider])
@@ -46,7 +46,7 @@ const Actions = ({ visible, onClose }) => {
       const splt = window.senos.splt
       const wsolAddress = await splt.deriveAssociatedAddress(
         address,
-        ssjs.DEFAULT_WSOL,
+        DEFAULT_WSOL,
       )
       setWSOLAccountAddress(wsolAddress)
     })()

@@ -1,9 +1,22 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import ssjs, { SecretKeyWallet, Coin98Wallet, PhantomWallet } from 'senswapjs'
+import {
+  account,
+  utils,
+  SecretKeyWallet,
+  Coin98Wallet,
+  PhantomWallet,
+} from '@senswap/sen-js'
 import numeral from 'numeral'
 
-import { Space, Typography, Tooltip, Button, Icon, Divider } from 'sen-kit'
+import {
+  Space,
+  Typography,
+  Tooltip,
+  Button,
+  Icon,
+  Divider,
+} from '@senswap/sen-ui'
 import Login from './login'
 import WalletWatcher from './walletWatcher'
 
@@ -23,7 +36,7 @@ const Wallet = () => {
   const { address, lamports } = useSelector((state: RootState) => state.wallet)
 
   const fontSize = infix === 'xs' ? 10 : 12
-  const balance = numeral(ssjs.undecimalize(lamports, 9)).format('0.[00]')
+  const balance = numeral(utils.undecimalize(lamports, 9)).format('0.[00]')
   const reconnect = () => {
     const types = ['SecretKey', 'Keystore', 'Coin98', 'Phantom']
     const walletType = session.get('WalletType')
@@ -45,7 +58,7 @@ const Wallet = () => {
     }
   }, [dispatch])
 
-  if (!ssjs.isAddress(address))
+  if (!account.isAddress(address))
     return (
       <Space size={2}>
         <Typography.Text style={{ fontSize }}>Connect Wallet</Typography.Text>
@@ -69,7 +82,7 @@ const Wallet = () => {
         {address.substring(0, 4) + '..'} <Icon name="open-outline" />
       </Typography.Link>
       <Divider type="vertical" />
-      <Tooltip title={`${ssjs.undecimalize(lamports, 9)} SOL`}>
+      <Tooltip title={`${utils.undecimalize(lamports, 9)} SOL`}>
         <Typography.Text style={{ fontSize }}>
           {balance} <span style={{ color: '#03E1FF' }}>◎</span>
         </Typography.Text>

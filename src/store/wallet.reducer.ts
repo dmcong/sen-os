@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import ssjs from 'senswapjs'
+import { Lamports, SPLT } from '@senswap/sen-js'
 
 import configs from 'configs'
 import IPFS from 'helpers/ipfs'
@@ -20,8 +20,8 @@ const initializeWindowSenOs = async (wallet: any) => {
   } = configs
   window.senos = {
     wallet: wallet,
-    lamports: new ssjs.Lamports(node),
-    splt: new ssjs.SPLT(spltAddress, splataAddress, node),
+    lamports: new Lamports(node),
+    splt: new SPLT(spltAddress, splataAddress, node),
     ipfs: new IPFS(),
   }
 }
@@ -59,8 +59,8 @@ export const connectWallet = createAsyncThunk(
   async (wallet: any) => {
     if (!wallet) throw new Error('Invalid wallet instance')
     await initializeWindowSenOs(wallet)
-    const address = await wallet.getAccount()
-    const lamports = await window.senos.lamports.get(address)
+    const address = await wallet.getAddress()
+    const lamports = await window.senos.lamports.getLamports(address)
     return { address, lamports: global.BigInt(lamports), visible: false }
   },
 )

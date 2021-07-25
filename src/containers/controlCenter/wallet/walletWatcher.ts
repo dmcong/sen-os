@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 
 import { updateWallet } from 'store/wallet.reducer'
 import { RootDispatch, RootState } from 'store'
@@ -12,7 +12,7 @@ const WalletWatcher = () => {
   const { address } = useSelector((state: RootState) => state.wallet)
 
   const watchData = useCallback(async () => {
-    if (!ssjs.isAddress(address)) {
+    if (!account.isAddress(address)) {
       try {
         await window.senos.lamports.unwatch(watchId)
       } catch (er) {

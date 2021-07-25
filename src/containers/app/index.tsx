@@ -1,6 +1,6 @@
 import { Route, Switch, Redirect } from 'react-router-dom'
 
-import { Layout, Row, Col } from 'sen-kit'
+import { Layout, Row, Col } from '@senswap/sen-ui'
 
 import Utility from 'containers/utility'
 import ControlCenter from 'containers/controlCenter'

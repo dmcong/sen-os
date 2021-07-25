@@ -1,7 +1,7 @@
 import { useHistory } from 'react-router-dom'
 import universe from 'universe.json'
 
-import { Row, Col, Typography } from 'sen-kit'
+import { Row, Col, Typography } from '@senswap/sen-ui'
 import AppPanelInMarket from './appPanelInMarket'
 
 const Foundation = () => {

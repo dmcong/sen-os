@@ -11,7 +11,7 @@ import {
   Divider,
   Animate,
   Typography,
-} from 'sen-kit'
+} from '@senswap/sen-ui'
 import Coin98 from './coin98'
 import Phantom from './phantom'
 import Keystore from './keystore'

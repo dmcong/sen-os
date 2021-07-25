@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 
 import util from 'helpers/util'
 import { appName } from '../package.json'
@@ -18,7 +18,7 @@ const initialState = {}
 export const getMint = createAsyncThunk(
   `${NAME}/getMint`,
   async ({ address }, { getState }) => {
-    if (!ssjs.isAddress(address)) throw new Error('Invalid address')
+    if (!account.isAddress(address)) throw new Error('Invalid address')
     const {
       mints: { [address]: data },
     } = getState()

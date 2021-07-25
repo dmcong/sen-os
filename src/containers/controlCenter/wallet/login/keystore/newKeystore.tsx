@@ -1,8 +1,16 @@
 import { ChangeEvent, useState, useEffect } from 'react'
 import fileDownload from 'js-file-download'
-import ssjs from 'senswapjs'
+import { keystore as ks } from '@senswap/sen-js'
 
-import { Row, Col, Icon, Button, Typography, Input, Modal } from 'sen-kit'
+import {
+  Row,
+  Col,
+  Icon,
+  Button,
+  Typography,
+  Input,
+  Modal,
+} from '@senswap/sen-ui'
 
 const NewKeyStore = ({
   visible = false,
@@ -12,7 +20,7 @@ const NewKeyStore = ({
   onClose: () => void
 }) => {
   const [password, setPassword] = useState('')
-  const [keystore, setKeystore] = useState<{ publicKey?: string }>({})
+  const [keystore, setKeystore] = useState<any>({})
   const [visiblePwd, setVisiblePwd] = useState(false)
 
   useEffect(() => {
@@ -21,7 +29,7 @@ const NewKeyStore = ({
     setVisiblePwd(false)
   }, [visible])
   useEffect(() => {
-    setKeystore(ssjs.gen(password))
+    setKeystore(ks.gen(password))
   }, [password])
 
   const onDownload = () => {

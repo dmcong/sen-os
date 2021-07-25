@@ -1,4 +1,4 @@
-import { Row, Col, Button, Typography, Card } from 'sen-kit'
+import { Row, Col, Button, Typography, Card } from '@senswap/sen-ui'
 
 const Policy = ({ onClick = () => {} }: { onClick: () => void }) => {
   return (

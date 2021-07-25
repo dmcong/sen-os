@@ -1,9 +1,9 @@
 import { Fragment, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 
-import { Row, Col, Icon, Modal, Typography, Tabs } from 'sen-kit'
+import { Row, Col, Icon, Modal, Typography, Tabs } from '@senswap/sen-ui'
 import { parseCID } from './syncLink'
 import Backup from './backup'
 import Restore from './restore'
@@ -30,7 +30,7 @@ const Sync = () => {
 
   useEffect(() => {
     if (!sync) setMode('backup')
-    else if (!ssjs.isAddress(address)) {
+    else if (!account.isAddress(address)) {
       dispatch(openWallet())
     } else {
       dispatch(closeWallet())
@@ -39,7 +39,7 @@ const Sync = () => {
     }
   }, [dispatch, sync, address])
 
-  if (!ssjs.isAddress(address)) return <Fragment />
+  if (!account.isAddress(address)) return <Fragment />
   return (
     <Modal
       visible={visibleSync}

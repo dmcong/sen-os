@@ -2,7 +2,7 @@ import { Component, Fragment } from 'react'
 import { connect } from 'react-redux'
 import { bindActionCreators } from '@reduxjs/toolkit'
 import { withRouter } from 'react-router-dom'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 import isEqual from 'react-fast-compare'
 
 import { withSenOs } from 'helpers/senos'
@@ -46,7 +46,7 @@ class AccountWatcher extends Component {
       },
       getAccounts,
     } = this.props
-    if (!ssjs.isAddress(address)) return
+    if (!account.isAddress(address)) return
     const { error } = await getAccounts(address)
     if (error)
       return await notify({ type: 'error', description: error.message })
@@ -59,7 +59,7 @@ class AccountWatcher extends Component {
       },
       upsetAccount,
     } = this.props
-    if (!ssjs.isAddress(address)) return this.unwatchData()
+    if (!account.isAddress(address)) return this.unwatchData()
     if (this.watchId) return console.warn('Already watched')
     const callback = (er, re) => {
       if (er) return console.error(er)

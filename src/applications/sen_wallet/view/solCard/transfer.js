@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import ssjs from 'senswapjs'
+import { utils, account } from '@senswap/sen-js'
 
 import {
   Row,
@@ -12,7 +12,7 @@ import {
   Input,
   Space,
   Tooltip,
-} from 'sen-kit'
+} from '@senswap/sen-ui'
 import Prefix from '@/sen_wallet/view/components/prefix'
 
 import util from 'helpers/util'
@@ -24,7 +24,7 @@ const Transfer = ({ data, onChange }) => {
   const [error, setError] = useState('')
 
   const { address, amount: maxAmount, symbol } = data
-  const balance = ssjs.undecimalize(maxAmount, 9)
+  const balance = utils.undecimalize(maxAmount, 9)
   const {
     senos: { notify },
   } = useSenOs()
@@ -33,10 +33,11 @@ const Transfer = ({ data, onChange }) => {
     try {
       const wallet = window.senos.wallet
       const lamports = window.senos.lamports
-      const amount = ssjs.decimalize(srcValue, 9)
+      const amount = utils.decimalize(srcValue, 9)
       if (!amount) return setError('Invalid amount')
       if (amount > maxAmount) return setError('Exceed your available balance')
-      if (!ssjs.isAddress(dstValue)) return setError('Invalid receiver address')
+      if (!account.isAddress(dstValue))
+        return setError('Invalid receiver address')
       const txId = await lamports.transfer(amount, dstValue, wallet)
       await notify({
         type: 'success',
@@ -54,7 +55,7 @@ const Transfer = ({ data, onChange }) => {
   }
 
   const icon = () => {
-    if (!ssjs.isAddress(dstValue))
+    if (!account.isAddress(dstValue))
       return (
         <Tooltip title="Invalid address">
           <Icon name="warning-outline" style={{ color: '#F2323F' }} />

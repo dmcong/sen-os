@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
-import ssjs from 'senswapjs'
+import { utils } from '@senswap/sen-js'
 import numeral from 'numeral'
 
 import {
@@ -14,7 +14,7 @@ import {
   Divider,
   Space,
   Button,
-} from 'sen-kit'
+} from '@senswap/sen-ui'
 import PriceChange from '@/sen_wallet/view/components/priceChange'
 
 import { getCGK } from '@/sen_wallet/controller/cgk.controller'
@@ -27,7 +27,7 @@ const AccountCard = ({ data, onClick }) => {
   const dispatch = useDispatch()
 
   const { logoURI, extensions, name, amount, symbol, mint } = data
-  const balance = ssjs.undecimalize(amount, decimals)
+  const balance = utils.undecimalize(amount, decimals)
   useEffect(() => {
     ;(async () => {
       const { error, payload } = await dispatch(getMint({ address: mint }))

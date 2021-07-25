@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 
-import { Button, Icon, Tooltip } from 'sen-kit'
+import { Button, Icon, Tooltip } from '@senswap/sen-ui'
 
 import util from 'helpers/util'
 
@@ -15,7 +15,7 @@ const Prefix = ({ address, symbol }) => {
         href={util.explorer(address)}
         target="_blank"
         rel="noopener noreferrer"
-        disabled={!ssjs.isAddress(address)}
+        disabled={!account.isAddress(address)}
       >
         {symbol}
       </Button>

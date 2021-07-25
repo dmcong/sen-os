@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-import { Row, Col, Icon, Avatar, Typography } from 'sen-kit'
+import { Row, Col, Icon, Avatar, Typography } from '@senswap/sen-ui'
 
 const Header = ({ data }) => {
   const { logoURI, name, symbol, mint } = data

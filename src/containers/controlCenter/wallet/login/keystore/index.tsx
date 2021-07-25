@@ -1,8 +1,16 @@
 import { ChangeEvent, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { KeystoreWallet } from 'senswapjs'
+import { KeystoreWallet } from '@senswap/sen-js'
 
-import { Row, Col, Space, Icon, Button, Typography, Input } from 'sen-kit'
+import {
+  Row,
+  Col,
+  Space,
+  Icon,
+  Button,
+  Typography,
+  Input,
+} from '@senswap/sen-ui'
 import NewKeyStore from './newKeystore'
 
 import { RootDispatch } from 'store'
@@ -12,7 +20,7 @@ import { notify } from 'store/ui.reducer'
 const KeyStore = () => {
   const [password, setPassword] = useState('')
   const [filename, setFilename] = useState('')
-  const [keystore, setKeystore] = useState({})
+  const [keystore, setKeystore] = useState(null)
   const [visible, setVisible] = useState(false)
 
   const refFile = useRef<HTMLInputElement>(null)
@@ -46,9 +54,7 @@ const KeyStore = () => {
         }),
       )
     try {
-      console.log(typeof keystore, password)
-      const wallet = new KeystoreWallet(keystore, password)
-      console.log('keystore, password')
+      const wallet = new KeystoreWallet(keystore as any, password)
       await dispatch(connectWallet(wallet)).unwrap()
     } catch (er) {
       return dispatch(notify({ type: 'error', description: er.message }))

@@ -1,6 +1,6 @@
 import { forwardRef } from 'react'
 
-import { Badge, Col, Button, Icon, Spin } from 'sen-kit'
+import { Badge, Col, Button, Icon, Spin } from '@senswap/sen-ui'
 import { DynamicLogo } from 'helpers/loader'
 
 const Item = forwardRef<HTMLElement, any>(

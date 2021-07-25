@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Row, Col, Button, Icon, Space, Tooltip } from 'sen-kit'
+import { Row, Col, Button, Icon, Space, Tooltip } from '@senswap/sen-ui'
 import { useSenOs } from 'helpers/senos'
 
 import Pokemon from './pokemon'

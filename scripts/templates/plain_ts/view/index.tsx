@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Row, Col, Typography, Button, Icon } from 'sen-kit'
+import { Row, Col, Typography, Button, Icon } from '@senswap/sen-ui'
 
 import { updateTime } from '../controller/main.controller'
 import { AppDispatch, AppState } from '../model'

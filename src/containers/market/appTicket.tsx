@@ -1,4 +1,4 @@
-import { Row, Col, Card, Button, Typography } from 'sen-kit'
+import { Row, Col, Card, Button, Typography } from '@senswap/sen-ui'
 import metadata, { DynamicLogo } from 'helpers/loader'
 
 const AppTicket = ({

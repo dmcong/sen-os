@@ -13,7 +13,7 @@ import {
   Card,
   Button,
   Badge,
-} from 'sen-kit'
+} from '@senswap/sen-ui'
 import Navigation from './navigation'
 import Shelf from './shelf'
 

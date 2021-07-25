@@ -1,8 +1,16 @@
 import { useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 
-import { Row, Col, Space, Switch, Typography, Icon, Button } from 'sen-kit'
+import {
+  Row,
+  Col,
+  Space,
+  Switch,
+  Typography,
+  Icon,
+  Button,
+} from '@senswap/sen-ui'
 
 import { RootState } from 'store'
 
@@ -15,7 +23,7 @@ const FooterAction = ({
 
   const to = (route = '#') => history.push(route)
 
-  if (!ssjs.isAddress(address)) return null
+  if (!account.isAddress(address)) return null
   return (
     <Row justify="space-between" align="middle">
       <Col>

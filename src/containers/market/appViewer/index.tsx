@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom'
 
-import { Row, Col } from 'sen-kit'
+import { Row, Col } from '@senswap/sen-ui'
 import HeroPanel from './heroPanel'
 import Description from './description'
 

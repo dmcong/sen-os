@@ -1,4 +1,4 @@
-import { Row, Col, Card, Typography, Button, Space, Icon } from 'sen-kit'
+import { Row, Col, Card, Typography, Button, Space, Icon } from '@senswap/sen-ui'
 
 const HeroPanel = () => {
   const style = {

@@ -1,7 +1,7 @@
 import { useEffect, createRef } from 'react'
 import { Remarkable } from 'remarkable'
 
-import { Row, Col } from 'sen-kit'
+import { Row, Col } from '@senswap/sen-ui'
 
 import util from 'helpers/util'
 

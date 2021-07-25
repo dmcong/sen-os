@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
-import { Coin98Wallet } from 'senswapjs'
+import { Coin98Wallet } from '@senswap/sen-js'
 
-import { Row, Card, Col, Avatar } from 'sen-kit'
+import { Row, Card, Col, Avatar } from '@senswap/sen-ui'
 
 import COIN98 from 'static/images/coin98.png'
 import { RootDispatch } from 'store'

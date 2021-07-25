@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 
-import { Row, Col, Button, Card } from 'sen-kit'
+import { Row, Col, Button, Card } from '@senswap/sen-ui'
 import Source from './source'
 import Destination from './destination'
 
@@ -31,7 +31,7 @@ const Transfer = ({ data, onChange }) => {
     const { amount } = srcMeta
     if (!amount) return setSrcError('Invalid amount')
     if (amount > maxAmount) return setSrcError('Exceed your available balance')
-    if (!ssjs.isAddress(dstAddress))
+    if (!account.isAddress(dstAddress))
       return setDstError('Invalid receiver address')
     if (state === 2) return setDstError('The receiver address has been frozen')
     try {

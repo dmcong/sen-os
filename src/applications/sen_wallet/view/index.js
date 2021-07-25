@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 
-import { Row, Col } from 'sen-kit'
+import { Row, Col } from '@senswap/sen-ui'
 import LazyLoad from 'react-lazyload'
 import AccountWatcher from './accountWatcher'
 import WalletInfo from './walletInfo'

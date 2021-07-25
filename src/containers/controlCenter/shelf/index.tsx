@@ -1,9 +1,9 @@
 import { useEffect, useCallback, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 
-import { Row, Col, Button, Icon } from 'sen-kit'
+import { Row, Col, Button, Icon } from '@senswap/sen-ui'
 import { MultipleDnd } from 'components/dnd'
 import Container from './container'
 import Item from './item'
@@ -21,7 +21,7 @@ const Shelf = ({ settings = false }: { settings: boolean }) => {
   const { apps } = useSelector((state: RootState) => state.babysitter)
 
   const getApps = useCallback(async () => {
-    if (!ssjs.isAddress(address)) return
+    if (!account.isAddress(address)) return
     try {
       await dispatch(loadApps()).unwrap()
     } catch (er) {

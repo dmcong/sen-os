@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
-import { PhantomWallet } from 'senswapjs'
+import { PhantomWallet } from '@senswap/sen-js'
 
-import { Row, Card, Col, Avatar } from 'sen-kit'
+import { Row, Card, Col, Avatar } from '@senswap/sen-ui'
 
 import PHANTOM from 'static/images/phantom.png'
 import { RootDispatch } from 'store'

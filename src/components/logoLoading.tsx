@@ -1,4 +1,4 @@
-import { Row, Col, Spin } from 'sen-kit'
+import { Row, Col, Spin } from '@senswap/sen-ui'
 
 /**
  * Logo Loading

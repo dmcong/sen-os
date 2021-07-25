@@ -1,4 +1,4 @@
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 import randomColor from 'randomcolor'
 
 import configs from 'configs'
@@ -23,7 +23,7 @@ const util = {
     const {
       sol: { cluster },
     } = configs
-    if (ssjs.isAddress(addressOrTxId)) {
+    if (account.isAddress(addressOrTxId)) {
       return `https://explorer.solana.com/address/${addressOrTxId}?cluster=${cluster}`
     }
     return `https://explorer.solana.com/tx/${addressOrTxId}?cluster=${cluster}`

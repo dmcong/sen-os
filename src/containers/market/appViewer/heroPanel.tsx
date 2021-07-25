@@ -1,4 +1,4 @@
-import { Row, Col, Card, Typography, Divider } from 'sen-kit'
+import { Row, Col, Card, Typography, Divider } from '@senswap/sen-ui'
 
 import metadata, { DynamicPanel, DynamicLogo } from 'helpers/loader'
 

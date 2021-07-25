@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 
-import { Row, Col, Modal, Icon, Typography, Button } from 'sen-kit'
+import { Row, Col, Modal, Icon, Typography, Button } from '@senswap/sen-ui'
 import Intro from './intro'
 
 import { RootDispatch, RootState } from 'store'
@@ -21,7 +21,7 @@ const Preset = () => {
   const dispatch = useDispatch<RootDispatch>()
 
   const db = useMemo(() => {
-    if (!ssjs.isAddress(address)) return null
+    if (!account.isAddress(address)) return null
     return new PDB(address).createInstance('senos')
   }, [address])
 
@@ -43,7 +43,7 @@ const Preset = () => {
   }
 
   useEffect(() => {
-    if (ssjs.isAddress(address))
+    if (account.isAddress(address))
       (async () => {
         if (visibleSync || visited) return await dispatch(togglePreset(false))
         await dispatch(togglePreset(true))

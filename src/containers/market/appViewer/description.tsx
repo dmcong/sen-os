@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
-import ssjs from 'senswapjs'
+import { account } from '@senswap/sen-js'
 
-import { Row, Col, Button, Icon, Card } from 'sen-kit'
+import { Row, Col, Button, Icon, Card } from '@senswap/sen-ui'
 import Markdown from 'components/markdown'
 
 import { RootDispatch, RootState } from 'store'
@@ -15,7 +15,7 @@ const Description = ({ appName }: { appName: string }) => {
   const { apps } = useSelector((state: RootState) => state.babysitter)
 
   const isInstalled = () => {
-    return ssjs.isAddress(address) && apps.flat().includes(appName)
+    return account.isAddress(address) && apps.flat().includes(appName)
   }
 
   const toApp = () => {

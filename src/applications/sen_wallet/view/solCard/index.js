@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import ssjs from 'senswapjs'
+import { utils, DEFAULT_EMPTY_ADDRESS } from '@senswap/sen-js'
 import numeral from 'numeral'
 
 import {
@@ -13,7 +13,7 @@ import {
   Space,
   Icon,
   Typography,
-} from 'sen-kit'
+} from '@senswap/sen-ui'
 import PriceChange from '@/sen_wallet/view/components/priceChange'
 import Actions from '@/sen_wallet/view/solCard/actions'
 
@@ -35,12 +35,12 @@ const Sol = () => {
   const accountData = {
     address,
     amount: lamports,
-    mint: ssjs.DEFAULT_EMPTY_ADDRESS,
+    mint: DEFAULT_EMPTY_ADDRESS,
     ticket: 'solana',
     symbol: 'SOL',
     name: 'Solana',
   }
-  const balance = ssjs.undecimalize(lamports, 9)
+  const balance = utils.undecimalize(lamports, 9)
   useEffect(() => {
     ;(async () => {
       const { error, payload } = await dispatch(getCGK('solana'))

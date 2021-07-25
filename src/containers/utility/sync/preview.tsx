@@ -1,4 +1,4 @@
-import { Row, Col, Card } from 'sen-kit'
+import { Row, Col, Card } from '@senswap/sen-ui'
 import ReactJson from 'react-json-view'
 
 const Preview = ({ value = {} }: { value: object }) => {
