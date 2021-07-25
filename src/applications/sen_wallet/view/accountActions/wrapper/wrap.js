@@ -23,19 +23,13 @@ const Wrap = ({ data, onChange }) => {
 
   const {
     senos: {
-      wallet: { lamports },
+      wallet: { address: ownerAddress, lamports },
+      notify,
     },
   } = useSenOs()
   const { address, symbol } = data
   const sol = utils.undecimalize(lamports, 9)
   const handleMax = () => setValue(sol)
-
-  const {
-    senos: {
-      wallet: { address: ownerAddress },
-      notify,
-    },
-  } = useSenOs()
   const wrap = async () => {
     try {
       const { splt, wallet } = window.senos
@@ -48,7 +42,12 @@ const Wrap = ({ data, onChange }) => {
         /* Skip errors */
       }
       if (!amount) return setError('Invalid amount')
-      const { txId } = await splt.wrap(amount, ownerAddress, wallet)
+      const compensation = 2039280n
+      const { txId } = await splt.wrap(
+        amount + compensation,
+        ownerAddress,
+        wallet,
+      )
       await notify({
         type: 'success',
         description: `Wrap ${value} ${symbol} successfully. Click to view details.`,
@@ -123,6 +122,21 @@ const Wrap = ({ data, onChange }) => {
         <Button type="primary" onClick={wrap} block>
           Wrap
         </Button>
+      </Col>
+
+      <Col span={24} style={{ fontSize: 11 }}>
+        <ul style={{ paddingLeft: 16 }}>
+          <li>
+            <Typography.Text type="secondary">
+              {`To wrap SOL you have to deposit an extra fee equal to 0.00203928 SOL.`}
+            </Typography.Text>
+          </li>
+          <li>
+            <Typography.Text type="secondary">
+              The fee mentioned above will return when you unwrap.
+            </Typography.Text>
+          </li>
+        </ul>
       </Col>
     </Row>
   )

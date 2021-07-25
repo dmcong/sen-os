@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { utils, DEFAULT_EMPTY_ADDRESS } from '@senswap/sen-js'
+import { utils } from '@senswap/sen-js'
 import numeral from 'numeral'
 
 import {
@@ -29,17 +29,9 @@ const Sol = () => {
 
   const {
     senos: {
-      wallet: { address, lamports },
+      wallet: { lamports },
     },
   } = useSenOs()
-  const accountData = {
-    address,
-    amount: lamports,
-    mint: DEFAULT_EMPTY_ADDRESS,
-    ticket: 'solana',
-    symbol: 'SOL',
-    name: 'Solana',
-  }
   const balance = utils.undecimalize(lamports, 9)
   useEffect(() => {
     ;(async () => {
@@ -84,11 +76,7 @@ const Sol = () => {
           </Col>
         </Row>
       </Card>
-      <Actions
-        visible={visible}
-        onClose={() => setVisible(false)}
-        accountData={accountData}
-      />
+      <Actions visible={visible} onClose={() => setVisible(false)} />
     </Fragment>
   )
 }

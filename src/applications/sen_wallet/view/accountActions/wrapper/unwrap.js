@@ -23,23 +23,12 @@ const Unwrap = ({ data, onChange }) => {
   const [decimals, setDecimals] = useState(0)
   const [error, setError] = useState('')
   const dispatch = useDispatch()
-
-  const { address, symbol, amount, mint } = data
-  useEffect(() => {
-    ;(async () => {
-      const { error, payload } = await dispatch(getMint({ address: mint }))
-      if (error) return setError(error.message)
-      const {
-        [mint]: { decimals },
-      } = payload
-      setDecimals(decimals)
-    })()
-  }, [dispatch, mint])
-
-  const wsol = utils.undecimalize(amount, decimals)
   const {
     senos: { notify },
   } = useSenOs()
+
+  const { address, symbol, amount, mint } = data
+  const wsol = utils.undecimalize(amount, decimals)
   const unwrap = async () => {
     try {
       const { splt, wallet } = window.senos
@@ -55,6 +44,17 @@ const Unwrap = ({ data, onChange }) => {
       return setError(er.message)
     }
   }
+
+  useEffect(() => {
+    ;(async () => {
+      const { error, payload } = await dispatch(getMint({ address: mint }))
+      if (error) return setError(error.message)
+      const {
+        [mint]: { decimals },
+      } = payload
+      setDecimals(decimals)
+    })()
+  }, [dispatch, mint])
 
   return (
     <Row gutter={[8, 8]}>

@@ -33,7 +33,7 @@ const Actions = ({ visible, onClose }) => {
     amount: lamports,
     state: 1,
   }
-  const wsolData = { ...mintData, ...accountData }
+  const wsolData = { ...mintData, ...accountData, address: wsolAccountAddress }
 
   useEffect(() => {
     ;(async () => {
