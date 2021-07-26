@@ -5,6 +5,7 @@ import { useSelector } from 'react-redux'
 import { Row, Col, Card, Input, Icon, Button } from '@senswap/sen-ui'
 
 import { useSenOs } from 'helpers/senos'
+import { account } from '@senswap/sen-js'
 
 const KEYSIZE = 3
 
@@ -18,11 +19,18 @@ const Search = ({ onChange }) => {
   useEffect(() => {
     ;(async () => {
       if (!keyword || keyword.length < KEYSIZE) return onChange(null)
-      const a = Object.keys(accounts).map((address) => accounts[address])
-      const b = (await tokenProvider.find(keyword)).filter(({ address }) => {
-        return a.findIndex(({ mint }) => mint === address) >= 0
-      })
-      return onChange(b)
+      const accountData = Object.keys(accounts).map(
+        (address) => accounts[address],
+      )
+      const data = (await tokenProvider.find(keyword))
+        .map((mintData) => {
+          const { address: mintAddress } = mintData
+          const acc = accountData.find(({ mint }) => mint === mintAddress)
+          if (!acc) return {}
+          return { ...mintData, ...acc }
+        })
+        .filter(({ address }) => account.isAddress(address))
+      return onChange(data)
     })()
   }, [keyword, accounts, onChange, tokenProvider])
 

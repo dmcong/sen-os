@@ -1,6 +1,7 @@
 import { ChangeEvent, useState, useEffect } from 'react'
+import { useDispatch } from 'react-redux'
 import fileDownload from 'js-file-download'
-import { keystore as ks } from '@senswap/sen-js'
+import { keystore as ks, Keystore } from '@senswap/sen-js'
 
 import {
   Row,
@@ -12,6 +13,9 @@ import {
   Modal,
 } from '@senswap/sen-ui'
 
+import { RootDispatch } from 'store'
+import { notify } from 'store/ui.reducer'
+
 const NewKeyStore = ({
   visible = false,
   onClose = () => {},
@@ -20,12 +24,13 @@ const NewKeyStore = ({
   onClose: () => void
 }) => {
   const [password, setPassword] = useState('')
-  const [keystore, setKeystore] = useState<any>({})
+  const [keystore, setKeystore] = useState<Keystore | null>(null)
   const [visiblePwd, setVisiblePwd] = useState(false)
+  const dispatch = useDispatch<RootDispatch>()
 
   useEffect(() => {
     setPassword('')
-    setKeystore({})
+    setKeystore(null)
     setVisiblePwd(false)
   }, [visible])
   useEffect(() => {
@@ -33,6 +38,13 @@ const NewKeyStore = ({
   }, [password])
 
   const onDownload = () => {
+    if (!keystore)
+      return dispatch(
+        notify({
+          type: 'error',
+          description: 'Cannot download a empty keystore',
+        }),
+      )
     fileDownload(
       JSON.stringify(keystore),
       `senwallet-keystore-${keystore.publicKey}.json`,
