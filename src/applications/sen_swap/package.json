@@ -1,6 +1,6 @@
 {
-  "name": "__app_name__",
-  "appName": "__APP_NAME__",
+  "name": "sen_swap",
+  "appName": "Sen Swap",
   "version": "1.0.0",
   "description": "The application default template",
   "main": "index.js",
@@ -11,8 +11,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": {
-    "name": "__author_name__",
-    "email": "__author_email__"
+    "name": "SenSwap",
+    "email": "hi@senswap.com"
   },
   "license": "MIT",
   "dependencies": {},

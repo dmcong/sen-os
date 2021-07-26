@@ -69,7 +69,7 @@ const withSenOs = (WrappedComponent: typeof Component) => {
 }
 
 const useSenOs = () => {
-  return useContext(Context)
+  return useContext<any>(Context)
 }
 
 export { withSenOs, useSenOs }

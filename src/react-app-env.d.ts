@@ -7,14 +7,6 @@ declare module 'randomcolor'
 declare module 'numeral'
 declare module 'flexsearch'
 
-interface Window {
-  senos: {
-    wallet: any
-    lamports: any
-    splt: any
-    ipfs: any
-  }
-}
 
 type AppInfo = {
   appName: string

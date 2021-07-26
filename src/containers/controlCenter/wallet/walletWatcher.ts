@@ -21,9 +21,9 @@ const WalletWatcher = () => {
       watchId = null
     } else {
       if (watchId) return console.warn('Already watched')
-      const callback = (er: string, re: bigint) => {
+      const callback = (er: string | null, re: number | null) => {
         if (er) return console.error(er)
-        return dispatch(updateWallet({ lamports: re }))
+        return dispatch(updateWallet({ lamports: BigInt(re || 0) }))
       }
       watchId = window.senos.lamports.watch(address, callback)
     }

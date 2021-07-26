@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { Lamports, SPLT } from '@senswap/sen-js'
+import { Lamports, SPLT, Swap } from '@senswap/sen-js'
+import { WalletInterface } from '@senswap/sen-js/dist/wallet/baseWallet'
 
 import configs from 'configs'
 import IPFS from 'helpers/ipfs'
@@ -7,6 +8,18 @@ import IPFS from 'helpers/ipfs'
 /**
  * Interface & Utility
  */
+
+declare global {
+  interface Window {
+    senos: {
+      wallet: WalletInterface
+      lamports: Lamports
+      splt: SPLT
+      swap: Swap
+      ipfs: any
+    }
+  }
+}
 
 export type State = {
   visible: boolean
@@ -16,12 +29,13 @@ export type State = {
 
 const initializeWindowSenOs = async (wallet: any) => {
   const {
-    sol: { spltAddress, splataAddress, node },
+    sol: { spltAddress, splataAddress, node, swapAddress },
   } = configs
   window.senos = {
     wallet: wallet,
     lamports: new Lamports(node),
     splt: new SPLT(spltAddress, splataAddress, node),
+    swap: new Swap(swapAddress, spltAddress, splataAddress, node),
     ipfs: new IPFS(),
   }
 }

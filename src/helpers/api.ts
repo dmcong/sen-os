@@ -13,7 +13,7 @@ const api = {
     return authHeader
   },
   // Create
-  post: async (url: string, params = null, auth = false) => {
+  post: async (url: string, params: any = null, auth = false) => {
     const authHeader = await api.auth(auth)
     try {
       const { data } = await axios({
@@ -35,7 +35,7 @@ const api = {
     }
   },
   // Read
-  get: async (url: string, params = null, auth = false) => {
+  get: async (url: string, params: any = null, auth = false) => {
     const authHeader = await api.auth(auth)
     try {
       const { data } = await axios({
@@ -57,7 +57,7 @@ const api = {
     }
   },
   // Update
-  put: async (url: string, params = null, auth = false) => {
+  put: async (url: string, params: any = null, auth = false) => {
     const authHeader = await api.auth(auth)
     try {
       const { data } = await axios({
@@ -79,7 +79,7 @@ const api = {
     }
   },
   // Delete
-  delete: async (url: string, params = null, auth = false) => {
+  delete: async (url: string, params: any = null, auth = false) => {
     const authHeader = await api.auth(auth)
     try {
       const { data } = await axios({

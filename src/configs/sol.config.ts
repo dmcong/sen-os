@@ -1,14 +1,4 @@
-import { DEFAULT_EMPTY_ADDRESS } from '@senswap/sen-js'
 import { Env } from './env'
-
-const NATIVE = {
-  address: DEFAULT_EMPTY_ADDRESS,
-  decimals: 9,
-  name: 'Solana',
-  symbol: 'SOL',
-  ticket: 'solana',
-  icon: 'https://assets.coingecko.com/coins/images/4128/large/coinmarketcap-solana-200.png',
-}
 
 const SOLVARS = {
   spltAddress: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
@@ -22,7 +12,7 @@ type Config = {
   node: string
   cluster: 'devnet' | 'testnet' | 'mainnet'
   chainId: 101 | 102 | 103
-  native: typeof NATIVE
+  swapAddress: string
 } & typeof SOLVARS
 
 const configs: Record<Env, Config> = {
@@ -33,8 +23,8 @@ const configs: Record<Env, Config> = {
     node: 'https://api.devnet.solana.com',
     chainId: 103,
     cluster: 'devnet',
-    native: { ...NATIVE },
     ...SOLVARS,
+    swapAddress: 'D8UuF1jPr5gtxHvnVz3HpxP2UkgtxLs9vwz7ecaTkrGy',
   },
 
   /**
@@ -44,8 +34,8 @@ const configs: Record<Env, Config> = {
     node: 'https://api.devnet.solana.com',
     cluster: 'devnet',
     chainId: 103,
-    native: { ...NATIVE },
     ...SOLVARS,
+    swapAddress: 'D8UuF1jPr5gtxHvnVz3HpxP2UkgtxLs9vwz7ecaTkrGy',
   },
 
   /**
@@ -55,8 +45,8 @@ const configs: Record<Env, Config> = {
     node: 'https://api.mainnet-beta.solana.com',
     cluster: 'mainnet',
     chainId: 101,
-    native: { ...NATIVE },
     ...SOLVARS,
+    swapAddress: 'SSW7ooZ1EbEognq5GosbygA3uWW1Hq1NsFq6TsftCFV',
   },
 }
 

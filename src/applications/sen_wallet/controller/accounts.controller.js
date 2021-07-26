@@ -38,7 +38,7 @@ export const getAccounts = createAsyncThunk(
 export const getAccount = createAsyncThunk(
   `${NAME}/getAccount`,
   async ({ address }, { getState }) => {
-    if (!account.isAddress(address)) throw new Error('Invalid address')
+    if (!account.isAddress(address)) throw new Error('Invalid account address')
     const {
       accounts: { [address]: data },
     } = getState()
