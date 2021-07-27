@@ -35,7 +35,7 @@ class TokenProvider {
     this.cluster = cluster
   }
 
-  private _init = async () => {
+  private _init = async (): Promise<TokenInfo[]> => {
     if (this.tokenList.length) return this.tokenList
     const tokenList = await (await new TokenListProvider().resolve())
       .filterByChainId(this.chainId)
@@ -53,16 +53,16 @@ class TokenProvider {
     return this.engine
   }
 
-  all = async () => {
+  all = async (): Promise<TokenInfo[]> => {
     return await this._init()
   }
 
-  findByAddress = async (addr: string) => {
+  findByAddress = async (addr: string): Promise<TokenInfo | undefined> => {
     const tl = await this._init()
     return tl.find(({ address }) => address === addr)
   }
 
-  find = async (keyword: string, limit?: 10) => {
+  find = async (keyword: string, limit?: 10): Promise<TokenInfo[]> => {
     const tl = await this._init()
     const engine = await this._engine()
     const raw: Array<{ result: string[] }> = engine.search(keyword, limit)

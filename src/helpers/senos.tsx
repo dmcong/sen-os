@@ -14,7 +14,17 @@ import TokenProvider from 'helpers/tokenProvider'
 import { RootState, RootDispatch } from 'store'
 import { notify } from 'store/ui.reducer'
 
-const Context = createContext({})
+const Context = createContext<SenOs>({} as SenOs)
+
+export type SenOs = {
+  senos: {
+    ui: any
+    notify: any
+    wallet: any
+    db: any
+    tokenProvider: TokenProvider
+  }
+}
 
 const SenOsProvider = ({
   children,
@@ -39,7 +49,9 @@ const SenOsProvider = ({
   // SenOS
   const senos = { ui, notify: ntf, wallet, db, tokenProvider }
   // Context provider
-  return <Context.Provider value={{ senos }}>{children}</Context.Provider>
+  return (
+    <Context.Provider value={{ senos } as SenOs}>{children}</Context.Provider>
+  )
 }
 
 const SenOsComsumer = ({ children }: { children: JSX.Element }) => {
@@ -69,7 +81,7 @@ const withSenOs = (WrappedComponent: typeof Component) => {
 }
 
 const useSenOs = () => {
-  return useContext<any>(Context)
+  return useContext<SenOs>(Context)
 }
 
 export { withSenOs, useSenOs }

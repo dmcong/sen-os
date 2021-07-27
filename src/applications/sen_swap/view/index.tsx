@@ -1,47 +1,34 @@
-import { useDispatch, useSelector } from 'react-redux'
-
-import { Row, Col, Typography, Button, Icon } from '@senswap/sen-ui'
+import { Row, Col, Button, Icon } from '@senswap/sen-ui'
+import AccountWatcher from './accountWatcher'
 import PoolWatcher from './poolWatcher'
-
-import { getPools } from '../controller/pool.controller'
-import { AppDispatch, AppState } from '../model'
-import { useSenOs } from 'helpers/senos'
+import Bid from './bid'
+import Ask from './ask'
+import { useState } from 'react'
 
 const View = () => {
-  const dispatch = useDispatch<AppDispatch>()
-  const { time } = useSelector((state: AppState) => state.main)
-  const {
-    senos: { notify },
-  } = useSenOs()
+  const [bidValue, setBidValue] = useState({ amount: '' })
+  const [askValue, setAskValue] = useState('')
 
-  const onClick = async () => {
-    try {
-      await dispatch(getPools()).unwrap()
-    } catch (er) {
-      return notify({ type: 'error', description: er.message })
-    }
-  }
+  console.log(bidValue)
 
   return (
-    <Row gutter={[16, 16]}>
+    <Row gutter={[8, 12]} justify="center">
       <Col span={24}>
-        <Typography.Title level={1}>Template</Typography.Title>
+        <Bid value={bidValue} onChange={setBidValue} />
+      </Col>
+      <Col>
+        <Button icon={<Icon name="git-compare-outline" />} />
       </Col>
       <Col span={24}>
-        <Typography.Text>
-          Updated at: {new Date(time).toString()}
-        </Typography.Text>
+        <Ask value={askValue} onChange={setAskValue} />
       </Col>
+      <Col span={24} style={{ height: 8 }} /> {/* Safe sapce */}
       <Col span={24}>
-        <Button
-          type="primary"
-          onClick={onClick}
-          icon={<Icon name="reload-outline" />}
-          block
-        >
-          Update
+        <Button type="primary" block>
+          Review & Swap
         </Button>
       </Col>
+      <AccountWatcher />
       <PoolWatcher />
     </Row>
   )

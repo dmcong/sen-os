@@ -2,21 +2,27 @@ import { Fragment, useCallback, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { useSenOs } from 'helpers/senos'
-import { getPools, upsetPool } from '@/sen_swap/controller/pools.controller'
+import {
+  getAccounts,
+  upsetAccount,
+} from '@/sen_swap/controller/accounts.controller'
 import { AppDispatch } from '@/sen_swap/model'
 
 // Watch id
 let watchId = 0
 
-const PoolWatcher = () => {
+const AccountWatcher = () => {
   const dispatch = useDispatch<AppDispatch>()
   const {
-    senos: { notify },
+    senos: {
+      notify,
+      wallet: { address: walletAddress },
+    },
   } = useSenOs()
 
   const fetchData = useCallback(async () => {
     try {
-      await dispatch(getPools()).unwrap()
+      await dispatch(getAccounts({ owner: walletAddress })).unwrap()
     } catch (er) {
       await notify({
         type: 'error',
@@ -30,14 +36,15 @@ const PoolWatcher = () => {
     const callback = (er: string | null, re: any) => {
       if (er) return console.error(er)
       const { address, data } = re
-      return dispatch(upsetPool({ address, data }))
+      return dispatch(upsetAccount({ address, data }))
     }
-    watchId = window.senos.swap.watch(callback)
-  }, [dispatch])
+    const filters = [{ memcmp: { bytes: walletAddress, offset: 32 } }]
+    watchId = window.senos.splt.watch(callback, filters)
+  }, [dispatch, walletAddress])
 
   const unwatchData = useCallback(async () => {
     try {
-      await window.senos.swap.unwatch(watchId)
+      await window.senos.splt.unwatch(watchId)
     } catch (er) {
       /* Nothing */
     }
@@ -55,4 +62,4 @@ const PoolWatcher = () => {
   return <Fragment />
 }
 
-export default PoolWatcher
+export default AccountWatcher

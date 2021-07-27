@@ -12,6 +12,10 @@ import api from 'helpers/api'
 import configs from '@/sen_swap/configs'
 import { appName } from '../package.json'
 
+/**
+ * Store constructor
+ */
+
 export type State = Record<string, PoolData>
 
 const NAME = util.normalizeAppName(appName)
@@ -30,7 +34,7 @@ export const getPools = createAsyncThunk(`${NAME}/getPools`, async () => {
     await swap.connection.getProgramAccounts(programId, {
       filters: [{ dataSize: 313 }],
     })
-  let bulk: Record<string, any> = {}
+  let bulk: State = {}
   value.forEach(({ pubkey, account: { data: buf } }) => {
     const address = pubkey.toBase58()
     const data = swap.parsePoolData(buf)
@@ -39,18 +43,19 @@ export const getPools = createAsyncThunk(`${NAME}/getPools`, async () => {
   return bulk
 })
 
-export const getPool = createAsyncThunk<State, string, { state: any }>(
-  `${NAME}/getPool`,
-  async (address, { getState }) => {
-    const { pool } = getState()
-    if (pool[address]) return { [address]: pool[address] }
-    const {
-      api: { base },
-    } = configs
-    const { data } = await api.get(base + '/pool', { address })
-    return { [address]: data }
-  },
-)
+export const getPool = createAsyncThunk<
+  State,
+  { address: string },
+  { state: any }
+>(`${NAME}/getPool`, async ({ address }, { getState }) => {
+  const { pool } = getState()
+  if (pool[address]) return { [address]: pool[address] }
+  const {
+    api: { base },
+  } = configs
+  const { data } = await api.get(base + '/pool', { address })
+  return { [address]: data }
+})
 
 export const upsetPool = createAsyncThunk<
   State,
