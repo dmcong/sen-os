@@ -3,18 +3,21 @@ import { useState } from 'react'
 import { Row, Col, Button, Icon } from '@senswap/sen-ui'
 import AccountWatcher from './accountWatcher'
 import PoolWatcher from './poolWatcher'
-import Bid from './bid'
-import Ask from './ask'
+import Bid, { BidData } from './bid'
+import Ask, { AskData } from './ask'
 import Settings from './settings'
 
 const View = () => {
   const [settings, setSettings] = useState({ slippage: 0.001, advanced: false })
-  const [bidValue, setBidValue] = useState({ amount: '' })
-  const [askValue, setAskValue] = useState({ amount: '' })
+  const [bidValue, setBidValue] = useState<BidData>({ amount: '' })
+  const [askValue, setAskValue] = useState<AskData>({ amount: '' })
 
-  console.log('bid', bidValue)
-  console.log('ask', askValue)
-  console.log('settings', settings)
+  const onSwitch = () => {
+    const { mintInfo: bidMintInfo } = bidValue
+    const { mintInfo: askMintInfo } = askValue
+    setBidValue({ ...bidValue, mintInfo: askMintInfo, amount: '' })
+    setAskValue({ ...askValue, mintInfo: bidMintInfo, amount: '' })
+  }
 
   return (
     <Row gutter={[8, 8]}>
@@ -31,7 +34,11 @@ const View = () => {
       <Col span={24}>
         <Row gutter={[8, 8]} justify="center">
           <Col>
-            <Button size="small" icon={<Icon name="git-compare-outline" />} />
+            <Button
+              size="small"
+              icon={<Icon name="git-compare-outline" />}
+              onClick={onSwitch}
+            />
           </Col>
         </Row>
       </Col>

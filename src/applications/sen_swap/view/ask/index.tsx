@@ -1,5 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
+import { useSelector } from 'react-redux'
 import { TokenInfo } from '@solana/spl-token-registry'
+import { utils } from '@senswap/sen-js'
+import numeral from 'numeral'
 
 import {
   Row,
@@ -12,6 +15,8 @@ import {
   Icon,
 } from '@senswap/sen-ui'
 import MintSelection from '@/sen_swap/view/mintSelection'
+
+import { AppState } from '@/sen_swap/model'
 
 export type AskData = {
   amount: string
@@ -27,9 +32,22 @@ const Ask = ({
   value: AskData
   onChange: (value: AskData) => void
 }) => {
+  const [error, setError] = useState('')
   const [amount, setAmount] = useState('')
   const [mintInfo, setMintInfo] = useState<TokenInfo>({} as TokenInfo)
-  const [error, setError] = useState('')
+  const accounts = useSelector((state: AppState) => state.accounts)
+
+  const accountData = useMemo(() => {
+    return Object.keys(accounts)
+      .map((key) => accounts[key])
+      .find(({ mint: mintAddress }) => mintAddress === mintInfo.address)
+  }, [accounts, mintInfo])
+  const balance = useMemo(() => {
+    const { decimals } = mintInfo
+    if (!accountData || !decimals) return 0
+    const { amount } = accountData
+    return utils.undecimalize(amount, decimals)
+  }, [accountData, mintInfo])
 
   const onError = (er: string) => {
     if (timeoutId) clearTimeout(timeoutId)
@@ -47,6 +65,7 @@ const Ask = ({
   }, [amount, mintInfo, onChange])
   useEffect(() => {
     setAmount(value.amount)
+    if (value.mintInfo) setMintInfo(value.mintInfo)
   }, [value])
 
   return (
@@ -82,9 +101,10 @@ const Ask = ({
           <Col flex="auto">
             <Typography.Text type="secondary">Price:</Typography.Text>
           </Col>
-          <Col>
-            <Typography.Text type="secondary">Available:</Typography.Text>
-          </Col>
+          <Typography.Text type="secondary">
+            Available: {numeral(balance || 0).format('0,0.[00]')}{' '}
+            {mintInfo.symbol}
+          </Typography.Text>
         </Row>
       </Col>
     </Row>

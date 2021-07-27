@@ -34,10 +34,10 @@ const Bid = ({
   value: BidData
   onChange: (value: BidData) => void
 }) => {
+  const [error, setError] = useState('')
   const [amount, setAmount] = useState('')
   const [mintInfo, setMintInfo] = useState<TokenInfo>({} as TokenInfo)
   const accounts = useSelector((state: AppState) => state.accounts)
-  const [error, setError] = useState('')
 
   const accountData = useMemo(() => {
     if (value.accountData) return value.accountData
