@@ -29,7 +29,7 @@ const AccountWatcher = () => {
         description: 'Cannot fetch data for pools',
       })
     }
-  }, [dispatch, notify])
+  }, [dispatch, notify, walletAddress])
 
   const watchData = useCallback(async () => {
     if (watchId) return console.warn('Already watched')

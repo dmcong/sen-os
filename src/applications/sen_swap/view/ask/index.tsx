@@ -1,19 +1,53 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { TokenInfo } from '@solana/spl-token-registry'
 
-import { Row, Col, Input, Typography, Card, Space } from '@senswap/sen-ui'
+import {
+  Row,
+  Col,
+  Input,
+  Typography,
+  Card,
+  Space,
+  Tooltip,
+  Icon,
+} from '@senswap/sen-ui'
 import MintSelection from '@/sen_swap/view/mintSelection'
-import Limit from './limit'
+
+export type AskData = {
+  amount: string
+  mintInfo?: TokenInfo
+}
+
+let timeoutId: ReturnType<typeof setTimeout>
 
 const Ask = ({
   value,
   onChange,
 }: {
-  value: string
-  onChange: (value: string) => void
+  value: AskData
+  onChange: (value: AskData) => void
 }) => {
-  const [mint, setMint] = useState<TokenInfo>({} as TokenInfo)
-  const [limit, setLimit] = useState('0')
+  const [amount, setAmount] = useState('')
+  const [mintInfo, setMintInfo] = useState<TokenInfo>({} as TokenInfo)
+  const [error, setError] = useState('')
+
+  const onError = (er: string) => {
+    if (timeoutId) clearTimeout(timeoutId)
+    setError(er)
+    timeoutId = setTimeout(() => setError(''), 500)
+  }
+  const onAmount = (val: string) => {
+    const reg = /^-?\d*(\.\d*)?$/
+    if (!reg.test(val)) return onError('Invalid character')
+    return setAmount(val)
+  }
+
+  useEffect(() => {
+    onChange({ amount, mintInfo })
+  }, [amount, mintInfo, onChange])
+  useEffect(() => {
+    setAmount(value.amount)
+  }, [value])
 
   return (
     <Row gutter={[4, 4]}>
@@ -22,16 +56,25 @@ const Ask = ({
       </Col>
       <Col span={24}>
         <Card bordered={false} bodyStyle={{ padding: 4 }}>
-          <Input
-            placeholder="0"
-            value={value}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              onChange(e.target.value || '')
+          <Tooltip
+            title={
+              <Space>
+                <Icon name="warning" />
+                {error}
+              </Space>
             }
-            prefix={<MintSelection value={mint} onChange={setMint} />}
-            suffix={<Limit value={limit} onChange={setLimit} />}
-            bordered={false}
-          />
+            visible={error}
+          >
+            <Input
+              placeholder="0"
+              value={amount}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                onAmount(e.target.value || '')
+              }
+              prefix={<MintSelection value={mintInfo} onChange={setMintInfo} />}
+              bordered={false}
+            />
+          </Tooltip>
         </Card>
       </Col>
       <Col span={24}>
