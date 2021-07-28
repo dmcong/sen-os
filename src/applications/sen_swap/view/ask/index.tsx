@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react'
 import { useSelector } from 'react-redux'
 import { TokenInfo } from '@solana/spl-token-registry'
-import { utils } from '@senswap/sen-js'
+import { utils, AccountData } from '@senswap/sen-js'
 import numeral from 'numeral'
 
 import {
@@ -20,6 +20,7 @@ import { AppState } from '@/sen_swap/model'
 
 export type AskData = {
   amount: string
+  accountData?: AccountData
   mintInfo?: TokenInfo
 }
 
@@ -38,10 +39,11 @@ const Ask = ({
   const accounts = useSelector((state: AppState) => state.accounts)
 
   const accountData = useMemo(() => {
+    if (value.accountData) return value.accountData
     return Object.keys(accounts)
       .map((key) => accounts[key])
       .find(({ mint: mintAddress }) => mintAddress === mintInfo.address)
-  }, [accounts, mintInfo])
+  }, [accounts, mintInfo, value])
   const balance = useMemo(() => {
     const { decimals } = mintInfo
     if (!accountData || !decimals) return 0

@@ -18,6 +18,9 @@ const View = () => {
     setAskValue({ ...askValue, mintInfo: bidMintInfo, amount: '' })
   }
 
+  console.log('bid', bidValue)
+  console.log('ask', askValue)
+
   return (
     <Row gutter={[8, 8]}>
       <Col span={24} style={{ marginTop: -8 }}>
