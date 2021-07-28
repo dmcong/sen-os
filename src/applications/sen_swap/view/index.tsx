@@ -11,15 +11,12 @@ const View = () => {
   const [bidValue, setBidValue] = useState<BidData>({ amount: '' })
   const [askValue, setAskValue] = useState<AskData>({ amount: '' })
 
-  const onSwitch = () => {
-    const { mintInfo: bidMintInfo } = bidValue
-    const { mintInfo: askMintInfo } = askValue
-    setBidValue({ ...bidValue, mintInfo: askMintInfo, amount: '' })
-    setAskValue({ ...askValue, mintInfo: bidMintInfo, amount: '' })
-  }
+  console.log(bidValue, askValue)
 
-  console.log('bid', bidValue)
-  console.log('ask', askValue)
+  const onSwitch = () => {
+    setBidValue({ ...askValue, amount: '' })
+    setAskValue({ ...bidValue, amount: '' })
+  }
 
   return (
     <Row gutter={[8, 8]}>
