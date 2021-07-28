@@ -1,3 +1,5 @@
+import React from 'react'
+
 import {
   Row,
   Col,
@@ -9,7 +11,6 @@ import {
   Divider,
   Button,
 } from '@senswap/sen-ui'
-import React from 'react'
 
 const Mint = ({
   logoURI,
@@ -17,21 +18,26 @@ const Mint = ({
   name,
   onClick,
   advanced = false,
+  onAdvanced = () => {},
+  active = false,
 }: {
   logoURI: string | undefined
   symbol: string
   name: string
   onClick: () => void
   advanced?: boolean
+  onAdvanced?: () => void
+  active?: boolean
 }) => {
   const onPools = (e: React.MouseEvent) => {
     e.stopPropagation()
+    return onAdvanced()
   }
 
   return (
     <Card
       bodyStyle={{ padding: `8px 16px`, cursor: 'pointer' }}
-      bordered={false}
+      bordered={active}
       onClick={onClick}
       hoverable
     >

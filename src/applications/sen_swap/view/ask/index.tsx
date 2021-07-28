@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react'
-import { useSelector } from 'react-redux'
-import { TokenInfo } from '@solana/spl-token-registry'
-import { account, utils, AccountData, PoolData } from '@senswap/sen-js'
+import { useDispatch, useSelector } from 'react-redux'
+import { utils } from '@senswap/sen-js'
 import numeral from 'numeral'
 
 import {
@@ -14,55 +13,37 @@ import {
   Tooltip,
   Icon,
 } from '@senswap/sen-ui'
-import MintSelection from '@/sen_swap/view/mintSelection'
+import Selection from '@/sen_swap/view/selection'
 
-import { AppState } from '@/sen_swap/model'
-
-export type AskData = {
-  amount: string
-  accountData?: AccountData
-  mintInfo?: TokenInfo
-  pools?: PoolData[]
-}
+import { AppDispatch, AppState } from '@/sen_swap/model'
+import { SelectionInfo } from '../selection/mintSelection'
+import { updateAskData } from '@/sen_swap/controller/ask.controller'
 
 let timeoutId: ReturnType<typeof setTimeout>
 
-const Ask = ({
-  value,
-  onChange,
-}: {
-  value: AskData
-  onChange: (value: AskData) => void
-}) => {
+const Ask = () => {
   const [error, setError] = useState('')
   const [amount, setAmount] = useState('')
-  const [mintInfo, setMintInfo] = useState<TokenInfo>({} as TokenInfo)
+  const [selectionInfo, setSelectionInfo] = useState<SelectionInfo>({
+    pools: [],
+  })
+  const dispatch = useDispatch<AppDispatch>()
   const accounts = useSelector((state: AppState) => state.accounts)
-  const pools = useSelector((state: AppState) => state.pools)
 
   // Compute account data
   const accountData = useMemo(() => {
+    const { address } = selectionInfo.mintInfo || {}
     return Object.keys(accounts)
       .map((key) => accounts[key])
-      .find(({ mint: mintAddress }) => mintAddress === mintInfo.address)
-  }, [accounts, mintInfo])
-  // Compute available pools
-  const askPools = useMemo(() => {
-    const mintAddress = mintInfo.address
-    if (!mintAddress || !account.isAddress(mintAddress)) return []
-    return Object.keys(pools)
-      .map((poolAddress) => pools[poolAddress])
-      .filter(({ mint_s, mint_a, mint_b }) =>
-        [mint_s, mint_a, mint_b].includes(mintAddress),
-      )
-  }, [pools, mintInfo])
+      .find(({ mint: mintAddress }) => mintAddress === address)
+  }, [accounts, selectionInfo])
   // Compute human-readable balance
   const balance = useMemo(() => {
-    const { decimals } = mintInfo
+    const { decimals } = selectionInfo.mintInfo || {}
     if (!accountData || !decimals) return 0
     const { amount } = accountData
     return utils.undecimalize(amount, decimals)
-  }, [accountData, mintInfo])
+  }, [accountData, selectionInfo])
 
   // Handle errors
   const onError = (er: string) => {
@@ -77,15 +58,10 @@ const Ask = ({
     return setAmount(val)
   }
 
-  // Return data to parents
+  // Return data to store
   useEffect(() => {
-    onChange({ amount, mintInfo, accountData, pools: askPools })
-  }, [amount, mintInfo, accountData, askPools, onChange])
-  // Receive data from parents
-  useEffect(() => {
-    setAmount(value.amount)
-    if (value.mintInfo) setMintInfo(value.mintInfo)
-  }, [value])
+    dispatch(updateAskData({ amount, accountData, ...selectionInfo }))
+  }, [amount, accountData, selectionInfo, dispatch])
 
   return (
     <Row gutter={[4, 4]}>
@@ -109,7 +85,9 @@ const Ask = ({
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onAmount(e.target.value || '')
               }
-              prefix={<MintSelection value={mintInfo} onChange={setMintInfo} />}
+              prefix={
+                <Selection value={selectionInfo} onChange={setSelectionInfo} />
+              }
               bordered={false}
             />
           </Tooltip>
@@ -122,7 +100,7 @@ const Ask = ({
           </Col>
           <Typography.Text type="secondary">
             Available: {numeral(balance || 0).format('0,0.[00]')}{' '}
-            {mintInfo.symbol}
+            {selectionInfo.mintInfo?.symbol || 'TOKEN'}
           </Typography.Text>
         </Row>
       </Col>

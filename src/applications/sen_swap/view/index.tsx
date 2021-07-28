@@ -3,20 +3,12 @@ import { useState } from 'react'
 import { Row, Col, Button, Icon } from '@senswap/sen-ui'
 import AccountWatcher from './accountWatcher'
 import PoolWatcher from './poolWatcher'
-import Bid, { BidData } from './bid'
-import Ask, { AskData } from './ask'
+import Bid from './bid'
+import Ask from './ask'
 import Settings from './settings'
 
 const View = () => {
-  const [bidValue, setBidValue] = useState<BidData>({ amount: '' })
-  const [askValue, setAskValue] = useState<AskData>({ amount: '' })
-
-  console.log(bidValue, askValue)
-
-  const onSwitch = () => {
-    setBidValue({ ...askValue, amount: '' })
-    setAskValue({ ...bidValue, amount: '' })
-  }
+  const onSwitch = () => {}
 
   return (
     <Row gutter={[8, 8]}>
@@ -28,7 +20,7 @@ const View = () => {
         </Row>
       </Col>
       <Col span={24}>
-        <Bid value={bidValue} onChange={setBidValue} />
+        <Bid />
       </Col>
       <Col span={24}>
         <Row gutter={[8, 8]} justify="center">
@@ -42,7 +34,7 @@ const View = () => {
         </Row>
       </Col>
       <Col span={24}>
-        <Ask value={askValue} onChange={setAskValue} />
+        <Ask />
       </Col>
       <Col span={24} style={{ height: 8 }} /> {/* Safe sapce */}
       <Col span={24}>
