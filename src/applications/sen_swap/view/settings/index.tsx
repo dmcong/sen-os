@@ -10,7 +10,7 @@ import {
 import Slippage from './slippage'
 import Advanced from './advanced'
 
-export type Settings = {
+export type SettingsInfo = {
   slippage: number
   advanced: boolean
 }
@@ -19,8 +19,8 @@ const Settings = ({
   value,
   onChange,
 }: {
-  value: Settings
-  onChange: (value: Settings) => void
+  value: SettingsInfo
+  onChange: (value: SettingsInfo) => void
 }) => {
   const onSlippage = (slippage: number) => {
     return onChange({ ...value, slippage })

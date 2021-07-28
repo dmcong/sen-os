@@ -1,4 +1,4 @@
-import { useState, Fragment, useCallback, useMemo } from 'react'
+import { useState, Fragment, useCallback, useMemo, useEffect } from 'react'
 import { TokenInfo } from '@solana/spl-token-registry'
 
 import {
@@ -11,6 +11,7 @@ import {
   Divider,
   Modal,
 } from '@senswap/sen-ui'
+import LazyLoad, { forceCheck } from 'react-lazyload'
 import Search from './search'
 import Mint from './mint'
 
@@ -61,8 +62,12 @@ const MintSelection = ({
     setVisible(false)
     onChange(mint)
   }
-  const { logoURI, symbol } = value
 
+  useEffect(() => {
+    if (visible) setTimeout(forceCheck, 500)
+  }, [visible])
+
+  const { logoURI, symbol } = value
   return (
     <Fragment>
       <Space
@@ -101,12 +106,14 @@ const MintSelection = ({
                 const { logoURI, symbol, name } = mint
                 return (
                   <Col span={24} key={name + i}>
-                    <Mint
-                      logoURI={logoURI}
-                      symbol={symbol}
-                      name={name}
-                      onClick={() => onMint(mint)}
-                    />
+                    <LazyLoad height={48} overflow>
+                      <Mint
+                        logoURI={logoURI}
+                        symbol={symbol}
+                        name={name}
+                        onClick={() => onMint(mint)}
+                      />
+                    </LazyLoad>
                   </Col>
                 )
               })}
