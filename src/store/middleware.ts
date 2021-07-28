@@ -6,7 +6,7 @@ declare global {
     toJSON: (this: bigint) => string
   }
 }
-global.BigInt.prototype.toJSON = function () {
+BigInt.prototype.toJSON = function () {
   return this.toString()
 }
 

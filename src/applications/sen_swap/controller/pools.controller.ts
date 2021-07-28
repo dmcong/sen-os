@@ -8,8 +8,6 @@ import {
 } from '@senswap/sen-js'
 
 import util from 'helpers/util'
-import api from 'helpers/api'
-import configs from '@/sen_swap/configs'
 import { appName } from '../package.json'
 
 /**
@@ -48,13 +46,14 @@ export const getPool = createAsyncThunk<
   { address: string },
   { state: any }
 >(`${NAME}/getPool`, async ({ address }, { getState }) => {
-  const { pool } = getState()
-  if (pool[address]) return { [address]: pool[address] }
+  if (!account.isAddress(address)) throw new Error('Invalid pool address')
   const {
-    api: { base },
-  } = configs
-  const { data } = await api.get(base + '/pool', { address })
-  return { [address]: data }
+    pools: { [address]: data },
+  } = getState()
+  if (data) return { [address]: data }
+  const { swap } = window.senos
+  const raw = await swap.getPoolData(address)
+  return { [address]: raw }
 })
 
 export const upsetPool = createAsyncThunk<

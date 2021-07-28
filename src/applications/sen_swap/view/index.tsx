@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux'
+import { Swap } from '@senswap/sen-js'
 
 import { Row, Col, Button, Icon } from '@senswap/sen-ui'
 import AccountWatcher from './accountWatcher'
@@ -15,6 +16,8 @@ const View = () => {
   const dispatch = useDispatch<AppDispatch>()
   const bidData = useSelector((state: AppState) => state.bid)
   const askData = useSelector((state: AppState) => state.ask)
+
+  const oracle = Swap.oracle
 
   const onSwitch = () => {
     dispatch(updateBidData({ ...askData, amount: '' }))

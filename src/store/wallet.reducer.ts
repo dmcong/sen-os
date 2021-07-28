@@ -53,7 +53,7 @@ const NAME = 'wallet'
 const initialState: State = {
   visible: false,
   address: '',
-  lamports: global.BigInt(0),
+  lamports: BigInt(0),
 }
 
 /**
@@ -75,7 +75,7 @@ export const connectWallet = createAsyncThunk(
     await initializeWindowSenOs(wallet)
     const address = await wallet.getAddress()
     const lamports = await window.senos.lamports.getLamports(address)
-    return { address, lamports: global.BigInt(lamports), visible: false }
+    return { address, lamports: BigInt(lamports), visible: false }
   },
 )
 

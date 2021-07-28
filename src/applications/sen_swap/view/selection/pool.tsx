@@ -63,7 +63,7 @@ const Pool = ({
       if (reserves[i] && decimals[i] && prices[i])
         tvl =
           tvl +
-          Number(utils.undecimalize(reserves[i] as BigInt, decimals[i])) *
+          Number(utils.undecimalize(reserves[i] as bigint, decimals[i])) *
             prices[i]
     })
     return setTVL(tvl)
