@@ -79,6 +79,7 @@ const MintSelection = ({
     const availablePools = getAvailablePools(tokenInfo)
     return onChange({
       mintInfo: tokenInfo,
+      poolData: undefined,
       pools: availablePools,
     })
   }
@@ -88,6 +89,15 @@ const MintSelection = ({
     return onChange({
       mintInfo: tempTokenInfo,
       poolData,
+      pools: availablePools,
+    })
+  }
+  // Auto pool selection
+  const onAuto = () => {
+    const availablePools = getAvailablePools(tempTokenInfo)
+    return onChange({
+      mintInfo: tempTokenInfo,
+      poolData: undefined,
       pools: availablePools,
     })
   }
@@ -115,7 +125,7 @@ const MintSelection = ({
   // Render pool list
   const poolList = getAvailablePools(tempTokenInfo).map((pool, i) => {
     const { address } = pool
-    const { address: currentPoolAddress } = value.poolData || {} as any
+    const { address: currentPoolAddress } = value.poolData || ({} as any)
     return (
       <Col span={24} key={address + i}>
         <LazyLoad height={58} overflow>
@@ -141,13 +151,8 @@ const MintSelection = ({
         <Row gutter={[16, 16]} style={{ height: 300, overflowY: 'scroll' }}>
           {tempTokenInfo ? (
             <Col span={24}>
-              <Row gutter={[16, 16]} wrap={false}>
+              <Row gutter={[8, 8]} wrap={false} align="middle">
                 <Col flex="auto">
-                  <Typography.Text type="secondary">
-                    Choose one favorite pool
-                  </Typography.Text>
-                </Col>
-                <Col>
                   <Button
                     type="text"
                     className="contained"
@@ -155,6 +160,20 @@ const MintSelection = ({
                     onClick={() => setTempTokenInfo(undefined)}
                   >
                     Back
+                  </Button>
+                </Col>
+                <Col>
+                  <Typography.Text type="secondary">
+                    Choose one favorite pool or
+                  </Typography.Text>
+                </Col>
+                <Col>
+                  <Button
+                    type="primary"
+                    icon={<Icon name="sparkles-outline" />}
+                    onClick={onAuto}
+                  >
+                    Auto
                   </Button>
                 </Col>
               </Row>
