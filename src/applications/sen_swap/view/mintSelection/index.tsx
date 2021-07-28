@@ -98,10 +98,7 @@ const MintSelection = ({
             <Search onChange={onMints} isSupportedMint={isSupportedMint} />
           </Col>
           <Col span={24}>
-            <Row
-              gutter={[16, 16]}
-              style={{ maxHeight: 380, overflowY: 'scroll' }}
-            >
+            <Row gutter={[16, 16]} style={{ height: 300, overflowY: 'scroll' }}>
               {mints.map((mint, i) => {
                 const { logoURI, symbol, name } = mint
                 return (
