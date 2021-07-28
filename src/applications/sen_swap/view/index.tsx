@@ -8,7 +8,6 @@ import Ask, { AskData } from './ask'
 import Settings from './settings'
 
 const View = () => {
-  const [settings, setSettings] = useState({ slippage: 0.001, advanced: false })
   const [bidValue, setBidValue] = useState<BidData>({ amount: '' })
   const [askValue, setAskValue] = useState<AskData>({ amount: '' })
 
@@ -24,7 +23,7 @@ const View = () => {
       <Col span={24} style={{ marginTop: -8 }}>
         <Row gutter={[8, 8]} justify="end">
           <Col>
-            <Settings value={settings} onChange={setSettings} />
+            <Settings />
           </Col>
         </Row>
       </Col>

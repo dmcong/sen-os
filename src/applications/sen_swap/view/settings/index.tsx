@@ -10,23 +10,19 @@ import {
 import Slippage from './slippage'
 import Advanced from './advanced'
 
-export type SettingsInfo = {
-  slippage: number
-  advanced: boolean
-}
+import { updateSettings } from '@/sen_swap/controller/settings.controller'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, AppState } from '@/sen_swap/model'
 
-const Settings = ({
-  value,
-  onChange,
-}: {
-  value: SettingsInfo
-  onChange: (value: SettingsInfo) => void
-}) => {
+const Settings = () => {
+  const dispatch = useDispatch<AppDispatch>()
+  const settings = useSelector((state: AppState) => state.settings)
+
   const onSlippage = (slippage: number) => {
-    return onChange({ ...value, slippage })
+    return dispatch(updateSettings({ ...settings, slippage }))
   }
   const onAdvanced = (advanced: boolean) => {
-    return onChange({ ...value, advanced })
+    return dispatch(updateSettings({ ...settings, advanced }))
   }
 
   return (
@@ -39,11 +35,11 @@ const Settings = ({
             <Typography.Title level={5}>Settings</Typography.Title>
           </Col>
           <Col span={24}>
-            <Slippage value={value.slippage} onChange={onSlippage} />
+            <Slippage value={settings.slippage} onChange={onSlippage} />
           </Col>
           <Divider style={{ marginTop: 8, marginBottom: 8 }} />
           <Col span={24}>
-            <Advanced value={value.advanced} onChange={onAdvanced} />
+            <Advanced value={settings.advanced} onChange={onAdvanced} />
           </Col>
         </Row>
       }

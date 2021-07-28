@@ -5,6 +5,7 @@ import devTools from 'store/devTools'
 import { appName } from '../package.json'
 import accounts from '../controller/accounts.controller'
 import pools from '../controller/pools.controller'
+import settings from '../controller/settings.controller'
 
 /**
  * Isolated store
@@ -15,6 +16,7 @@ const model = configureStore({
   reducer: {
     accounts,
     pools,
+    settings,
   },
 })
 

@@ -29,6 +29,7 @@ const MintSelection = ({
   const [visible, setVisible] = useState(false)
   const [mints, setMints] = useState<Array<TokenInfo>>([])
   const pools = useSelector((state: AppState) => state.pools)
+  const settings = useSelector((state: AppState) => state.settings)
   const {
     senos: { tokenProvider },
   } = useSenOs()
@@ -109,6 +110,7 @@ const MintSelection = ({
                         symbol={symbol}
                         name={name}
                         onClick={() => onMint(mint)}
+                        advanced={settings.advanced}
                       />
                     </LazyLoad>
                   </Col>
