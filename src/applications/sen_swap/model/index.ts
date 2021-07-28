@@ -6,6 +6,8 @@ import { appName } from '../package.json'
 import accounts from '../controller/accounts.controller'
 import pools from '../controller/pools.controller'
 import settings from '../controller/settings.controller'
+import bid from '../controller/bid.controller'
+import ask from '../controller/ask.controller'
 
 /**
  * Isolated store
@@ -17,6 +19,8 @@ const model = configureStore({
     accounts,
     pools,
     settings,
+    bid,
+    ask,
   },
 })
 

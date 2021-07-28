@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
 import numeral from 'numeral'
@@ -23,27 +23,26 @@ let timeoutId: ReturnType<typeof setTimeout>
 
 const Ask = () => {
   const [error, setError] = useState('')
-  const [amount, setAmount] = useState('')
-  const [selectionInfo, setSelectionInfo] = useState<SelectionInfo>({
-    pools: [],
-  })
   const dispatch = useDispatch<AppDispatch>()
   const accounts = useSelector((state: AppState) => state.accounts)
+  const askData = useSelector((state: AppState) => state.ask)
 
-  // Compute account data
-  const accountData = useMemo(() => {
-    const { address } = selectionInfo.mintInfo || {}
-    return Object.keys(accounts)
-      .map((key) => accounts[key])
-      .find(({ mint: mintAddress }) => mintAddress === address)
-  }, [accounts, selectionInfo])
+  // Compoute selection info
+  const selectionInfo: SelectionInfo = useMemo(
+    () => ({
+      mintInfo: askData.mintInfo,
+      poolData: askData.poolData,
+      pools: askData.pools,
+    }),
+    [askData],
+  )
   // Compute human-readable balance
   const balance = useMemo(() => {
-    const { decimals } = selectionInfo.mintInfo || {}
-    if (!accountData || !decimals) return 0
-    const { amount } = accountData
+    const { amount } = askData.accountData || {}
+    const { decimals } = askData.mintInfo || {}
+    if (!amount || !decimals) return 0
     return utils.undecimalize(amount, decimals)
-  }, [accountData, selectionInfo])
+  }, [askData])
 
   // Handle errors
   const onError = (er: string) => {
@@ -55,13 +54,17 @@ const Ask = () => {
   const onAmount = (val: string) => {
     const reg = /^-?\d*(\.\d*)?$/
     if (!reg.test(val)) return onError('Invalid character')
-    return setAmount(val)
+    return dispatch(updateAskData({ amount: val }))
   }
-
-  // Return data to store
-  useEffect(() => {
-    dispatch(updateAskData({ amount, accountData, ...selectionInfo }))
-  }, [amount, accountData, selectionInfo, dispatch])
+  // Update ask data
+  const onSelectionInfo = (selectionInfo: SelectionInfo) => {
+    // Compute account data
+    const { address } = selectionInfo.mintInfo || {}
+    const accountData = Object.keys(accounts)
+      .map((key) => accounts[key])
+      .find(({ mint: mintAddress }) => mintAddress === address)
+    dispatch(updateAskData({ accountData, ...selectionInfo }))
+  }
 
   return (
     <Row gutter={[4, 4]}>
@@ -81,12 +84,12 @@ const Ask = () => {
           >
             <Input
               placeholder="0"
-              value={amount}
+              value={askData.amount}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onAmount(e.target.value || '')
               }
               prefix={
-                <Selection value={selectionInfo} onChange={setSelectionInfo} />
+                <Selection value={selectionInfo} onChange={onSelectionInfo} />
               }
               bordered={false}
             />

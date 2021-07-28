@@ -20,6 +20,7 @@ const AccountWatcher = () => {
     },
   } = useSenOs()
 
+  // First-time fetching
   const fetchData = useCallback(async () => {
     try {
       await dispatch(getAccounts({ owner: walletAddress })).unwrap()
@@ -30,7 +31,7 @@ const AccountWatcher = () => {
       })
     }
   }, [dispatch, notify, walletAddress])
-
+  // Watch account changes
   const watchData = useCallback(async () => {
     if (watchId) return console.warn('Already watched')
     const callback = (er: string | null, re: any) => {
@@ -41,7 +42,7 @@ const AccountWatcher = () => {
     const filters = [{ memcmp: { bytes: walletAddress, offset: 32 } }]
     watchId = window.senos.splt.watch(callback, filters)
   }, [dispatch, walletAddress])
-
+  // Unwatch (cancel socket) when component unmounts
   const unwatchData = useCallback(async () => {
     try {
       await window.senos.splt.unwatch(watchId)

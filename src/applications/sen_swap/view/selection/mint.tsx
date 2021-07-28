@@ -45,7 +45,7 @@ const Mint = ({
         <Col flex="auto">
           <Space size={12} style={{ marginLeft: -4 }}>
             <Avatar src={logoURI} size={32}>
-              <Icon name="diamon-outline" />
+              <Icon name="diamond-outline" />
             </Avatar>
             <Typography.Text style={{ margin: 0 }}>{symbol}</Typography.Text>
             <Divider type="vertical" style={{ margin: 0 }} />
@@ -66,7 +66,7 @@ const Mint = ({
               style={{ marginRight: -7 }}
               onClick={onPools}
             >
-              Select Pool
+              View Pools
             </Button>
           ) : null}
         </Col>

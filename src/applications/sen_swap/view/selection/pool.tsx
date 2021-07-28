@@ -53,6 +53,7 @@ const Pool = ({
     const decimals = tokenInfos.map(({ decimals }) => decimals)
     const data = await Promise.all(
       tokenInfos.map(({ extensions }) => {
+        if (!extensions?.coingeckoId) return {} as any
         return utils.parseCGK(extensions?.coingeckoId)
       }),
     )
@@ -91,7 +92,7 @@ const Pool = ({
               size={32}
               style={{ backgroundColor: '#2D3355', border: 'none' }}
             >
-              <Icon name="diamon-outline" />
+              <Icon name="diamond-outline" />
             </Avatar>
           ))}
         </Avatar.Group>

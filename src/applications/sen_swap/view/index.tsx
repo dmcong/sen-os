@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 
 import { Row, Col, Button, Icon } from '@senswap/sen-ui'
 import AccountWatcher from './accountWatcher'
@@ -7,8 +7,19 @@ import Bid from './bid'
 import Ask from './ask'
 import Settings from './settings'
 
+import { AppDispatch, AppState } from '../model'
+import { updateBidData } from '../controller/bid.controller'
+import { updateAskData } from '../controller/ask.controller'
+
 const View = () => {
-  const onSwitch = () => {}
+  const dispatch = useDispatch<AppDispatch>()
+  const bidData = useSelector((state: AppState) => state.bid)
+  const askData = useSelector((state: AppState) => state.ask)
+
+  const onSwitch = () => {
+    dispatch(updateBidData({ ...askData, amount: '' }))
+    dispatch(updateAskData({ ...bidData, amount: '' }))
+  }
 
   return (
     <Row gutter={[8, 8]}>

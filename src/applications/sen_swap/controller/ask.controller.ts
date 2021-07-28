@@ -25,9 +25,9 @@ const initialState: State = {
  */
 
 export const updateAskData = createAsyncThunk(
-  `${NAME}/updateBidData`,
+  `${NAME}/updateAskData`,
   async (askData: Partial<State>) => {
-    return { askData }
+    return askData
   },
 )
 

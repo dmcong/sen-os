@@ -118,7 +118,7 @@ const MintSelection = ({
     const { address: currentPoolAddress } = value.poolData || {} as any
     return (
       <Col span={24} key={address + i}>
-        <LazyLoad height={48} overflow>
+        <LazyLoad height={58} overflow>
           <Pool
             value={pool}
             onClick={() => onPool(pool)}

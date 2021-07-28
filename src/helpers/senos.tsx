@@ -5,6 +5,8 @@ import {
   cloneElement,
   Component,
   forwardRef,
+  useCallback,
+  useMemo,
 } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { account } from '@senswap/sen-js'
@@ -36,14 +38,19 @@ const SenOsProvider = ({
   const dispatch = useDispatch<RootDispatch>()
   // UI instance
   const ui = useSelector((state: RootState) => state.ui)
-  const ntf = (...agrs: Parameters<typeof notify>) => dispatch(notify(...agrs))
+  const ntf = useCallback(
+    (...agrs: Parameters<typeof notify>) => dispatch(notify(...agrs)),
+    [dispatch],
+  )
   // Wallet instance
   const wallet = useSelector((state: RootState) => state.wallet)
   // DB instance
-  const address = wallet.address
-  const db = account.isAddress(address)
-    ? new PDB(address).createInstance(appName)
-    : null
+  const db = useMemo(() => {
+    const address = wallet.address
+    return account.isAddress(address)
+      ? new PDB(address).createInstance(appName)
+      : null
+  }, [wallet, appName])
   // Token Provider
   const tokenProvider = new TokenProvider()
   // SenOS

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { utils } from '@senswap/sen-js'
 import numeral from 'numeral'
@@ -24,27 +24,26 @@ let timeoutId: ReturnType<typeof setTimeout>
 
 const Bid = () => {
   const [error, setError] = useState('')
-  const [amount, setAmount] = useState('')
-  const [selectionInfo, setSelectionInfo] = useState<SelectionInfo>({
-    pools: [],
-  })
   const dispatch = useDispatch<AppDispatch>()
   const accounts = useSelector((state: AppState) => state.accounts)
+  const bidData = useSelector((state: AppState) => state.bid)
 
-  // Compute account data
-  const accountData = useMemo(() => {
-    const { address } = selectionInfo.mintInfo || {}
-    return Object.keys(accounts)
-      .map((key) => accounts[key])
-      .find(({ mint: mintAddress }) => mintAddress === address)
-  }, [accounts, selectionInfo])
+  // Compoute selection info
+  const selectionInfo: SelectionInfo = useMemo(
+    () => ({
+      mintInfo: bidData.mintInfo,
+      poolData: bidData.poolData,
+      pools: bidData.pools,
+    }),
+    [bidData],
+  )
   // Compute human-readable balance
   const balance = useMemo(() => {
-    const { decimals } = selectionInfo.mintInfo || {}
-    if (!accountData || !decimals) return 0
-    const { amount } = accountData
+    const { amount } = bidData.accountData || {}
+    const { decimals } = bidData.mintInfo || {}
+    if (!amount || !decimals) return 0
     return utils.undecimalize(amount, decimals)
-  }, [accountData, selectionInfo])
+  }, [bidData])
 
   // Handle errors
   const onError = (er: string) => {
@@ -56,15 +55,18 @@ const Bid = () => {
   const onAmount = (val: string) => {
     const reg = /^-?\d*(\.\d*)?$/
     if (!reg.test(val)) return onError('Invalid character')
-    return setAmount(val)
+    return dispatch(updateBidData({ amount: val }))
   }
   // All in :)))
   const onMax = () => onAmount(balance.toString())
-
-  // Return data to store
-  useEffect(() => {
-    dispatch(updateBidData({ amount, accountData, ...selectionInfo }))
-  }, [amount, accountData, selectionInfo, dispatch])
+  // Update bid data
+  const onSelectionInfo = (val: SelectionInfo) => {
+    const { address } = val.mintInfo || {}
+    const accountData = Object.keys(accounts)
+      .map((key) => accounts[key])
+      .find(({ mint: mintAddress }) => mintAddress === address)
+    dispatch(updateBidData({ accountData, ...val }))
+  }
 
   return (
     <Row gutter={[4, 4]}>
@@ -84,12 +86,12 @@ const Bid = () => {
           >
             <Input
               placeholder="0"
-              value={amount}
+              value={bidData.amount}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onAmount(e.target.value || '')
               }
               prefix={
-                <Selection value={selectionInfo} onChange={setSelectionInfo} />
+                <Selection value={selectionInfo} onChange={onSelectionInfo} />
               }
               suffix={
                 <Button
