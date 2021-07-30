@@ -1,23 +1,26 @@
-import { PoolData } from '@senswap/sen-js'
+import { useCallback, useEffect, useState } from 'react'
+import { TokenInfo } from '@solana/spl-token-registry'
+import { Routing, utils } from '@senswap/sen-js'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Row, Col, Modal, Icon, Typography, Button } from '@senswap/sen-ui'
 import Hop, { HopData } from './hop'
 
-import { AppDispatch, AppState } from '@/sen_swap/model'
-import { useCallback, useEffect, useState } from 'react'
-import { TokenInfo } from '@solana/spl-token-registry'
 import { useSenOs } from 'helpers/senos'
-import { curve, inverseCurve } from './util'
+import util from 'helpers/util'
+import configs from '@/sen_swap/config'
+import { AppDispatch, AppState } from '@/sen_swap/model'
+import { curve, DECIMALS, inverseCurve } from './util'
 import { updateAskData } from '@/sen_swap/controller/ask.controller'
 import { updateBidData } from '@/sen_swap/controller/bid.controller'
+import { ExtendedPoolData } from '../selection/mintSelection'
 
 const Review = ({
   route,
   visible = false,
   onClose = () => {},
 }: {
-  route: PoolData[]
+  route: ExtendedPoolData[]
   visible: boolean
   onClose: () => void
 }) => {
@@ -26,8 +29,9 @@ const Review = ({
   const dispatch = useDispatch<AppDispatch>()
   const bidData = useSelector((state: AppState) => state.bid)
   const askData = useSelector((state: AppState) => state.ask)
+  const { slippage } = useSelector((state: AppState) => state.settings)
   const {
-    senos: { tokenProvider },
+    senos: { tokenProvider, notify },
   } = useSenOs()
 
   /**
@@ -102,6 +106,91 @@ const Review = ({
     }
   }, [hops, bidData, askData, dispatch])
 
+  /**
+   * Swap function
+   */
+  const swapOrRoute = useCallback(async () => {
+    const {
+      sol: { routingAddress, swapAddress, spltAddress, splataAddress, node },
+    } = configs
+    const routing = new Routing(
+      routingAddress,
+      swapAddress,
+      spltAddress,
+      splataAddress,
+      node,
+    )
+    const { wallet } = window.senos
+    const {
+      dstMintInfo: { decimals: bidDecimals },
+    } = hops[0]
+    const amount = utils.decimalize(bidData.amount, bidDecimals)
+    if (hops.length === 1) {
+      const {
+        srcMintInfo: { address: srcMintAddress },
+        dstMintInfo: { address: dstMintAddress },
+        poolData: { address: poolAddress },
+      } = hops[0]
+      const limit =
+        (amount * (DECIMALS - BigInt(slippage * 10 ** 9))) / DECIMALS
+      return await routing.swap(
+        amount,
+        limit,
+        poolAddress,
+        srcMintAddress,
+        dstMintAddress,
+        wallet,
+      )
+    }
+    if (hops.length === 2) {
+      const {
+        srcMintInfo: { address: srcMintAddress },
+        dstMintInfo: { decimals: middleDecimals },
+        poolData: { address: firstPoolAddress },
+      } = hops[0]
+      const {
+        dstMintInfo: { address: dstMintAddress },
+        poolData: { address: secondPoolAddress },
+      } = hops[1]
+      const firstLimit =
+        (amount * (DECIMALS - BigInt(slippage * 10 ** 9))) / DECIMALS
+      const middleAmount = utils.decimalize(
+        curve(bidData.amount, hops[1]),
+        middleDecimals,
+      )
+      const secondLimit =
+        (middleAmount * (DECIMALS - BigInt(slippage * 10 ** 9))) / DECIMALS
+      return await routing.route(
+        amount,
+        firstLimit,
+        firstPoolAddress,
+        srcMintAddress,
+        secondLimit,
+        secondPoolAddress,
+        dstMintAddress,
+        wallet,
+      )
+    }
+    throw new Error('Invalid swap type')
+  }, [hops, bidData, slippage])
+
+  const onSwap = async () => {
+    try {
+      const { txId } = await swapOrRoute()
+      notify({
+        type: 'success',
+        description: `Swap successfully. Click to view details.`,
+        onClick: () => window.open(util.explorer(txId), '_blank'),
+      })
+      return onClose()
+    } catch (er) {
+      return notify({
+        type: 'error',
+        description: er.message || 'An error occurred',
+      })
+    }
+  }
+
   useEffect(() => {
     parseHops()
   }, [parseHops])
@@ -129,7 +218,7 @@ const Review = ({
           </Col>
         ))}
         <Col span={24}>
-          <Button type="primary" block>
+          <Button type="primary" onClick={onSwap} block>
             Swap
           </Button>
         </Col>

@@ -13,7 +13,7 @@ import Review from './review'
 import { AppDispatch, AppState } from '../model'
 import { updateBidData } from '../controller/bid.controller'
 import { updateAskData } from '../controller/ask.controller'
-import { ExpandedPoolData } from './selection/mintSelection'
+import { ExtendedPoolData } from './selection/mintSelection'
 
 /**
  * Search a direct pool
@@ -22,9 +22,9 @@ import { ExpandedPoolData } from './selection/mintSelection'
  * @returns
  */
 const findDirectPool = (
-  bidPools: ExpandedPoolData[],
-  askPools: ExpandedPoolData[],
-): ExpandedPoolData | null => {
+  bidPools: ExtendedPoolData[],
+  askPools: ExtendedPoolData[],
+): ExtendedPoolData | null => {
   for (const { address: bidPoolAddress } of bidPools) {
     for (const data of askPools) {
       const { address: askPoolAddress } = data
@@ -43,10 +43,10 @@ const findDirectPool = (
  */
 const findOptimalRoute = (
   bidMintAddress: string,
-  bidPools: ExpandedPoolData[],
+  bidPools: ExtendedPoolData[],
   askMintAddress: string,
-  askPools: ExpandedPoolData[],
-): ExpandedPoolData[] => {
+  askPools: ExtendedPoolData[],
+): ExtendedPoolData[] => {
   const indexBidPool = findMaxPoolIndex(bidMintAddress, bidPools)
   const bidPool = bidPools[indexBidPool]
   const indexAskPool = findMaxPoolIndex(askMintAddress, askPools)
@@ -71,7 +71,7 @@ const findMaxPoolIndex = (mintAddress: string, pools: PoolData[]): number => {
 
 const View = () => {
   const [visibleReview, setVisibleReview] = useState(false)
-  const [route, setRoute] = useState<PoolData[]>([])
+  const [route, setRoute] = useState<ExtendedPoolData[]>([])
   const dispatch = useDispatch<AppDispatch>()
   const bidData = useSelector((state: AppState) => state.bid)
   const askData = useSelector((state: AppState) => state.ask)

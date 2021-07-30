@@ -14,14 +14,14 @@ import {
 } from '@senswap/sen-ui'
 
 import { useSenOs } from 'helpers/senos'
-import { ExpandedPoolData } from './mintSelection'
+import { ExtendedPoolData } from './mintSelection'
 
 const Pool = ({
   value,
   onClick,
   active = false,
 }: {
-  value: ExpandedPoolData | undefined
+  value: ExtendedPoolData | undefined
   onClick: () => void
   active?: boolean
 }) => {

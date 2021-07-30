@@ -12,11 +12,11 @@ import { useSenOs } from 'helpers/senos'
 import { useSelector } from 'react-redux'
 import { AppState } from '@/sen_swap/model'
 
-export type ExpandedPoolData = PoolData & { address: string }
+export type ExtendedPoolData = PoolData & { address: string }
 export type SelectionInfo = {
   mintInfo?: TokenInfo
-  poolData?: ExpandedPoolData
-  pools: ExpandedPoolData[]
+  poolData?: ExtendedPoolData
+  pools: ExtendedPoolData[]
 }
 
 const MintSelection = ({
@@ -84,7 +84,7 @@ const MintSelection = ({
     })
   }
   // Return data to parent (users specified a pool)
-  const onPool = (poolData: ExpandedPoolData) => {
+  const onPool = (poolData: ExtendedPoolData) => {
     const availablePools = getAvailablePools(tempTokenInfo)
     return onChange({
       mintInfo: tempTokenInfo,

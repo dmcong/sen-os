@@ -4,14 +4,14 @@ import { TokenInfo } from '@solana/spl-token-registry'
 
 import util from 'helpers/util'
 import { appName } from '../package.json'
-import { ExpandedPoolData } from '../view/selection/mintSelection'
+import { ExtendedPoolData } from '../view/selection/mintSelection'
 
 export type State = {
   amount: string // Desired amount
   accountData?: AccountData // Associated account to the selected token
   mintInfo?: TokenInfo // Selected token
-  poolData?: ExpandedPoolData // Selected pool (for advanced mode)
-  pools: ExpandedPoolData[] // List of available pools
+  poolData?: ExtendedPoolData // Selected pool (for advanced mode)
+  pools: ExtendedPoolData[] // List of available pools
   priority: number
 }
 
