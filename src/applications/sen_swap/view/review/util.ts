@@ -1,4 +1,4 @@
-import { PoolData, Swap } from '@senswap/sen-js'
+import { utils, PoolData, Swap } from '@senswap/sen-js'
 import { HopData } from './hop'
 
 export const ORACLE = Swap.oracle
@@ -16,28 +16,59 @@ export const parseReverse = (
   return BigInt(0)
 }
 
-export const curve = (data: HopData): bigint => {
+export const curve = (bidAmount: string, data: HopData): string => {
   const {
-    srcMintInfo: { address: srcMintAddress },
-    dstMintInfo: { symbol: dstSymbol, address: dstMintAddress },
+    srcMintInfo: { address: srcMintAddress, decimals: bidDecimals },
+    dstMintInfo: {
+      symbol: dstSymbol,
+      address: dstMintAddress,
+      decimals: askDecimals,
+    },
   } = data
+
   const isDiscounted = dstSymbol === 'SEN'
   const fee = isDiscounted ? FEE : FEE + EARN
   const bidReserve = parseReverse(srcMintAddress, data.poolData)
   const askReserve = parseReverse(dstMintAddress, data.poolData)
   const askAmount = ORACLE.curve(
-    data.amount,
+    utils.decimalize(bidAmount, bidDecimals),
     bidReserve,
     askReserve,
     fee,
     DECIMALS,
   )
-  return askAmount
+
+  return utils.undecimalize(askAmount, askDecimals)
 }
 
-export const slippage = (data: HopData): bigint => {
+export const inverseCurve = (askAmount: string, data: HopData): string => {
   const {
-    srcMintInfo: { address: srcMintAddress },
+    srcMintInfo: { address: srcMintAddress, decimals: bidDecimals },
+    dstMintInfo: {
+      symbol: dstSymbol,
+      address: dstMintAddress,
+      decimals: askDecimals,
+    },
+  } = data
+
+  const isDiscounted = dstSymbol === 'SEN'
+  const fee = isDiscounted ? FEE : FEE + EARN
+  const bidReserve = parseReverse(srcMintAddress, data.poolData)
+  const askReserve = parseReverse(dstMintAddress, data.poolData)
+  const bidAmount = ORACLE.inverseCurve(
+    utils.decimalize(askAmount, askDecimals),
+    bidReserve,
+    askReserve,
+    fee,
+    DECIMALS,
+  )
+
+  return utils.undecimalize(bidAmount, bidDecimals)
+}
+
+export const slippage = (bidAmount: string, data: HopData): string => {
+  const {
+    srcMintInfo: { address: srcMintAddress, decimals: bidDecimals },
     dstMintInfo: { symbol: dstSymbol, address: dstMintAddress },
   } = data
 
@@ -46,11 +77,12 @@ export const slippage = (data: HopData): bigint => {
   const bidReserve = parseReverse(srcMintAddress, data.poolData)
   const askReserve = parseReverse(dstMintAddress, data.poolData)
   const slippage = ORACLE.slippage(
-    data.amount,
+    utils.decimalize(bidAmount, bidDecimals),
     bidReserve,
     askReserve,
     fee,
     DECIMALS,
   )
-  return slippage
+
+  return utils.undecimalize(slippage, 9)
 }

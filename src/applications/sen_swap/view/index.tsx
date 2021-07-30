@@ -53,7 +53,7 @@ const findOptimalRoute = (
   const askPool = askPools[indexAskPool]
   return [bidPool, askPool]
 }
-// Find max pool in terms of multiplying reserve_x and reserve s
+// Find max pool in terms of multiplying reserve_x and reserve_s
 const findMaxPoolIndex = (mintAddress: string, pools: PoolData[]): number => {
   return pools
     .map(({ mint_a, reserve_a, mint_b, reserve_b, reserve_s }, index) => {
@@ -76,11 +76,23 @@ const View = () => {
   const bidData = useSelector((state: AppState) => state.bid)
   const askData = useSelector((state: AppState) => state.ask)
 
-  const onSwitch = useCallback(() => {
-    dispatch(updateBidData({ ...askData, amount: '' }))
-    dispatch(updateAskData({ ...bidData, amount: '' }))
+  /**
+   * Switch tokens
+   */
+  const onSwitch = useCallback(async () => {
+    const { amount: bidAmount, priority: bidPriority, ...bidRest } = bidData
+    const { amount: askAmount, priority: askPriority, ...askRest } = askData
+    const amount = bidPriority > askPriority ? bidAmount : askAmount
+    const updateData = bidPriority > askPriority ? updateAskData : updateBidData
+    await dispatch(updateBidData({ ...askRest, amount: '', reset: true }))
+    await dispatch(updateAskData({ ...bidRest, amount: '', reset: true }))
+    await dispatch(updateData({ amount, prioritized: true }))
   }, [dispatch, askData, bidData])
-  const findRouting = useCallback(async () => {
+
+  /**
+   * Find optimals route
+   */
+  const findRoute = useCallback(async () => {
     const { address: bidMintAddress } = bidData.mintInfo || {}
     const bidPools = bidData.poolData ? [bidData.poolData] : bidData.pools
     const { address: askMintAddress } = askData.mintInfo || {}
@@ -109,8 +121,8 @@ const View = () => {
   }, [bidData, askData])
 
   useEffect(() => {
-    findRouting()
-  }, [findRouting])
+    findRoute()
+  }, [findRoute])
 
   return (
     <Row gutter={[8, 8]}>

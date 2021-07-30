@@ -12,22 +12,33 @@ export type State = {
   mintInfo?: TokenInfo // Selected token
   poolData?: ExpandedPoolData // Selected pool (for advanced mode)
   pools: ExpandedPoolData[] // List of available pools
+  priority: number
 }
 
 const NAME = util.normalizeAppName(appName)
 const initialState: State = {
   amount: '',
   pools: [],
+  priority: 0,
 }
 
 /**
  * Actions
  */
 
-export const updateBidData = createAsyncThunk(
+export const updateBidData = createAsyncThunk<
+  Partial<State>,
+  Partial<State> & { prioritized?: boolean; reset?: boolean },
+  { state: any }
+>(
   `${NAME}/updateBidData`,
-  async (bidData: Partial<State>) => {
-    return bidData
+  async ({ prioritized, reset, ...bidData }, { getState }) => {
+    const {
+      bid: { priority: prevPriority },
+      ask: { priority: refPriority },
+    } = getState()
+    const priority = reset ? 0 : prioritized ? refPriority + 1 : prevPriority
+    return { ...bidData, priority }
   },
 )
 

@@ -52,9 +52,9 @@ const Ask = () => {
   }
   // Handle amount
   const onAmount = (val: string) => {
-    const reg = /^-?\d*(\.\d*)?$/
+    const reg = /^\d*(\.\d*)?$/
     if (!reg.test(val)) return onError('Invalid character')
-    return dispatch(updateAskData({ amount: val }))
+    return dispatch(updateAskData({ amount: val, prioritized: true }))
   }
   // Update ask data
   const onSelectionInfo = (selectionInfo: SelectionInfo) => {
@@ -97,14 +97,13 @@ const Ask = () => {
         </Card>
       </Col>
       <Col span={24}>
-        <Row gutter={[4, 4]} wrap={false} style={{ fontSize: 11 }}>
-          <Col flex="auto">
-            <Typography.Text type="secondary">Price:</Typography.Text>
+        <Row gutter={[4, 4]} justify="end" style={{ fontSize: 11 }}>
+          <Col>
+            <Typography.Text type="secondary">
+              Available: {numeral(balance || 0).format('0,0.[00]')}{' '}
+              {selectionInfo.mintInfo?.symbol || 'TOKEN'}
+            </Typography.Text>
           </Col>
-          <Typography.Text type="secondary">
-            Available: {numeral(balance || 0).format('0,0.[00]')}{' '}
-            {selectionInfo.mintInfo?.symbol || 'TOKEN'}
-          </Typography.Text>
         </Row>
       </Col>
     </Row>

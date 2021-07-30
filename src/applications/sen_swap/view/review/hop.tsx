@@ -17,31 +17,22 @@ import { AppState } from '@/sen_swap/model'
 import { curve, slippage, FEE, EARN, DECIMALS } from './util'
 
 export type HopData = {
-  amount: bigint
   poolData: PoolData
   srcMintInfo: TokenInfo
   dstMintInfo: TokenInfo
 }
 
-const Hop = ({ data }: { data: HopData }) => {
+const Hop = ({ bidAmount, data }: { bidAmount: string; data: HopData }) => {
   const settings = useSelector((state: AppState) => state.settings)
   const {
-    srcMintInfo: {
-      logoURI: srcLogoURI,
-      symbol: srcSymbol,
-      decimals: bidDecimals,
-    },
-    dstMintInfo: {
-      logoURI: dstLogoURI,
-      symbol: dstSymbol,
-      decimals: askDecimals,
-    },
+    srcMintInfo: { logoURI: srcLogoURI, symbol: srcSymbol },
+    dstMintInfo: { logoURI: dstLogoURI, symbol: dstSymbol },
   } = data
 
   const isDiscounted = dstSymbol === 'SEN'
   const fee = isDiscounted ? FEE : FEE + EARN
-  const askAmount = curve(data)
-  const slippageRate = slippage(data)
+  const askAmount = curve(bidAmount, data)
+  const slippageRate = slippage(bidAmount, data)
 
   return (
     <Card bordered={false}>
@@ -68,9 +59,7 @@ const Hop = ({ data }: { data: HopData }) => {
               Bid
             </Typography.Text>
             <Space>
-              <Typography.Text>
-                {utils.undecimalize(data.amount, bidDecimals)}
-              </Typography.Text>
+              <Typography.Text>{bidAmount}</Typography.Text>
               <Typography.Text
                 type="secondary"
                 style={{ fontSize: 11, margin: 0 }}
@@ -89,9 +78,7 @@ const Hop = ({ data }: { data: HopData }) => {
               Ask
             </Typography.Text>
             <Space>
-              <Typography.Text>
-                {utils.undecimalize(askAmount, askDecimals)}
-              </Typography.Text>
+              <Typography.Text>{askAmount}</Typography.Text>
               <Typography.Text
                 type="secondary"
                 style={{ fontSize: 11, margin: 0 }}
@@ -111,10 +98,9 @@ const Hop = ({ data }: { data: HopData }) => {
             </Typography.Text>
             <Space>
               <Typography.Text>
-                {numeral(
-                  Number(utils.undecimalize(askAmount, askDecimals)) *
-                    (1 - settings.slippage),
-                ).format('0.[0000]')}
+                {numeral(Number(askAmount) * (1 - settings.slippage)).format(
+                  '0.[0000]',
+                )}
               </Typography.Text>
               <Typography.Text
                 type="secondary"
@@ -135,7 +121,9 @@ const Hop = ({ data }: { data: HopData }) => {
             </Typography.Text>
             <Space>
               <Typography.Text>
-                {numeral(utils.div(askAmount, data.amount)).format('0.[0000]')}
+                {numeral(Number(askAmount) / Number(bidAmount)).format(
+                  '0.[0000]',
+                )}
               </Typography.Text>
               <Typography.Text
                 type="secondary"
@@ -162,10 +150,7 @@ const Hop = ({ data }: { data: HopData }) => {
                 <Icon name="arrow-down-circle-outline" />{' '}
               </Typography.Text>
               <Typography.Text type="danger">
-                {numeral(utils.div(slippageRate, DECIMALS) * 100).format(
-                  '0.[0000]',
-                )}{' '}
-                %
+                {numeral(Number(slippageRate) * 100).format('0.[0000]')} %
               </Typography.Text>
             </Space>
           </Space>
