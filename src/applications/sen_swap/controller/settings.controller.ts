@@ -10,7 +10,7 @@ export type State = {
 
 const NAME = util.normalizeAppName(appName)
 const initialState: State = {
-  slippage: 0.005,
+  slippage: 0.01,
   advanced: false,
 }
 

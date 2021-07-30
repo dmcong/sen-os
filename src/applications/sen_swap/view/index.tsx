@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Swap } from '@senswap/sen-js'
+import { account, PoolData } from '@senswap/sen-js'
 
 import { Row, Col, Button, Icon } from '@senswap/sen-ui'
 import AccountWatcher from './accountWatcher'
@@ -15,47 +15,98 @@ import { updateBidData } from '../controller/bid.controller'
 import { updateAskData } from '../controller/ask.controller'
 import { ExpandedPoolData } from './selection/mintSelection'
 
-const oracle = Swap.oracle
+/**
+ * Search a direct pool
+ * @param bidPools
+ * @param askPools
+ * @returns
+ */
+const findDirectPool = (
+  bidPools: ExpandedPoolData[],
+  askPools: ExpandedPoolData[],
+): ExpandedPoolData | null => {
+  for (const { address: bidPoolAddress } of bidPools) {
+    for (const data of askPools) {
+      const { address: askPoolAddress } = data
+      if (bidPoolAddress === askPoolAddress) return data
+    }
+  }
+  return null
+}
+/**
+ * Search an optimal route
+ * @param bidMintAddress
+ * @param bidPools
+ * @param askMintAddress
+ * @param askPools
+ * @returns
+ */
+const findOptimalRoute = (
+  bidMintAddress: string,
+  bidPools: ExpandedPoolData[],
+  askMintAddress: string,
+  askPools: ExpandedPoolData[],
+): ExpandedPoolData[] => {
+  const indexBidPool = findMaxPoolIndex(bidMintAddress, bidPools)
+  const bidPool = bidPools[indexBidPool]
+  const indexAskPool = findMaxPoolIndex(askMintAddress, askPools)
+  const askPool = askPools[indexAskPool]
+  return [bidPool, askPool]
+}
+// Find max pool in terms of multiplying reserve_x and reserve s
+const findMaxPoolIndex = (mintAddress: string, pools: PoolData[]): number => {
+  return pools
+    .map(({ mint_a, reserve_a, mint_b, reserve_b, reserve_s }, index) => {
+      let point = BigInt(0)
+      if (mint_a === mintAddress) point = reserve_a * reserve_s
+      if (mint_b === mintAddress) point = reserve_b * reserve_s
+      return { index, point }
+    })
+    .sort(({ point: firstPoint }, { point: secondPoint }) => {
+      if (firstPoint < secondPoint) return 1
+      if (firstPoint > secondPoint) return -1
+      return 0
+    })[0].index
+}
 
 const View = () => {
   const [visibleReview, setVisibleReview] = useState(false)
+  const [route, setRoute] = useState<PoolData[]>([])
   const dispatch = useDispatch<AppDispatch>()
   const bidData = useSelector((state: AppState) => state.bid)
   const askData = useSelector((state: AppState) => state.ask)
 
-  const onSwitch = () => {
+  const onSwitch = useCallback(() => {
     dispatch(updateBidData({ ...askData, amount: '' }))
     dispatch(updateAskData({ ...bidData, amount: '' }))
-  }
-
+  }, [dispatch, askData, bidData])
   const findRouting = useCallback(async () => {
+    const { address: bidMintAddress } = bidData.mintInfo || {}
     const bidPools = bidData.poolData ? [bidData.poolData] : bidData.pools
+    const { address: askMintAddress } = askData.mintInfo || {}
     const askPools = askData.poolData ? [askData.poolData] : askData.pools
+    // Validation
+    if (
+      !bidMintAddress ||
+      !account.isAddress(bidMintAddress) ||
+      !askMintAddress ||
+      !account.isAddress(askMintAddress) ||
+      !bidPools.length ||
+      !askPools.length
+    )
+      return console.warn('Cannot find available tokens, pools')
     // First attempt: Find a direct pool
     const directPool = findDirectPool(bidPools, askPools)
-    if (directPool) console.log(directPool)
+    if (directPool) return setRoute([directPool])
     // Second attempt: Find max-reserve pool for each token
-    const optimalRoute = findOptimalRoute(bidPools, askPools)
-    console.log(optimalRoute)
+    const optimalRoute = findOptimalRoute(
+      bidMintAddress,
+      bidPools,
+      askMintAddress,
+      askPools,
+    )
+    return setRoute(optimalRoute)
   }, [bidData, askData])
-  const findDirectPool = (
-    bidPools: ExpandedPoolData[],
-    askPools: ExpandedPoolData[],
-  ): ExpandedPoolData | null => {
-    for (const { address: bidPoolAddress } of bidPools) {
-      for (const data of askPools) {
-        const { address: askPoolAddress } = data
-        if (bidPoolAddress === askPoolAddress) return data
-      }
-    }
-    return null
-  }
-  const findOptimalRoute = (
-    bidPools: ExpandedPoolData[],
-    askPools: ExpandedPoolData[],
-  ): ExpandedPoolData[] => {
-    return []
-  }
 
   useEffect(() => {
     findRouting()
@@ -89,10 +140,16 @@ const View = () => {
       </Col>
       <Col span={24} style={{ height: 8 }} /> {/* Safe sapce */}
       <Col span={24}>
-        <Button type="primary" onClick={() => setVisibleReview(true)} block>
+        <Button
+          type="primary"
+          onClick={() => setVisibleReview(true)}
+          disabled={!route.length || !bidData.amount || !askData.amount}
+          block
+        >
           Review & Swap
         </Button>
         <Review
+          route={route}
           visible={visibleReview}
           onClose={() => setVisibleReview(false)}
         />
