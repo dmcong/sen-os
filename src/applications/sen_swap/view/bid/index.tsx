@@ -45,7 +45,7 @@ const Bid = () => {
     const { decimals } = bidData.mintInfo || {}
     if (!amount || !decimals) return 0
     return utils.undecimalize(amount, decimals)
-  }, [accounts, bidData])
+  }, [accounts, bidData.accountAddress, bidData.mintInfo])
 
   // Handle errors
   const onError = (er: string) => {

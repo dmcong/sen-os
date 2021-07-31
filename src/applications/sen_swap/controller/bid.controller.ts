@@ -6,7 +6,7 @@ import { appName } from '../package.json'
 
 export type State = {
   amount: string // Desired amount
-  accountAddress?: string // Associated account to the selected token
+  accountAddress: string // Associated account to the selected token
   mintInfo?: TokenInfo // Selected token
   poolAddress?: string // Selected pool (for advanced mode)
   poolAddresses: string[] // List of available pools
@@ -16,6 +16,7 @@ export type State = {
 const NAME = util.normalizeAppName(appName)
 const initialState: State = {
   amount: '',
+  accountAddress: '',
   poolAddresses: [],
   priority: 0,
 }

@@ -7,6 +7,7 @@ import Header from '@/sen_wallet/view/components/header'
 import Info from '@/sen_wallet/view/components/info'
 import Transfer from './transfer'
 import Wrapper from './wrapper'
+import Close from './close'
 
 import { useSenOs } from 'helpers/senos'
 
@@ -53,6 +54,9 @@ const AccountActions = ({ visible, onClose, accountData }) => {
               disabled={mint !== DEFAULT_WSOL}
             >
               <Wrapper data={data} onChange={onClose} />
+            </Tabs.TabPane>
+            <Tabs.TabPane key="close" tab="Close">
+              <Close data={data} onChange={onClose} />
             </Tabs.TabPane>
           </Tabs>
         </Col>

@@ -13,7 +13,7 @@ const Advanced = ({
         <Row gutter={[8, 8]} wrap={false}>
           <Col flex="auto">
             <Typography.Text type="secondary" style={{ fontSize: 11 }}>
-              Advanced Mode
+              Advance Mode
             </Typography.Text>
           </Col>
           <Col>
@@ -26,6 +26,16 @@ const Advanced = ({
             />
           </Col>
         </Row>
+      </Col>
+      <Col span={24}>
+        <Typography.Paragraph style={{ fontSize: 11, textAlign: 'justify' }}>
+          <Icon name="warning-outline" /> This advance mode will disable the
+          automatic optimization that often results in bad rates and lost funds.
+          Only use this mode if you know what you are doing.{' '}
+          <strong style={{ color: '#f9575e' }}>
+            The advance mode will display in the tokenlist.
+          </strong>
+        </Typography.Paragraph>
       </Col>
     </Row>
   )

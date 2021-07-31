@@ -1,5 +1,4 @@
 import { Row, Col, Button, Typography, Icon, Tooltip } from '@senswap/sen-ui'
-import { Fragment } from 'react'
 
 const Option = ({
   label,
@@ -42,15 +41,13 @@ const Slippage = ({
             <Tooltip
               placement="right"
               title={
-                <Fragment>
-                  <span>
-                    Your transaction will be canceled if the confirmed price
-                    breaks the limited range of{' '}
-                  </span>
+                <span>
+                  Your transaction will be canceled if the confirmed price
+                  breaks the limited range of{' '}
                   <strong style={{ color: '#f9575e' }}>{`${
                     value * 100
                   }%.`}</strong>
-                </Fragment>
+                </span>
               }
             >
               <Button
