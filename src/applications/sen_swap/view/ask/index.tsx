@@ -1,6 +1,6 @@
 import React, { useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { utils } from '@senswap/sen-js'
+import { account, utils } from '@senswap/sen-js'
 import numeral from 'numeral'
 
 import {
@@ -31,18 +31,20 @@ const Ask = () => {
   const selectionInfo: SelectionInfo = useMemo(
     () => ({
       mintInfo: askData.mintInfo,
-      poolData: askData.poolData,
-      pools: askData.pools,
+      poolAddress: askData.poolAddress,
+      poolAddresses: askData.poolAddresses,
     }),
     [askData],
   )
   // Compute human-readable balance
   const balance = useMemo(() => {
-    const { amount } = askData.accountData || {}
+    if (!account.isAddress(askData.accountAddress)) return 0
+    const accountAddress = askData.accountAddress as string
+    const { amount } = accounts[accountAddress] || {}
     const { decimals } = askData.mintInfo || {}
     if (!amount || !decimals) return 0
     return utils.undecimalize(amount, decimals)
-  }, [askData])
+  }, [accounts, askData])
 
   // Handle errors
   const onError = (er: string) => {
@@ -60,10 +62,10 @@ const Ask = () => {
   const onSelectionInfo = (selectionInfo: SelectionInfo) => {
     // Compute account data
     const { address } = selectionInfo.mintInfo || {}
-    const accountData = Object.keys(accounts)
-      .map((key) => accounts[key])
-      .find(({ mint: mintAddress }) => mintAddress === address)
-    dispatch(updateAskData({ accountData, ...selectionInfo }))
+    const accountAddress = Object.keys(accounts).find(
+      (key) => accounts[key].mint === address,
+    )
+    dispatch(updateAskData({ accountAddress, ...selectionInfo }))
   }
 
   return (

@@ -1,24 +1,22 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { AccountData } from '@senswap/sen-js'
 import { TokenInfo } from '@solana/spl-token-registry'
 
 import util from 'helpers/util'
 import { appName } from '../package.json'
-import { ExtendedPoolData } from '../view/selection/mintSelection'
 
 export type State = {
   amount: string // Desired amount
-  accountData?: AccountData // Associated account to the selected token
+  accountAddress?: string // Associated account to the selected token
   mintInfo?: TokenInfo // Selected token
-  poolData?: ExtendedPoolData // Selected pool (for advanced mode)
-  pools: ExtendedPoolData[] // List of available pools
+  poolAddress?: string // Selected pool (for advanced mode)
+  poolAddresses: string[] // List of available pools
   priority: number
 }
 
 const NAME = util.normalizeAppName(appName)
 const initialState: State = {
   amount: '',
-  pools: [],
+  poolAddresses: [],
   priority: 0,
 }
 

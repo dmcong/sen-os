@@ -25,7 +25,6 @@ export const curve = (bidAmount: string, data: HopData): string => {
       decimals: askDecimals,
     },
   } = data
-
   const isDiscounted = dstSymbol === 'SEN'
   const fee = isDiscounted ? FEE : FEE + EARN
   const bidReserve = parseReverse(srcMintAddress, data.poolData)
@@ -37,7 +36,6 @@ export const curve = (bidAmount: string, data: HopData): string => {
     fee,
     DECIMALS,
   )
-
   return utils.undecimalize(askAmount, askDecimals)
 }
 
@@ -50,7 +48,6 @@ export const inverseCurve = (askAmount: string, data: HopData): string => {
       decimals: askDecimals,
     },
   } = data
-
   const isDiscounted = dstSymbol === 'SEN'
   const fee = isDiscounted ? FEE : FEE + EARN
   const bidReserve = parseReverse(srcMintAddress, data.poolData)
@@ -62,7 +59,6 @@ export const inverseCurve = (askAmount: string, data: HopData): string => {
     fee,
     DECIMALS,
   )
-
   return utils.undecimalize(bidAmount, bidDecimals)
 }
 
@@ -71,7 +67,6 @@ export const slippage = (bidAmount: string, data: HopData): string => {
     srcMintInfo: { address: srcMintAddress, decimals: bidDecimals },
     dstMintInfo: { symbol: dstSymbol, address: dstMintAddress },
   } = data
-
   const isDiscounted = dstSymbol === 'SEN'
   const fee = isDiscounted ? FEE : FEE + EARN
   const bidReserve = parseReverse(srcMintAddress, data.poolData)
@@ -83,6 +78,5 @@ export const slippage = (bidAmount: string, data: HopData): string => {
     fee,
     DECIMALS,
   )
-
   return utils.undecimalize(slippage, 9)
 }

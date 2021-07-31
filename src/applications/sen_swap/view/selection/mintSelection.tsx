@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react'
 import { TokenInfo } from '@solana/spl-token-registry'
-import { account, PoolData } from '@senswap/sen-js'
+import { account } from '@senswap/sen-js'
 
 import { Row, Col, Typography, Button, Icon } from '@senswap/sen-ui'
 import LazyLoad from 'react-lazyload'
@@ -12,11 +12,10 @@ import { useSenOs } from 'helpers/senos'
 import { useSelector } from 'react-redux'
 import { AppState } from '@/sen_swap/model'
 
-export type ExtendedPoolData = PoolData & { address: string }
 export type SelectionInfo = {
   mintInfo?: TokenInfo
-  poolData?: ExtendedPoolData
-  pools: ExtendedPoolData[]
+  poolAddress?: string
+  poolAddresses: string[]
 }
 
 const MintSelection = ({
@@ -61,44 +60,43 @@ const MintSelection = ({
     [tokenProvider, isSupportedMint],
   )
   // Compute available pools
-  const getAvailablePools = useCallback(
+  const getAvailablePoolAddresses = useCallback(
     (tokenInfo: TokenInfo | undefined) => {
       const mintAddress = tokenInfo?.address
       if (!mintAddress || !account.isAddress(mintAddress)) return []
-      return Object.keys(pools)
-        .map((poolAddress) => ({ address: poolAddress, ...pools[poolAddress] }))
-        .filter(({ mint_s, mint_a, mint_b }) =>
-          [mint_s, mint_a, mint_b].includes(mintAddress),
-        )
+      return Object.keys(pools).filter((poolAddress) => {
+        const { mint_s, mint_a, mint_b } = pools[poolAddress]
+        return [mint_s, mint_a, mint_b].includes(mintAddress)
+      })
     },
     [pools],
   )
 
   // Return data to parent (users didn't select pool)
   const onMint = (tokenInfo: TokenInfo) => {
-    const availablePools = getAvailablePools(tokenInfo)
+    const poolAddresses = getAvailablePoolAddresses(tokenInfo)
     return onChange({
       mintInfo: tokenInfo,
-      poolData: undefined,
-      pools: availablePools,
+      poolAddress: undefined,
+      poolAddresses,
     })
   }
   // Return data to parent (users specified a pool)
-  const onPool = (poolData: ExtendedPoolData) => {
-    const availablePools = getAvailablePools(tempTokenInfo)
+  const onPool = (poolAddress: string) => {
+    const poolAddresses = getAvailablePoolAddresses(tempTokenInfo)
     return onChange({
       mintInfo: tempTokenInfo,
-      poolData,
-      pools: availablePools,
+      poolAddress,
+      poolAddresses,
     })
   }
   // Auto pool selection
   const onAuto = () => {
-    const availablePools = getAvailablePools(tempTokenInfo)
+    const poolAddresses = getAvailablePoolAddresses(tempTokenInfo)
     return onChange({
       mintInfo: tempTokenInfo,
-      poolData: undefined,
-      pools: availablePools,
+      poolAddress: undefined,
+      poolAddresses,
     })
   }
 
@@ -123,21 +121,23 @@ const MintSelection = ({
     )
   })
   // Render pool list
-  const poolList = getAvailablePools(tempTokenInfo).map((pool, i) => {
-    const { address } = pool
-    const { address: currentPoolAddress } = value.poolData || ({} as any)
-    return (
-      <Col span={24} key={address + i}>
-        <LazyLoad height={58} overflow>
-          <Pool
-            value={pool}
-            onClick={() => onPool(pool)}
-            active={address === currentPoolAddress}
-          />
-        </LazyLoad>
-      </Col>
-    )
-  })
+  const poolList = getAvailablePoolAddresses(tempTokenInfo).map(
+    (poolAddress, i) => {
+      const { poolAddress: currentPoolAddress } = value
+      const poolData = pools[poolAddress]
+      return (
+        <Col span={24} key={poolAddress + i}>
+          <LazyLoad height={58} overflow>
+            <Pool
+              value={poolData}
+              onClick={() => onPool(poolAddress)}
+              active={poolAddress === currentPoolAddress}
+            />
+          </LazyLoad>
+        </Col>
+      )
+    },
+  )
 
   return (
     <Row gutter={[16, 16]}>

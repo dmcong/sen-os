@@ -13,7 +13,8 @@ import Review from './review'
 import { AppDispatch, AppState } from '../model'
 import { updateBidData } from '../controller/bid.controller'
 import { updateAskData } from '../controller/ask.controller'
-import { ExtendedPoolData } from './selection/mintSelection'
+
+export type ExtendedPoolData = PoolData & { address: string }
 
 /**
  * Search a direct pool
@@ -24,14 +25,13 @@ import { ExtendedPoolData } from './selection/mintSelection'
 const findDirectPool = (
   bidPools: ExtendedPoolData[],
   askPools: ExtendedPoolData[],
-): ExtendedPoolData | null => {
+): string | undefined => {
   for (const { address: bidPoolAddress } of bidPools) {
-    for (const data of askPools) {
-      const { address: askPoolAddress } = data
-      if (bidPoolAddress === askPoolAddress) return data
+    for (const { address: askPoolAddress } of askPools) {
+      if (bidPoolAddress === askPoolAddress) return bidPoolAddress
     }
   }
-  return null
+  return undefined
 }
 /**
  * Search an optimal route
@@ -46,12 +46,12 @@ const findOptimalRoute = (
   bidPools: ExtendedPoolData[],
   askMintAddress: string,
   askPools: ExtendedPoolData[],
-): ExtendedPoolData[] => {
+): string[] => {
   const indexBidPool = findMaxPoolIndex(bidMintAddress, bidPools)
-  const bidPool = bidPools[indexBidPool]
+  const { address: bidPoolAddress } = bidPools[indexBidPool]
   const indexAskPool = findMaxPoolIndex(askMintAddress, askPools)
-  const askPool = askPools[indexAskPool]
-  return [bidPool, askPool]
+  const { address: askPoolAddress } = askPools[indexAskPool]
+  return [bidPoolAddress, askPoolAddress]
 }
 // Find max pool in terms of multiplying reserve_x and reserve_s
 const findMaxPoolIndex = (mintAddress: string, pools: PoolData[]): number => {
@@ -71,8 +71,9 @@ const findMaxPoolIndex = (mintAddress: string, pools: PoolData[]): number => {
 
 const View = () => {
   const [visibleReview, setVisibleReview] = useState(false)
-  const [route, setRoute] = useState<ExtendedPoolData[]>([])
+  const [route, setRoute] = useState<string[]>([])
   const dispatch = useDispatch<AppDispatch>()
+  const pools = useSelector((state: AppState) => state.pools)
   const bidData = useSelector((state: AppState) => state.bid)
   const askData = useSelector((state: AppState) => state.ask)
 
@@ -92,33 +93,58 @@ const View = () => {
   /**
    * Find optimals route
    */
+  const parsePools = useCallback(
+    (
+      poolAddress: string | undefined,
+      poolAddresses: string[],
+    ): ExtendedPoolData[] => {
+      return account.isAddress(poolAddress)
+        ? [
+            {
+              address: poolAddress as string,
+              ...pools[poolAddress as string],
+            },
+          ]
+        : poolAddresses.map((address) => ({ address, ...pools[address] }))
+    },
+    [pools],
+  )
   const findRoute = useCallback(async () => {
-    const { address: bidMintAddress } = bidData.mintInfo || {}
-    const bidPools = bidData.poolData ? [bidData.poolData] : bidData.pools
-    const { address: askMintAddress } = askData.mintInfo || {}
-    const askPools = askData.poolData ? [askData.poolData] : askData.pools
+    const {
+      poolAddress: bidPoolAddress,
+      poolAddresses: bidPoolAddresses,
+      mintInfo: bidMintInfo,
+    } = bidData
+    const { address: bidMintAddress } = bidMintInfo || {}
+    const bidPools = parsePools(bidPoolAddress, bidPoolAddresses)
+    const {
+      poolAddress: askPoolAddress,
+      poolAddresses: askPoolAddresses,
+      mintInfo: askMintInfo,
+    } = askData
+    const { address: askMintAddress } = askMintInfo || {}
+    const askPools = parsePools(askPoolAddress, askPoolAddresses)
     // Validation
     if (
-      !bidMintAddress ||
       !account.isAddress(bidMintAddress) ||
-      !askMintAddress ||
       !account.isAddress(askMintAddress) ||
       !bidPools.length ||
       !askPools.length
     )
       return console.warn('Cannot find available tokens, pools')
     // First attempt: Find a direct pool
-    const directPool = findDirectPool(bidPools, askPools)
-    if (directPool) return setRoute([directPool])
+    const directPoolAddress = findDirectPool(bidPools, askPools)
+    if (account.isAddress(directPoolAddress))
+      return setRoute([directPoolAddress as string])
     // Second attempt: Find max-reserve pool for each token
     const optimalRoute = findOptimalRoute(
-      bidMintAddress,
+      bidMintAddress as string,
       bidPools,
-      askMintAddress,
+      askMintAddress as string,
       askPools,
     )
     return setRoute(optimalRoute)
-  }, [bidData, askData])
+  }, [parsePools, bidData, askData])
 
   useEffect(() => {
     findRoute()

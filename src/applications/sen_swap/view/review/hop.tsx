@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux'
 import { TokenInfo } from '@solana/spl-token-registry'
-import { utils } from '@senswap/sen-js'
+import { PoolData, utils } from '@senswap/sen-js'
 import numeral from 'numeral'
 
 import {
@@ -15,10 +15,9 @@ import {
 } from '@senswap/sen-ui'
 import { AppState } from '@/sen_swap/model'
 import { curve, slippage, FEE, EARN, DECIMALS } from './util'
-import { ExtendedPoolData } from '../selection/mintSelection'
 
 export type HopData = {
-  poolData: ExtendedPoolData
+  poolData: PoolData & { address: string }
   srcMintInfo: TokenInfo
   dstMintInfo: TokenInfo
 }

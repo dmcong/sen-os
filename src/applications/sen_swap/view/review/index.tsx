@@ -13,20 +13,20 @@ import { AppDispatch, AppState } from '@/sen_swap/model'
 import { curve, DECIMALS, inverseCurve } from './util'
 import { updateAskData } from '@/sen_swap/controller/ask.controller'
 import { updateBidData } from '@/sen_swap/controller/bid.controller'
-import { ExtendedPoolData } from '../selection/mintSelection'
 
 const Review = ({
   route,
   visible = false,
   onClose = () => {},
 }: {
-  route: ExtendedPoolData[]
+  route: string[]
   visible: boolean
   onClose: () => void
 }) => {
   const [hops, setHops] = useState<HopData[]>([])
   const [bidAmounts, setBidAmounts] = useState<string[]>([])
   const dispatch = useDispatch<AppDispatch>()
+  const pools = useSelector((state: AppState) => state.pools)
   const bidData = useSelector((state: AppState) => state.bid)
   const askData = useSelector((state: AppState) => state.ask)
   const { slippage } = useSelector((state: AppState) => state.settings)
@@ -39,47 +39,48 @@ const Review = ({
    */
   const parseHops = useCallback(async () => {
     if (route.length === 1) {
+      const poolData = pools[route[0]]
       const hop: HopData = {
-        poolData: route[0],
+        poolData: { address: route[0], ...poolData },
         srcMintInfo: bidData.mintInfo as TokenInfo,
         dstMintInfo: askData.mintInfo as TokenInfo,
       }
       setHops([hop])
     }
     if (route.length === 2) {
-      const middleMintInfo = await tokenProvider.findByAddress(route[0].mint_s)
+      const firstPoolData = pools[route[0]]
+      const middleMintInfo = await tokenProvider.findByAddress(
+        firstPoolData.mint_s,
+      )
       const firstHop: HopData = {
-        poolData: route[0],
+        poolData: { address: route[0], ...firstPoolData },
         srcMintInfo: bidData.mintInfo as TokenInfo,
         dstMintInfo: middleMintInfo as TokenInfo,
       }
+      const secondPoolData = pools[route[1]]
       const secondHop: HopData = {
-        poolData: route[1],
+        poolData: { address: route[1], ...secondPoolData },
         srcMintInfo: middleMintInfo as TokenInfo,
         dstMintInfo: askData.mintInfo as TokenInfo,
       }
       setHops([firstHop, secondHop])
     }
-  }, [route, bidData, askData, tokenProvider])
+  }, [route, bidData, askData, tokenProvider, pools])
 
   /**
    * Infer amounts
    */
-  const isValidAmount = (amount: string) => {
-    if (!amount || !Number(amount)) return false
-    return true
-  }
   const inferAmmount = useCallback(async () => {
     if (hops.length === 1) {
       if (bidData.priority > askData.priority) {
-        const amount = !isValidAmount(bidData.amount)
+        const amount = !Number(bidData.amount)
           ? bidData.amount
           : curve(bidData.amount, hops[0])
         setBidAmounts([bidData.amount])
         return dispatch(updateAskData({ amount }))
       }
       if (bidData.priority < askData.priority) {
-        const amount = !isValidAmount(askData.amount)
+        const amount = !Number(askData.amount)
           ? askData.amount
           : inverseCurve(askData.amount, hops[0])
         setBidAmounts([amount])
@@ -88,7 +89,7 @@ const Review = ({
     }
     if (hops.length === 2) {
       if (bidData.priority > askData.priority) {
-        const middleAmount = !isValidAmount(bidData.amount)
+        const middleAmount = !Number(bidData.amount)
           ? bidData.amount
           : curve(bidData.amount, hops[0])
         const amount = curve(middleAmount, hops[1])
@@ -96,7 +97,7 @@ const Review = ({
         return dispatch(updateAskData({ amount }))
       }
       if (bidData.priority < askData.priority) {
-        const middleAmount = !isValidAmount(askData.amount)
+        const middleAmount = !Number(askData.amount)
           ? askData.amount
           : inverseCurve(askData.amount, hops[1])
         const amount = inverseCurve(middleAmount, hops[0])
@@ -128,11 +129,15 @@ const Review = ({
     if (hops.length === 1) {
       const {
         srcMintInfo: { address: srcMintAddress },
-        dstMintInfo: { address: dstMintAddress },
+        dstMintInfo: { address: dstMintAddress, decimals: askDecimals },
         poolData: { address: poolAddress },
       } = hops[0]
+      const askAmount = utils.decimalize(
+        curve(bidData.amount, hops[0]),
+        askDecimals,
+      )
       const limit =
-        (amount * (DECIMALS - BigInt(slippage * 10 ** 9))) / DECIMALS
+        (askAmount * (DECIMALS - BigInt(slippage * 10 ** 9))) / DECIMALS
       return await routing.swap(
         amount,
         limit,
@@ -149,17 +154,21 @@ const Review = ({
         poolData: { address: firstPoolAddress },
       } = hops[0]
       const {
-        dstMintInfo: { address: dstMintAddress },
+        dstMintInfo: { address: dstMintAddress, decimals: askDecimals },
         poolData: { address: secondPoolAddress },
       } = hops[1]
-      const firstLimit =
-        (amount * (DECIMALS - BigInt(slippage * 10 ** 9))) / DECIMALS
       const middleAmount = utils.decimalize(
-        curve(bidData.amount, hops[1]),
+        curve(bidData.amount, hops[0]),
         middleDecimals,
       )
-      const secondLimit =
+      const firstLimit =
         (middleAmount * (DECIMALS - BigInt(slippage * 10 ** 9))) / DECIMALS
+      const askAmount = utils.decimalize(
+        curve(curve(bidData.amount, hops[0]), hops[1]),
+        askDecimals,
+      )
+      const secondLimit =
+        (askAmount * (DECIMALS - BigInt(slippage * 10 ** 9))) / DECIMALS
       return await routing.route(
         amount,
         firstLimit,

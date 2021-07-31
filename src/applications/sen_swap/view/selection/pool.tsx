@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { account, utils } from '@senswap/sen-js'
+import { account, PoolData, utils } from '@senswap/sen-js'
 import numeral from 'numeral'
 import { TokenInfo } from '@solana/spl-token-registry'
 
@@ -14,14 +14,13 @@ import {
 } from '@senswap/sen-ui'
 
 import { useSenOs } from 'helpers/senos'
-import { ExtendedPoolData } from './mintSelection'
 
 const Pool = ({
   value,
   onClick,
   active = false,
 }: {
-  value: ExtendedPoolData | undefined
+  value: PoolData | undefined
   onClick: () => void
   active?: boolean
 }) => {

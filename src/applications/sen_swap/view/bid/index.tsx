@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { utils } from '@senswap/sen-js'
+import { account, utils } from '@senswap/sen-js'
 import numeral from 'numeral'
 
 import {
@@ -32,18 +32,20 @@ const Bid = () => {
   const selectionInfo: SelectionInfo = useMemo(
     () => ({
       mintInfo: bidData.mintInfo,
-      poolData: bidData.poolData,
-      pools: bidData.pools,
+      poolAddress: bidData.poolAddress,
+      poolAddresses: bidData.poolAddresses,
     }),
     [bidData],
   )
   // Compute human-readable balance
   const balance = useMemo(() => {
-    const { amount } = bidData.accountData || {}
+    if (!account.isAddress(bidData.accountAddress)) return 0
+    const accountAddress = bidData.accountAddress as string
+    const { amount } = accounts[accountAddress] || {}
     const { decimals } = bidData.mintInfo || {}
     if (!amount || !decimals) return 0
     return utils.undecimalize(amount, decimals)
-  }, [bidData])
+  }, [accounts, bidData])
 
   // Handle errors
   const onError = (er: string) => {
@@ -62,10 +64,10 @@ const Bid = () => {
   // Update bid data
   const onSelectionInfo = (val: SelectionInfo) => {
     const { address } = val.mintInfo || {}
-    const accountData = Object.keys(accounts)
-      .map((key) => accounts[key])
-      .find(({ mint: mintAddress }) => mintAddress === address)
-    dispatch(updateBidData({ accountData, ...val }))
+    const accountAddress = Object.keys(accounts).find(
+      (key) => accounts[key].mint === address,
+    )
+    dispatch(updateBidData({ accountAddress, ...val }))
   }
 
   return (
