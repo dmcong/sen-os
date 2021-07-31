@@ -19,6 +19,22 @@ export const extractReserve = (
 }
 
 /**
+ *
+ * @param param0
+ * @param param1
+ * @returns
+ */
+type Point = { point: bigint }
+export const pointSorting = (
+  { point: firstPoint }: Point,
+  { point: secondPoint }: Point,
+) => {
+  if (firstPoint < secondPoint) return 1
+  if (firstPoint > secondPoint) return -1
+  return 0
+}
+
+/**
  * Search a direct pool
  * @param bidPools
  * @param askPools
@@ -44,11 +60,7 @@ export const findDirectPool = (
         extractReserve(askMintAddress, poolData)
       return { address, point }
     })
-    .sort(({ point: firstPoint }, { point: secondPoint }) => {
-      if (firstPoint < secondPoint) return 1
-      if (firstPoint > secondPoint) return -1
-      return 0
-    })[0].address
+    .sort(pointSorting)[0].address
 }
 
 /**
@@ -89,9 +101,5 @@ export const findMaxPoolIndex = (
       if (mint_b === mintAddress) point = reserve_b * reserve_s
       return { index, point }
     })
-    .sort(({ point: firstPoint }, { point: secondPoint }) => {
-      if (firstPoint < secondPoint) return 1
-      if (firstPoint > secondPoint) return -1
-      return 0
-    })[0].index
+    .sort(pointSorting)[0].index
 }
