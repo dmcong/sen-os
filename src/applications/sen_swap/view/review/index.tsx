@@ -10,7 +10,7 @@ import { useSenOs } from 'helpers/senos'
 import util from 'helpers/util'
 import configs from '@/sen_swap/config'
 import { AppDispatch, AppState } from '@/sen_swap/model'
-import { curve, DECIMALS, inverseCurve } from './util'
+import { curve, DECIMALS, inverseCurve } from '@/sen_swap/helper/oracle'
 import { updateAskData } from '@/sen_swap/controller/ask.controller'
 import { updateBidData } from '@/sen_swap/controller/bid.controller'
 
@@ -193,10 +193,7 @@ const Review = ({
       })
       return onClose()
     } catch (er) {
-      return notify({
-        type: 'error',
-        description: er.message || 'An error occurred',
-      })
+      return notify({ type: 'error', description: er.message })
     }
   }
 

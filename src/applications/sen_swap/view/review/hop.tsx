@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@senswap/sen-ui'
 import { AppState } from '@/sen_swap/model'
-import { curve, slippage, FEE, EARN, DECIMALS } from './util'
+import { curve, slippage, FEE, EARN, DECIMALS } from '@/sen_swap/helper/oracle'
 
 export type HopData = {
   poolData: PoolData & { address: string }

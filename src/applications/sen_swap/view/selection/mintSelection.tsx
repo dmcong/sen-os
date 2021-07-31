@@ -11,6 +11,7 @@ import Pool from './pool'
 import { useSenOs } from 'helpers/senos'
 import { useSelector } from 'react-redux'
 import { AppState } from '@/sen_swap/model'
+import { extractReserve } from '@/sen_swap/helper/router'
 
 export type SelectionInfo = {
   mintInfo?: TokenInfo
@@ -121,8 +122,18 @@ const MintSelection = ({
     )
   })
   // Render pool list
-  const poolList = getAvailablePoolAddresses(tempTokenInfo).map(
-    (poolAddress, i) => {
+  const poolList = getAvailablePoolAddresses(tempTokenInfo)
+    .map((poolAddress) => ({ address: poolAddress, ...pools[poolAddress] }))
+    .map(({ address, ...poolData }) => {
+      const { address: mintAddress } = tempTokenInfo || {}
+      return { address, point: extractReserve(mintAddress as string, poolData) }
+    })
+    .sort(({ point: firstPoint }, { point: secondPoint }) => {
+      if (firstPoint < secondPoint) return 1
+      if (firstPoint > secondPoint) return -1
+      return 0
+    })
+    .map(({ address: poolAddress }, i) => {
       const { poolAddress: currentPoolAddress } = value
       const poolData = pools[poolAddress]
       return (
@@ -136,8 +147,7 @@ const MintSelection = ({
           </LazyLoad>
         </Col>
       )
-    },
-  )
+    })
 
   return (
     <Row gutter={[16, 16]}>
@@ -145,7 +155,11 @@ const MintSelection = ({
         <Typography.Title level={5}>Token Selection</Typography.Title>
       </Col>
       <Col span={24}>
-        <Search onChange={onMints} isSupportedMint={isSupportedMint} />
+        <Search
+          onChange={onMints}
+          isSupportedMint={isSupportedMint}
+          disabled={Boolean(tempTokenInfo)}
+        />
       </Col>
       <Col span={24}>
         <Row gutter={[16, 16]} style={{ height: 300, overflowY: 'scroll' }}>

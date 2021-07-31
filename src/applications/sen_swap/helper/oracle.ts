@@ -1,5 +1,5 @@
 import { utils, PoolData, Swap } from '@senswap/sen-js'
-import { HopData } from './hop'
+import { HopData } from '@/sen_swap/view/review/hop'
 
 export const ORACLE = Swap.oracle
 export const FEE = BigInt(2500000)

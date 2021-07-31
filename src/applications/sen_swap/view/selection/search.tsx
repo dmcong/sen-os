@@ -9,9 +9,11 @@ const KEYSIZE = 3
 const Search = ({
   onChange,
   isSupportedMint,
+  disabled = false,
 }: {
   onChange: (data: TokenInfo[] | null) => void
   isSupportedMint: (mintAddress: string) => boolean
+  disabled?: boolean
 }) => {
   const [keyword, setKeyword] = useState('')
   const {
@@ -47,11 +49,13 @@ const Search = ({
                 icon={
                   <Icon name={keyword ? 'close-outline' : 'search-outline'} />
                 }
+                disabled={disabled}
               />
             }
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setKeyword(e.target.value)
             }
+            disabled={disabled}
           />
         </Card>
       </Col>

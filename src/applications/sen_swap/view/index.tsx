@@ -13,61 +13,11 @@ import Review from './review'
 import { AppDispatch, AppState } from '../model'
 import { updateBidData } from '../controller/bid.controller'
 import { updateAskData } from '../controller/ask.controller'
+import { findDirectPool, findOptimalRoute } from '../helper/router'
 
 export type ExtendedPoolData = PoolData & { address: string }
 
-/**
- * Search a direct pool
- * @param bidPools
- * @param askPools
- * @returns
- */
-const findDirectPool = (
-  bidPools: ExtendedPoolData[],
-  askPools: ExtendedPoolData[],
-): string | undefined => {
-  for (const { address: bidPoolAddress } of bidPools) {
-    for (const { address: askPoolAddress } of askPools) {
-      if (bidPoolAddress === askPoolAddress) return bidPoolAddress
-    }
-  }
-  return undefined
-}
-/**
- * Search an optimal route
- * @param bidMintAddress
- * @param bidPools
- * @param askMintAddress
- * @param askPools
- * @returns
- */
-const findOptimalRoute = (
-  bidMintAddress: string,
-  bidPools: ExtendedPoolData[],
-  askMintAddress: string,
-  askPools: ExtendedPoolData[],
-): string[] => {
-  const indexBidPool = findMaxPoolIndex(bidMintAddress, bidPools)
-  const { address: bidPoolAddress } = bidPools[indexBidPool]
-  const indexAskPool = findMaxPoolIndex(askMintAddress, askPools)
-  const { address: askPoolAddress } = askPools[indexAskPool]
-  return [bidPoolAddress, askPoolAddress]
-}
-// Find max pool in terms of multiplying reserve_x and reserve_s
-const findMaxPoolIndex = (mintAddress: string, pools: PoolData[]): number => {
-  return pools
-    .map(({ mint_a, reserve_a, mint_b, reserve_b, reserve_s }, index) => {
-      let point = BigInt(0)
-      if (mint_a === mintAddress) point = reserve_a * reserve_s
-      if (mint_b === mintAddress) point = reserve_b * reserve_s
-      return { index, point }
-    })
-    .sort(({ point: firstPoint }, { point: secondPoint }) => {
-      if (firstPoint < secondPoint) return 1
-      if (firstPoint > secondPoint) return -1
-      return 0
-    })[0].index
-}
+
 
 const View = () => {
   const [visibleReview, setVisibleReview] = useState(false)
@@ -133,7 +83,12 @@ const View = () => {
     )
       return console.warn('Cannot find available tokens, pools')
     // First attempt: Find a direct pool
-    const directPoolAddress = findDirectPool(bidPools, askPools)
+    const directPoolAddress = findDirectPool(
+      bidMintAddress as string,
+      bidPools,
+      askMintAddress as string,
+      askPools,
+    )
     if (account.isAddress(directPoolAddress))
       return setRoute([directPoolAddress as string])
     // Second attempt: Find max-reserve pool for each token
