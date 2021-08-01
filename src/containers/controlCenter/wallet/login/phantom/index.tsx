@@ -8,12 +8,6 @@ import { connectWallet } from 'store/wallet.reducer'
 import { notify } from 'store/ui.reducer'
 import { PhantomWallet } from '../../lib'
 
-declare global {
-  interface Window {
-    solana: any
-  }
-}
-
 const Phantom = () => {
   const dispatch = useDispatch<RootDispatch>()
 

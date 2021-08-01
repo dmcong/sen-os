@@ -8,12 +8,6 @@ import { connectWallet } from 'store/wallet.reducer'
 import { notify } from 'store/ui.reducer'
 import { Coin98Wallet } from '../../lib'
 
-declare global {
-  interface Window {
-    coin98: any
-  }
-}
-
 const Coin98 = () => {
   const dispatch = useDispatch<RootDispatch>()
 
