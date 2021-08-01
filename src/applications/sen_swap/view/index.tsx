@@ -139,7 +139,13 @@ const View = () => {
         <Button
           type="primary"
           onClick={() => setVisibleReview(true)}
-          disabled={!route.length || !bidData.amount || !askData.amount}
+          disabled={
+            !route.length ||
+            !parseFloat(bidData.amount) ||
+            parseFloat(bidData.amount) < 0 ||
+            !parseFloat(askData.amount) ||
+            parseFloat(askData.amount) < 0
+          }
           block
         >
           Review & Swap
