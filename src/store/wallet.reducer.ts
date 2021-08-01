@@ -1,6 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { Lamports, SPLT, Swap } from '@senswap/sen-js'
-import { WalletInterface } from '@senswap/sen-js/dist/wallet/baseWallet'
+import { Lamports, SPLT, Swap, WalletInterface } from '@senswap/sen-js'
 
 import configs from 'configs'
 import IPFS from 'helpers/ipfs'

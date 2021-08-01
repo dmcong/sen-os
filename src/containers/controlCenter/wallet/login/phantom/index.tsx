@@ -1,5 +1,4 @@
 import { useDispatch } from 'react-redux'
-import { PhantomWallet } from '@senswap/sen-js'
 
 import { Row, Card, Col, Avatar } from '@senswap/sen-ui'
 
@@ -7,6 +6,7 @@ import PHANTOM from 'static/images/phantom.png'
 import { RootDispatch } from 'store'
 import { connectWallet } from 'store/wallet.reducer'
 import { notify } from 'store/ui.reducer'
+import { PhantomWallet } from '../../lib'
 
 declare global {
   interface Window {

@@ -1,6 +1,5 @@
 import { ChangeEvent, useRef, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { KeystoreWallet } from '@senswap/sen-js'
 
 import {
   Row,
@@ -16,6 +15,7 @@ import NewKeyStore from './newKeystore'
 import { RootDispatch } from 'store'
 import { connectWallet } from 'store/wallet.reducer'
 import { notify } from 'store/ui.reducer'
+import { KeystoreWallet } from '../../lib'
 
 const KeyStore = () => {
   const [password, setPassword] = useState('')

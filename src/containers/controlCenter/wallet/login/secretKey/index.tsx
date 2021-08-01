@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { account, SecretKeyWallet } from '@senswap/sen-js'
+import { account } from '@senswap/sen-js'
 
 import {
   Row,
@@ -15,6 +15,7 @@ import {
 import { RootDispatch } from 'store'
 import { connectWallet } from 'store/wallet.reducer'
 import { notify } from 'store/ui.reducer'
+import { SecretKeyWallet } from '../../lib'
 
 const SecretKey = () => {
   const [secretKey, setSecretKey] = useState('')

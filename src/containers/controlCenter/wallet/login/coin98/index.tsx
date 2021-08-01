@@ -1,5 +1,4 @@
 import { useDispatch } from 'react-redux'
-import { Coin98Wallet } from '@senswap/sen-js'
 
 import { Row, Card, Col, Avatar } from '@senswap/sen-ui'
 
@@ -7,6 +6,7 @@ import COIN98 from 'static/images/coin98.png'
 import { RootDispatch } from 'store'
 import { connectWallet } from 'store/wallet.reducer'
 import { notify } from 'store/ui.reducer'
+import { Coin98Wallet } from '../../lib'
 
 declare global {
   interface Window {

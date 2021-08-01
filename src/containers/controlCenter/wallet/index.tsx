@@ -1,12 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  account,
-  utils,
-  SecretKeyWallet,
-  Coin98Wallet,
-  PhantomWallet,
-} from '@senswap/sen-js'
+import { account, utils } from '@senswap/sen-js'
 import numeral from 'numeral'
 
 import {
@@ -29,6 +23,7 @@ import {
   disconnectWallet,
 } from 'store/wallet.reducer'
 import { notify } from 'store/ui.reducer'
+import { Coin98Wallet, PhantomWallet, SecretKeyWallet } from './lib'
 
 const Wallet = () => {
   const dispatch = useDispatch<RootDispatch>()
