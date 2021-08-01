@@ -6,6 +6,7 @@ import { account } from '@senswap/sen-js'
 import { Row, Col, Card, Input, Icon, Button } from '@senswap/sen-ui'
 
 import { useSenOs } from 'helpers/senos'
+import { SenTradeMark } from 'components/trademark'
 
 const KEYSIZE = 3
 
@@ -54,6 +55,7 @@ const Search = ({ onChange }) => {
                 }
               />
             }
+            suffix={<SenTradeMark />}
             onChange={(e) => setKeyword(e.target.value)}
           />
         </Card>

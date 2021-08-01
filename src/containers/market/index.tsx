@@ -9,7 +9,7 @@ import Foundation from './foundation'
 
 const Market = () => {
   const history = useHistory()
-  const categories = ['Swap', 'Fun', 'Pokemon', 'Tu Phan']
+  const categories = ['Swap', 'Game', 'Community', 'Sen']
 
   const onSearch = (keyword: string) => {
     if (!keyword) return

@@ -54,7 +54,7 @@ const View = () => {
       <Col span={24}>
         <Row gutter={[16, 12]} justify="center">
           <Col span={24}>
-            <Row gutter={[8, 8]} align="middle">
+            <Row gutter={[8, 8]} align="middle" wrap={false}>
               <Col flex="auto">
                 <Search onChange={setSearchedAccounts} />
               </Col>

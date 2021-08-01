@@ -1,7 +1,19 @@
 const supplementary = [
+  // {
+  //   symbol: 'wSOL',
+  //   name: 'Wrapped SOL',
+  //   address: 'So11111111111111111111111111111111111111112',
+  //   decimals: 9,
+  //   chainId: 103,
+  //   extensions: {
+  //     coingeckoId: 'solana',
+  //   },
+  //   logoURI:
+  //     'https://assets.coingecko.com/coins/images/4128/large/coinmarketcap-solana-200.png',
+  // },
   {
     symbol: 'wBTC',
-    name: 'Bitcoin',
+    name: 'Wrapped Bitcoin',
     address: '8jk4eJymMfNZV9mkRNxJEt2VJ3pRvdJvD5FE94GXGBPM',
     decimals: 9,
     chainId: 103,

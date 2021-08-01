@@ -79,7 +79,9 @@ const AccountCard = ({ data, onClick }) => {
               <Typography.Text>{name || mint.substring(0, 6)}</Typography.Text>
               <Divider type="vertical" style={{ margin: 0 }} />
               <PriceChange value={priceChange} />
-              <Typography.Text>${price}</Typography.Text>
+              <Typography.Text>
+                ${numeral(price).format('0,0.[000]')}
+              </Typography.Text>
             </Space>
           </Space>
         </Col>

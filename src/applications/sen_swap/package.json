@@ -5,7 +5,9 @@
   "description": "The application default template",
   "main": "index.js",
   "keywords": [
-    "template"
+    "defi",
+    "swap",
+    "liquidity"
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

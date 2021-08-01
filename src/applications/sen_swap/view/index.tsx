@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { account, PoolData } from '@senswap/sen-js'
 
 import { Row, Col, Button, Icon } from '@senswap/sen-ui'
+import { SenTradeMark } from 'components/trademark'
 import AccountWatcher from './accountWatcher'
 import PoolWatcher from './poolWatcher'
 import Settings from './settings'
@@ -16,8 +17,6 @@ import { updateAskData } from '../controller/ask.controller'
 import { findDirectPool, findOptimalRoute } from '../helper/router'
 
 export type ExtendedPoolData = PoolData & { address: string }
-
-
 
 const View = () => {
   const [visibleReview, setVisibleReview] = useState(false)
@@ -108,7 +107,10 @@ const View = () => {
   return (
     <Row gutter={[8, 8]}>
       <Col span={24} style={{ marginTop: -8 }}>
-        <Row gutter={[8, 8]} justify="end">
+        <Row gutter={[8, 8]} justify="end" wrap={false}>
+          <Col>
+            <SenTradeMark />
+          </Col>
           <Col>
             <Settings />
           </Col>

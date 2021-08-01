@@ -5,6 +5,7 @@
   "description": "A Pokemon Deck",
   "main": "index.js",
   "keywords": [
+    "game",
     "fun"
   ],
   "scripts": {

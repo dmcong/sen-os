@@ -78,7 +78,9 @@ const Info = ({ data }) => {
           <Space>
             <PriceChange value={priceChange} />
             <Divider type="vertical" />
-            <Typography.Text>${price}</Typography.Text>
+            <Typography.Text>
+              ${numeral(price).format('0,0.[000]')}
+            </Typography.Text>
           </Space>
         </Col>
       </Row>

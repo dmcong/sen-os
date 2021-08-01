@@ -5,6 +5,7 @@
   "description": "Sen Wallet for SPLT",
   "main": "index.js",
   "keywords": [
+    "defi",
     "wallet"
   ],
   "scripts": {

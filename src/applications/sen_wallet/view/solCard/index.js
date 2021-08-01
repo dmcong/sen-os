@@ -68,7 +68,9 @@ const Sol = () => {
               </Tooltip>
               <Divider type="vertical" style={{ margin: 0 }} />
               <PriceChange value={priceChange} />
-              <Typography.Text>${price}</Typography.Text>
+              <Typography.Text>
+                ${numeral(price).format('0,0.[000]')}
+              </Typography.Text>
             </Space>
           </Col>
           <Col>

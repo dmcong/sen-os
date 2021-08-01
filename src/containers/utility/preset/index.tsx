@@ -1,18 +1,26 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account } from '@senswap/sen-js'
 
-import { Row, Col, Modal, Icon, Typography, Button } from '@senswap/sen-ui'
-import Intro from './intro'
+import {
+  Row,
+  Col,
+  Modal,
+  Icon,
+  Typography,
+  Button,
+  Card,
+} from '@senswap/sen-ui'
 
 import { RootDispatch, RootState } from 'store'
 import PDB from 'helpers/pdb'
 import { togglePreset } from 'store/ui.reducer'
-import { updateApps } from 'store/babysitter.reducer'
-import PRESETS from './presets.json'
+import { loadApps, updateApps } from 'store/babysitter.reducer'
+import { DynamicLogo } from 'helpers/loader'
+
+const PRESET = ['Sen Wallet', 'Sen Swap', 'Pokemon Deck']
 
 const Preset = () => {
-  const [presetIndex, setPresetIndex] = useState(0)
   const { address } = useSelector((state: RootState) => state.wallet)
   const { visiblePreset, visibleSync } = useSelector(
     (state: RootState) => state.ui,
@@ -26,20 +34,18 @@ const Preset = () => {
   }, [address])
 
   const skip = async () => {
-    await db.setItem('visited', true)
-    await dispatch(togglePreset(false))
+    await finish()
   }
 
   const go = async () => {
-    const { preset } = PRESETS[presetIndex]
-    await db.setItem('visited', true)
-    await dispatch(updateApps([preset]))
-    await dispatch(togglePreset(false))
+    await dispatch(updateApps([PRESET]))
+    await finish()
   }
 
-  const choose = async (index: number) => {
-    if (index === presetIndex) return setPresetIndex(-1)
-    return setPresetIndex(index)
+  const finish = async () => {
+    await db.setItem('visited', true)
+    await dispatch(loadApps())
+    await dispatch(togglePreset(false))
   }
 
   useEffect(() => {
@@ -65,30 +71,34 @@ const Preset = () => {
           <Typography.Title level={1} align="center">
             Welcome to Sen!
           </Typography.Title>
+          <Typography.Paragraph type="secondary" align="center">
+            It seems the first time the account has been used one this device.
+            We offer a preset to quickly get started.
+          </Typography.Paragraph>
         </Col>
         <Col span={24}>
-          <Row gutter={[16, 16]} style={{ maxHeight: 512, overflow: 'scroll' }}>
-            {PRESETS.map(({ type, description, preset }, index) => (
-              <Col span={24} key={index}>
-                <Intro
-                  type={type}
-                  description={description}
-                  preset={preset}
-                  selected={index === presetIndex}
-                  onClick={() => choose(index)}
-                />
-              </Col>
-            ))}
-            <Col span={24} />
-          </Row>
+          <Card
+            bordered={false}
+            bodyStyle={{ padding: 16, maxHeight: 512, overflow: 'scroll' }}
+            hoverable
+          >
+            <Row gutter={[16, 8]}>
+              {PRESET.map((appName, i) => (
+                <Col key={i}>
+                  <DynamicLogo name={appName} />
+                </Col>
+              ))}
+            </Row>
+          </Card>
         </Col>
-        <Col span={12}>
+        <Col span={24} />
+        <Col span={8}>
           <Button type="text" className="contained" onClick={skip} block>
             Skip
           </Button>
         </Col>
-        <Col span={12}>
-          <Button type="primary" onClick={go} disabled={presetIndex < 0} block>
+        <Col span={16}>
+          <Button type="primary" onClick={go} block>
             Let's go
           </Button>
         </Col>
