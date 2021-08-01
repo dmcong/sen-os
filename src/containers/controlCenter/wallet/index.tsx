@@ -23,7 +23,12 @@ import {
   disconnectWallet,
 } from 'store/wallet.reducer'
 import { notify } from 'store/ui.reducer'
-import { Coin98Wallet, PhantomWallet, SecretKeyWallet } from './lib'
+import {
+  Coin98Wallet,
+  PhantomWallet,
+  SecretKeyWallet,
+  SolletWallet,
+} from './lib'
 
 const Wallet = () => {
   const dispatch = useDispatch<RootDispatch>()
@@ -33,15 +38,15 @@ const Wallet = () => {
   const fontSize = infix === 'xs' ? 10 : 12
   const balance = numeral(utils.undecimalize(lamports, 9)).format('0.[00]')
   const reconnect = () => {
-    const types = ['SecretKey', 'Keystore', 'Coin98', 'Phantom']
     const walletType = session.get('WalletType')
-    if (!types.includes(walletType)) return null
     if (walletType === 'SecretKey')
       return new SecretKeyWallet(session.get('SecretKey'))
     if (walletType === 'Keystore')
       return new SecretKeyWallet(session.get('SecretKey'))
     if (walletType === 'Coin98') return new Coin98Wallet()
     if (walletType === 'Phantom') return new PhantomWallet()
+    if (walletType === 'Sollet') return new SolletWallet()
+    return null
   }
 
   useEffect(() => {

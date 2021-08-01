@@ -14,6 +14,7 @@ import {
 } from '@senswap/sen-ui'
 import Coin98 from './coin98'
 import Phantom from './phantom'
+import Sollet from './sollet'
 import Keystore from './keystore'
 import SecretKey from './secretKey'
 
@@ -41,6 +42,9 @@ const Login = () => {
         </Col>
         <Col xs={{ span: 12 }} md={{ span: 8 }}>
           <Phantom />
+        </Col>
+        <Col xs={{ span: 12 }} md={{ span: 8 }}>
+          <Sollet />
         </Col>
         <Col span={24}>
           <Row gutter={[16, 16]} align="middle">
