@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account, PoolData } from '@senswap/sen-js'
 
-import { Row, Col, Button, Icon } from '@senswap/sen-ui'
+import { Row, Col, Button, Icon, Divider } from '@senswap/sen-ui'
 import { SenTradeMark } from 'components/trademark'
 import AccountWatcher from './accountWatcher'
 import PoolWatcher from './poolWatcher'
@@ -107,10 +107,11 @@ const View = () => {
   return (
     <Row gutter={[8, 8]}>
       <Col span={24} style={{ marginTop: -8 }}>
-        <Row gutter={[8, 8]} justify="end" wrap={false}>
+        <Row gutter={[8, 8]} justify="end" align="middle" wrap={false}>
           <Col>
             <SenTradeMark />
           </Col>
+          <Divider type="vertical" style={{ margin: 0 }} />
           <Col>
             <Settings />
           </Col>

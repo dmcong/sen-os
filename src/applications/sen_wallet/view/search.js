@@ -55,7 +55,7 @@ const Search = ({ onChange }) => {
                 }
               />
             }
-            suffix={<SenTradeMark />}
+            suffix={<SenTradeMark style={{ marginRight: -7 }} />}
             onChange={(e) => setKeyword(e.target.value)}
           />
         </Card>
