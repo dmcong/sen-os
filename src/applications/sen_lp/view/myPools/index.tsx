@@ -15,7 +15,7 @@ const MyPools = () => {
     <Row gutter={[12, 12]}>
       {Object.keys(lpts).map((lptAddress, i) => (
         <Col span={24} key={lptAddress + i}>
-          <LazyLoad height={88} overflow>
+          <LazyLoad height={80} overflow>
             <LPTCard data={lpts[lptAddress]} onClick={onLPT} />
           </LazyLoad>
         </Col>

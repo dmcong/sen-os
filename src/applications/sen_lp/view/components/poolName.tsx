@@ -28,7 +28,7 @@ const PoolName = ({ poolAddress }: { poolAddress: string }) => {
     } catch (er) {
       return setName('UNKNOWN')
     }
-  }, [poolAddress, tokenProvider])
+  }, [dispatch, poolAddress, tokenProvider])
 
   useEffect(() => {
     getName()

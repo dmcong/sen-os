@@ -37,7 +37,7 @@ const PoolAvatar = ({
     } catch (er) {
       return setLogoURIs([])
     }
-  }, [poolAddress, tokenProvider])
+  }, [dispatch, poolAddress, tokenProvider])
 
   useEffect(() => {
     getLogoURIs()

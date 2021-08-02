@@ -55,7 +55,7 @@ const PoolTVL = ({ poolAddress }: { poolAddress: string }) => {
     } catch (er) {
       return setTVL(0)
     }
-  }, [poolAddress, tokenProvider])
+  }, [dispatch, poolAddress, tokenProvider])
 
   useEffect(() => {
     getTVL()

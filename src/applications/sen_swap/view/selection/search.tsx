@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
-import { Row, Col, Card, Icon, Input, Button } from '@senswap/sen-ui'
+import { Card, Icon, Input, Button } from '@senswap/sen-ui'
 import { useSenOs } from 'helpers/senos'
 import { TokenInfo } from '@solana/spl-token-registry'
 
@@ -32,34 +32,28 @@ const Search = ({
   }, [search])
 
   return (
-    <Row gutter={[16, 16]}>
-      <Col span={24}>
-        <Card bodyStyle={{ padding: 8 }} bordered={false}>
-          <Input
-            placeholder="Search"
-            value={keyword}
+    <Card bodyStyle={{ padding: 8 }} bordered={false}>
+      <Input
+        placeholder="Search"
+        value={keyword}
+        size="small"
+        bordered={false}
+        suffix={
+          <Button
+            type="text"
+            style={{ marginRight: -7 }}
             size="small"
-            bordered={false}
-            suffix={
-              <Button
-                type="text"
-                style={{ marginRight: -7 }}
-                size="small"
-                onClick={keyword ? () => setKeyword('') : () => {}}
-                icon={
-                  <Icon name={keyword ? 'close-outline' : 'search-outline'} />
-                }
-                disabled={disabled}
-              />
-            }
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setKeyword(e.target.value)
-            }
+            onClick={keyword ? () => setKeyword('') : () => {}}
+            icon={<Icon name={keyword ? 'close-outline' : 'search-outline'} />}
             disabled={disabled}
           />
-        </Card>
-      </Col>
-    </Row>
+        }
+        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+          setKeyword(e.target.value)
+        }
+        disabled={disabled}
+      />
+    </Card>
   )
 }
 

@@ -14,7 +14,7 @@ type Config = {
   routingAddress: string
 } & typeof SOLVARS
 
-const configs: Record<Env, Config> = {
+const config: Record<Env, Config> = {
   /**
    * Development configurations
    */
@@ -49,4 +49,4 @@ const configs: Record<Env, Config> = {
 /**
  * Module exports
  */
-export default configs
+export default config

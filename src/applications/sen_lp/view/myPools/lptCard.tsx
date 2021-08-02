@@ -23,8 +23,8 @@ const LPTCard = ({ data, onClick }: { data: LPTData; onClick: () => void }) => {
   const lp = utils.undecimalize(amount, 9)
 
   return (
-    <Card bodyStyle={{ padding: `16px 12px` }} bordered={false}>
-      <Row gutter={[12, 16]} align="middle" wrap={false}>
+    <Card bodyStyle={{ padding: 12 }} bordered={false}>
+      <Row gutter={[12, 12]} align="middle" wrap={false}>
         <Col flex="auto">
           <Space direction="vertical" size={0}>
             <Space style={{ whiteSpace: 'nowrap' }}>
