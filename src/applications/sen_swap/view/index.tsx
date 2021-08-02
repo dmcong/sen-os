@@ -88,7 +88,7 @@ const View = () => {
       askMintAddress as string,
       askPools,
     )
-    if (account.isAddress(directPoolAddress))
+    if (!directPoolAddress)
       return setRoute([directPoolAddress as string])
     // Second attempt: Find max-reserve pool for each token
     const optimalRoute = findOptimalRoute(

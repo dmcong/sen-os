@@ -100,7 +100,7 @@ const Pool = ({
         </Typography.Text>
         <Divider type="vertical" style={{ margin: 0 }} />
         <Space size={6}>
-          <Tooltip title="The TVL here is roughly estimated and maybe not precise because some unknown tokens ain't involved in the computation">
+          <Tooltip title="The TVL here is roughly estimated and perhaps inaccurate because unknown tokens ain't involved in the computation.">
             <Space size={4}>
               <Typography.Text type="secondary" style={{ margin: 0 }}>
                 <Icon name="information-circle-outline" />
