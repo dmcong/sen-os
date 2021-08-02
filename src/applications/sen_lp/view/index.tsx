@@ -1,34 +1,27 @@
-import { useDispatch, useSelector } from 'react-redux'
+import { Row, Col, Tabs } from '@senswap/sen-ui'
 
-import { Row, Col, Typography, Button, Icon } from '@senswap/sen-ui'
-
-import { updateTime } from '../controller/main.controller'
-import { AppDispatch, AppState } from '../model'
+import PoolWatcher from './poolWatcher'
+import LptWatcher from './lptWatcher'
+import AllPools from './allPools'
+import MyPools from './myPools'
+import NewPool from './newPool'
 
 const View = () => {
-  const dispatch = useDispatch<AppDispatch>()
-  const { time } = useSelector((state: AppState) => state.main)
-
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Typography.Title level={1}>Template</Typography.Title>
+        <Tabs style={{ marginTop: -8 }} tabBarExtraContent={<NewPool />}>
+          <Tabs.TabPane key="all" tab="All">
+            <AllPools />
+          </Tabs.TabPane>
+          <Tabs.TabPane key="my-pools" tab="My Pools">
+            <MyPools />
+          </Tabs.TabPane>
+        </Tabs>
       </Col>
-      <Col span={24}>
-        <Typography.Text>
-          Updated at: {new Date(time).toString()}
-        </Typography.Text>
-      </Col>
-      <Col span={24}>
-        <Button
-          type="primary"
-          onClick={() => dispatch(updateTime())}
-          icon={<Icon name="reload-outline" />}
-          block
-        >
-          Update
-        </Button>
-      </Col>
+      <Col span={24} />
+      <PoolWatcher />
+      <LptWatcher />
     </Row>
   )
 }

@@ -25,6 +25,7 @@
   "dependencies": {
     "prop-types": "^15.7.2",
     "qrcode.react": "^1.0.1",
+    "react-fast-compare": "^3.2.0",
     "react-lazyload": "^3.2.0"
   },
   "devDependencies": {}

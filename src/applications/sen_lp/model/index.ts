@@ -3,7 +3,8 @@ import middleware from 'store/middleware'
 import devTools from 'store/devTools'
 
 import { appName } from '../package.json'
-import main from '../controller/main.controller'
+import lpts from '../controller/lpts.controller'
+import pools from '../controller/pools.controller'
 
 /**
  * Isolated store
@@ -12,7 +13,8 @@ const model = configureStore({
   middleware,
   devTools: devTools(appName),
   reducer: {
-    main,
+    lpts,
+    pools,
   },
 })
 

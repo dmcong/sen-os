@@ -77,13 +77,13 @@ const Pool = ({
 
   return (
     <Card
-      bodyStyle={{ padding: `8px 16px`, cursor: 'pointer' }}
+      bodyStyle={{ padding: `8px 12px`, cursor: 'pointer', lineHeight: 1 }}
       bordered={active}
       onClick={onClick}
       hoverable
     >
-      <Space size={12} style={{ fontSize: 11, marginLeft: -8 }}>
-        <Avatar.Group style={{ margin: 4 }}>
+      <Space size={12} style={{ fontSize: 11 }}>
+        <Avatar.Group style={{ marginTop: 4, marginBottom: 4 }}>
           {tokenInfos.map(({ address, logoURI }, i) => (
             <Avatar
               key={address + i}
@@ -95,24 +95,20 @@ const Pool = ({
             </Avatar>
           ))}
         </Avatar.Group>
-        <Typography.Text style={{ margin: 0 }}>
+        <Typography.Text>
           {tokenInfos.map(({ symbol }) => symbol).join(' • ')}
         </Typography.Text>
         <Divider type="vertical" style={{ margin: 0 }} />
         <Space size={6}>
           <Tooltip title="The TVL here is roughly estimated and perhaps inaccurate because unknown tokens ain't involved in the computation.">
             <Space size={4}>
-              <Typography.Text type="secondary" style={{ margin: 0 }}>
+              <Typography.Text type="secondary">
                 <Icon name="information-circle-outline" />
               </Typography.Text>
-              <Typography.Text type="secondary" style={{ margin: 0 }}>
-                TVL:
-              </Typography.Text>
+              <Typography.Text type="secondary">TVL:</Typography.Text>
             </Space>
           </Tooltip>
-          <Typography.Text style={{ margin: 0 }}>
-            ${numeral(tvl).format('0.[00]a')}
-          </Typography.Text>
+          <Typography.Text>${numeral(tvl).format('0.[00]a')}</Typography.Text>
         </Space>
       </Space>
     </Card>

@@ -15,6 +15,10 @@
     "email": "hi@senswap.com"
   },
   "license": "MIT",
-  "dependencies": {},
-  "devDependencies": {}
+  "dependencies": {
+    "react-lazyload": "^3.2.0"
+  },
+  "devDependencies": {
+    "@types/react-lazyload": "^3.1.1"
+  }
 }
