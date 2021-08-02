@@ -53,6 +53,7 @@ export const findDirectPool = (
       if (bidPoolAddress === askPoolAddress) pools.push(askPool)
     })
   })
+  if (!pools.length) return undefined
   return pools
     .map(({ address, ...poolData }) => {
       const point =

@@ -37,23 +37,21 @@ const Ask = () => {
     [askData],
   )
   // Compute human-readable balance
-  const balance = useMemo(() => {
-    if (!account.isAddress(askData.accountAddress)) return 0
+  const balance = useMemo((): string => {
+    if (!account.isAddress(askData.accountAddress)) return '0'
     const accountAddress = askData.accountAddress as string
     const { amount } = accounts[accountAddress] || {}
     const { decimals } = askData.mintInfo || {}
-    if (!amount || !decimals) return 0
+    if (!amount || !decimals) return '0'
     return utils.undecimalize(amount, decimals)
   }, [accounts, askData])
-
-  // Handle errors
-  const onError = (er: string) => {
-    if (timeoutId) clearTimeout(timeoutId)
-    setError(er)
-    timeoutId = setTimeout(() => setError(''), 500)
-  }
   // Handle amount
   const onAmount = (val: string) => {
+    const onError = (er: string) => {
+      if (timeoutId) clearTimeout(timeoutId)
+      setError(er)
+      timeoutId = setTimeout(() => setError(''), 500)
+    }
     const reg = /^\d*(\.\d*)?$/
     if (!reg.test(val)) return onError('Invalid character')
     return dispatch(updateAskData({ amount: val, prioritized: true }))

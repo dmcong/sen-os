@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account, utils } from '@senswap/sen-js'
 import numeral from 'numeral'
@@ -38,27 +38,30 @@ const Bid = () => {
     [bidData],
   )
   // Compute human-readable balance
-  const balance = useMemo(() => {
-    if (!account.isAddress(bidData.accountAddress)) return 0
+  const balance = useMemo((): string => {
+    if (!account.isAddress(bidData.accountAddress)) return '0'
     const accountAddress = bidData.accountAddress as string
     const { amount } = accounts[accountAddress] || {}
     const { decimals } = bidData.mintInfo || {}
-    if (!amount || !decimals) return 0
+    if (!amount || !decimals) return '0'
     return utils.undecimalize(amount, decimals)
   }, [accounts, bidData.accountAddress, bidData.mintInfo])
-
-  // Handle errors
-  const onError = (er: string) => {
-    if (timeoutId) clearTimeout(timeoutId)
-    setError(er)
-    timeoutId = setTimeout(() => setError(''), 500)
-  }
   // Handle amount
-  const onAmount = (val: string) => {
-    const reg = /^\d*(\.\d*)?$/
-    if (!reg.test(val)) return onError('Invalid character')
-    return dispatch(updateBidData({ amount: val, prioritized: true }))
-  }
+  const onAmount = useCallback(
+    (val: string) => {
+      const onError = (er: string) => {
+        if (timeoutId) clearTimeout(timeoutId)
+        setError(er)
+        timeoutId = setTimeout(() => setError(''), 500)
+      }
+      const reg = /^\d*(\.\d*)?$/
+      if (!reg.test(val)) return onError('Invalid character')
+      if (parseFloat(val) > parseFloat(balance))
+        return onError('Not enough balance')
+      return dispatch(updateBidData({ amount: val, prioritized: true }))
+    },
+    [balance, dispatch],
+  )
   // All in :)))
   const onMax = () => onAmount(balance.toString())
   // Update bid data
