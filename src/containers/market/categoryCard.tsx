@@ -18,7 +18,7 @@ const CategoryCard = ({
           </Typography.Title>
         </Col>
         <Col>
-          <Avatar src={src} size={72} />
+          <Avatar shape="square" src={src} size={72} />
         </Col>
       </Row>
     </Card>

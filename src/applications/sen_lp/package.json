@@ -1,0 +1,20 @@
+{
+  "name": "sen_lp",
+  "appName": "Sen LP",
+  "version": "1.0.0",
+  "description": "SPLT Liquidity Provision with pools of trilogy",
+  "main": "index.js",
+  "keywords": [
+    "template"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "SenSwap",
+    "email": "hi@senswap.com"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}

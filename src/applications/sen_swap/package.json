@@ -2,7 +2,7 @@
   "name": "sen_swap",
   "appName": "Sen Swap",
   "version": "1.0.0",
-  "description": "The application default template",
+  "description": "SPLT Swap with pools of trilogy",
   "main": "index.js",
   "keywords": [
     "defi",
