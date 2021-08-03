@@ -1,30 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import numeral from 'numeral'
-import { TokenInfo } from '@solana/spl-token-registry'
 
-import {
-  Row,
-  Col,
-  Input,
-  Card,
-  Select,
-  Button,
-  Space,
-  Typography,
-  Icon,
-  Tooltip,
-} from '@senswap/sen-ui'
-import MintAvatar from '@/sen_lp/view/components/mintAvatar'
+import { Row, Col, Button } from '@senswap/sen-ui'
+import AmountSelect from '../amountSelect'
 
 import config from '@/sen_lp/config'
 import { AppState } from '@/sen_lp/model'
-import { account, AccountData, MintData, Swap, utils } from '@senswap/sen-js'
+import { MintData, Swap, utils } from '@senswap/sen-js'
 import { useSenOs } from 'helpers/senos'
 import LPT from './lpt'
 import util from 'helpers/util'
-
-let timeoutId: ReturnType<typeof setTimeout>
 
 const SingleSide = ({
   poolAddress,
@@ -36,88 +21,52 @@ const SingleSide = ({
   const {
     sol: { senAddress },
   } = config
-  const [amount, setAmount] = useState('')
+  const [amount, setAmount] = useState(BigInt(0))
   const [lpt, setLPT] = useState('')
-  const [error, setError] = useState('')
   const [activeMintAddress, setActiveMintAddress] = useState(senAddress)
-  const [accountData, setAccountData] = useState<AccountData>()
   const [mintData, setMintData] = useState<MintData>()
   const [mintLPTData, setMintLPTData] = useState<MintData>()
-  const [tokenInfo, setTokenInfo] = useState<TokenInfo>()
   const pools = useSelector((state: AppState) => state.pools)
   const {
-    senos: {
-      wallet: { address: walletAddress },
-      tokenProvider,
-      notify,
-    },
+    senos: { notify },
   } = useSenOs()
 
   const { mint_s, mint_a, mint_b, reserve_s, reserve_a, reserve_b, mint_lpt } =
     pools[poolAddress]
-  const { symbol } = tokenInfo || {}
   const { decimals } = mintData || {}
   const { supply: reserve_lpt } = mintLPTData || {}
 
-  const balance = useMemo(() => {
-    const { amount } = accountData || {}
-    if (!amount || !decimals) return '0'
-    return utils.undecimalize(amount, decimals) || '0'
-  }, [accountData, decimals])
-
-  const onAmount = useCallback(
-    (val: string) => {
-      const onError = (er: string) => {
-        if (timeoutId) clearTimeout(timeoutId)
-        setError(er)
-        timeoutId = setTimeout(() => setError(''), 500)
-      }
-      const reg = /^\d*(\.\d*)?$/
-      if (!reg.test(val)) return onError('Invalid character')
-      if (parseFloat(val) > parseFloat(balance))
-        return onError('Not enough balance')
-      return setAmount(val)
-    },
-    [balance],
-  )
+  const onData = ({
+    amount,
+    mintAddress,
+  }: {
+    amount: bigint
+    mintAddress: string
+  }) => {
+    setAmount(amount)
+    setActiveMintAddress(mintAddress)
+  }
 
   const fetchData = useCallback(async () => {
     const { splt } = window.senos
-    try {
-      const associatedAddress = await account.deriveAssociatedAddress(
-        walletAddress,
-        activeMintAddress,
-        splt.spltProgramId.toBase58(),
-        splt.splataProgramId.toBase58(),
-      )
-      const accountData = await splt.getAccountData(associatedAddress)
-      setAccountData(accountData)
-    } catch (er) {}
     try {
       const mintData = await splt.getMintData(activeMintAddress)
       setMintData(mintData)
     } catch (er) {}
     try {
-      const tokenInfo = await tokenProvider.findByAddress(activeMintAddress)
-      setTokenInfo(tokenInfo)
-    } catch (er) {}
-    try {
       const mintLPTData = await splt.getMintData(mint_lpt)
       setMintLPTData(mintLPTData)
     } catch (er) {}
-  }, [activeMintAddress, tokenProvider, mint_lpt, walletAddress])
+  }, [activeMintAddress, mint_lpt])
 
   const extractDeltas = useCallback(() => {
     let deltaS = BigInt(0)
     let deltaA = BigInt(0)
     let deltaB = BigInt(0)
     if (!amount || !decimals) return [deltaS, deltaA, deltaB]
-    if (activeMintAddress === mint_s)
-      deltaS = utils.decimalize(amount, decimals)
-    else if (activeMintAddress === mint_a)
-      deltaA = utils.decimalize(amount, decimals)
-    else if (activeMintAddress === mint_b)
-      deltaB = utils.decimalize(amount, decimals)
+    if (activeMintAddress === mint_s) deltaS = amount
+    else if (activeMintAddress === mint_a) deltaA = amount
+    else if (activeMintAddress === mint_b) deltaB = amount
     return [deltaS, deltaA, deltaB]
   }, [mint_s, mint_a, mint_b, activeMintAddress, amount, decimals])
 
@@ -180,76 +129,10 @@ const SingleSide = ({
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Row gutter={[8, 8]}>
-          <Col span={24}>
-            <Card bodyStyle={{ padding: 8 }} bordered={false}>
-              <Tooltip
-                title={
-                  <Space>
-                    <Icon name="warning" />
-                    {error}
-                  </Space>
-                }
-                visible={error}
-              >
-                <Input
-                  placeholder={`Amount of ${symbol || 'TOKEN'}`}
-                  value={amount}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    onAmount(e.target.value || '')
-                  }
-                  size="small"
-                  bordered={false}
-                  prefix={
-                    <Select
-                      style={{
-                        marginLeft: -15,
-                        marginRight: 7,
-                        lineHeight: 1,
-                        width: 110,
-                      }}
-                      onChange={setActiveMintAddress}
-                      value={activeMintAddress}
-                      bordered={false}
-                      suffixIcon={<Icon name="chevron-down-outline" />}
-                      size="small"
-                    >
-                      <Select.Option value={mint_s}>
-                        <MintAvatar mintAddress={mint_s} />
-                      </Select.Option>
-                      <Select.Option value={mint_a}>
-                        <MintAvatar mintAddress={mint_a} />
-                      </Select.Option>
-                      <Select.Option value={mint_b}>
-                        <MintAvatar mintAddress={mint_b} />
-                      </Select.Option>
-                    </Select>
-                  }
-                  suffix={
-                    <Button
-                      type="text"
-                      style={{ marginRight: -7 }}
-                      size="small"
-                      onClick={() => onAmount(balance)}
-                    >
-                      MAX
-                    </Button>
-                  }
-                />
-              </Tooltip>
-            </Card>
-          </Col>
-          <Col span={24}>
-            <Row gutter={[16, 16]} justify="end">
-              <Col>
-                <Typography.Text type="secondary" style={{ fontSize: 11 }}>
-                  Available: {numeral(balance).format('0,0.[0000]')}{' '}
-                  {symbol || 'TOKEN'}
-                </Typography.Text>
-              </Col>
-            </Row>
-          </Col>
-        </Row>
+        <AmountSelect
+          mintAddresses={[mint_s, mint_a, mint_b]}
+          onChange={onData}
+        />
       </Col>
       <Col span={24}>
         <LPT value={lpt} />
