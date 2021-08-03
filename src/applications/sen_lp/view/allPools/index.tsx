@@ -83,7 +83,10 @@ const AllPools = () => {
         destroyOnClose={true}
         centered={true}
       >
-        <Deposit poolAddress={activePoolAddress} />
+        <Deposit
+          poolAddress={activePoolAddress}
+          onClose={() => setActivePoolAddress('')}
+        />
       </Modal>
     </Row>
   )

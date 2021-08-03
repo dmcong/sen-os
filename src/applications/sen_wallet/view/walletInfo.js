@@ -92,11 +92,8 @@ const WalletInfo = () => {
   const getTotalBalance = useCallback(async () => {
     let usd = 0
     // Calculate SOL
-    const {
-      payload: {
-        solana: { price: solPrice },
-      },
-    } = await dispatch(getCGK('solana'))
+    const { payload } = await dispatch(getCGK('solana'))
+    const solPrice = payload?.solana?.price || 0
     usd = usd + utils.undecimalize(lamports, 9) * solPrice
     // Calculate mints
     for (const accountAddress of Object.keys(accounts)) {
@@ -106,11 +103,8 @@ const WalletInfo = () => {
       const { extensions, decimals } = mintData
       const ticket = extensions?.coingeckoId
       if (!ticket) continue
-      const {
-        payload: {
-          [ticket]: { price },
-        },
-      } = await dispatch(getCGK(ticket))
+      const { payload } = await dispatch(getCGK(ticket))
+      const price = payload?.[ticket]?.price || 0
       usd = usd + utils.undecimalize(amount, decimals) * price
     }
     return setValue(usd)

@@ -1,14 +1,13 @@
-import { useSelector } from 'react-redux'
-
 import { Row, Col, Typography, Tabs } from '@senswap/sen-ui'
-import { AppState } from '@/sen_lp/model'
 import SingleSide from './singleSide'
 
-const Deposit = ({ poolAddress }: { poolAddress: string }) => {
-  const pools = useSelector((state: AppState) => state.pools)
-  const poolData = pools[poolAddress]
-  console.log(poolData)
-
+const Deposit = ({
+  poolAddress,
+  onClose = () => {},
+}: {
+  poolAddress: string
+  onClose?: () => void
+}) => {
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -35,7 +34,7 @@ const Deposit = ({ poolAddress }: { poolAddress: string }) => {
       <Col span={24}>
         <Tabs>
           <Tabs.TabPane key="single-side" tab="Single Side">
-            <SingleSide poolAddress={poolAddress} />
+            <SingleSide poolAddress={poolAddress} onClose={onClose} />
           </Tabs.TabPane>
           <Tabs.TabPane key="full-side" tab="Full Side">
             asd

@@ -1,11 +1,7 @@
 import { AccountInfo, PublicKey } from '@solana/web3.js'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-import {
-  account,
-  DEFAULT_SWAP_PROGRAM_ADDRESS,
-  PoolData,
-} from '@senswap/sen-js'
+import { account, utils, PoolData } from '@senswap/sen-js'
 
 import util from 'helpers/util'
 import { appName } from '../package.json'
@@ -24,19 +20,50 @@ const initialState: State = {}
  */
 
 export const getPools = createAsyncThunk(`${NAME}/getPools`, async () => {
-  const { swap } = window.senos
-  const programId = account.fromAddress(
-    DEFAULT_SWAP_PROGRAM_ADDRESS,
-  ) as PublicKey
+  const { swap, splt } = window.senos
+  // Get all pools
   const value: Array<{ pubkey: PublicKey; account: AccountInfo<Buffer> }> =
-    await swap.connection.getProgramAccounts(programId, {
+    await swap.connection.getProgramAccounts(swap.swapProgramId, {
       filters: [{ dataSize: 313 }],
     })
-  let bulk: State = {}
-  value.forEach(({ pubkey, account: { data: buf } }) => {
+  const allPools = value.map(({ pubkey, account: { data: buf } }) => {
     const address = pubkey.toBase58()
     const data = swap.parsePoolData(buf)
-    return (bulk[address] = data)
+    return { address, ...data }
+  })
+  // Get lpt mint for each pool
+  const mintLPTAddresses = allPools.map(({ mint_lpt }) => mint_lpt)
+  const mintLPTPublicKeys = mintLPTAddresses.map(
+    (mintLPTAddress) => account.fromAddress(mintLPTAddress) as PublicKey,
+  )
+  const mintData = (
+    await utils.wrappedGetMultipleAccountsInfo(
+      swap.connection,
+      mintLPTPublicKeys,
+    )
+  ).map(({ data }) => {
+    try {
+      return splt.parseMintData(data)
+    } catch (er) {
+      return undefined
+    }
+  })
+  // Derive pool address from mint lpt data
+  const poolAddresses = await Promise.all(
+    mintData.map(async (mint) => {
+      if (!mint) return undefined
+      try {
+        const { mint_authority, freeze_authority } = mint
+        return await swap.derivePoolAddress(mint_authority, freeze_authority)
+      } catch (er) {
+        return undefined
+      }
+    }),
+  )
+  // Verify the pool address
+  let bulk: State = {}
+  allPools.forEach(({ address, ...data }, i) => {
+    if (account.isAddress(poolAddresses[i])) bulk[address] = data
   })
   return bulk
 })

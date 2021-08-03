@@ -19,37 +19,51 @@ import MintAvatar from '@/sen_lp/view/components/mintAvatar'
 
 import config from '@/sen_lp/config'
 import { AppState } from '@/sen_lp/model'
-import { account, AccountData, MintData, utils } from '@senswap/sen-js'
+import { account, AccountData, MintData, Swap, utils } from '@senswap/sen-js'
 import { useSenOs } from 'helpers/senos'
+import LPT from './lpt'
+import util from 'helpers/util'
 
 let timeoutId: ReturnType<typeof setTimeout>
 
-const SingleSide = ({ poolAddress }: { poolAddress: string }) => {
+const SingleSide = ({
+  poolAddress,
+  onClose = () => {},
+}: {
+  poolAddress: string
+  onClose?: () => void
+}) => {
   const {
     sol: { senAddress },
   } = config
   const [amount, setAmount] = useState('')
+  const [lpt, setLPT] = useState('')
   const [error, setError] = useState('')
   const [activeMintAddress, setActiveMintAddress] = useState(senAddress)
   const [accountData, setAccountData] = useState<AccountData>()
   const [mintData, setMintData] = useState<MintData>()
+  const [mintLPTData, setMintLPTData] = useState<MintData>()
   const [tokenInfo, setTokenInfo] = useState<TokenInfo>()
   const pools = useSelector((state: AppState) => state.pools)
   const {
     senos: {
       wallet: { address: walletAddress },
       tokenProvider,
+      notify,
     },
   } = useSenOs()
 
-  const { mint_s, mint_a, mint_b } = pools[poolAddress]
+  const { mint_s, mint_a, mint_b, reserve_s, reserve_a, reserve_b, mint_lpt } =
+    pools[poolAddress]
   const { symbol } = tokenInfo || {}
+  const { decimals } = mintData || {}
+  const { supply: reserve_lpt } = mintLPTData || {}
+
   const balance = useMemo(() => {
     const { amount } = accountData || {}
-    const { decimals } = mintData || {}
     if (!amount || !decimals) return '0'
     return utils.undecimalize(amount, decimals) || '0'
-  }, [accountData, mintData])
+  }, [accountData, decimals])
 
   const onAmount = useCallback(
     (val: string) => {
@@ -66,27 +80,112 @@ const SingleSide = ({ poolAddress }: { poolAddress: string }) => {
     },
     [balance],
   )
-  const onDeposit = () => {
-    console.log(amount)
+
+  const fetchData = useCallback(async () => {
+    const { splt } = window.senos
+    const associatedAddress = await account.deriveAssociatedAddress(
+      walletAddress,
+      activeMintAddress,
+      splt.spltProgramId.toBase58(),
+      splt.splataProgramId.toBase58(),
+    )
+    const accountData = await splt.getAccountData(associatedAddress)
+    const mintData = await splt.getMintData(activeMintAddress)
+    const tokenInfo = await tokenProvider.findByAddress(activeMintAddress)
+    const mintLPTData = await splt.getMintData(mint_lpt)
+    setAccountData(accountData)
+    setMintData(mintData)
+    setTokenInfo(tokenInfo)
+    setMintLPTData(mintLPTData)
+  }, [activeMintAddress, tokenProvider, mint_lpt, walletAddress])
+
+  const extractDeltas = useCallback(() => {
+    let deltaS = BigInt(0)
+    let deltaA = BigInt(0)
+    let deltaB = BigInt(0)
+    if (!amount || !decimals) return [deltaS, deltaA, deltaB]
+    if (activeMintAddress === mint_s)
+      deltaS = utils.decimalize(amount, decimals)
+    else if (activeMintAddress === mint_a)
+      deltaA = utils.decimalize(amount, decimals)
+    else if (activeMintAddress === mint_b)
+      deltaB = utils.decimalize(amount, decimals)
+    return [deltaS, deltaA, deltaB]
+  }, [mint_s, mint_a, mint_b, activeMintAddress, amount, decimals])
+
+  const extractSrcAddresses = useCallback(async () => {
+    const { splt } = window.senos
+    return await Promise.all(
+      [mint_s, mint_a, mint_b].map((mintAddress) =>
+        account.deriveAssociatedAddress(
+          walletAddress,
+          mintAddress,
+          splt.spltProgramId.toBase58(),
+          splt.splataProgramId.toBase58(),
+        ),
+      ),
+    )
+  }, [mint_s, mint_a, mint_b, walletAddress])
+
+  const estimateLPT = useCallback(async () => {
+    if (!amount || !decimals || !reserve_lpt) return setLPT('')
+    const [deltaS, deltaA, deltaB] = extractDeltas()
+    const { lpt } = Swap.oracle.rake(
+      deltaS,
+      deltaA,
+      deltaB,
+      reserve_s,
+      reserve_b,
+      reserve_a,
+      reserve_lpt,
+    )
+    return setLPT(utils.undecimalize(lpt, 9))
+  }, [
+    amount,
+    decimals,
+    reserve_s,
+    reserve_b,
+    reserve_a,
+    reserve_lpt,
+    extractDeltas,
+  ])
+
+  const onDeposit = async () => {
+    if (!amount || !decimals || !reserve_lpt) return setLPT('')
+    const [deltaS, deltaA, deltaB] = extractDeltas()
+    const { swap, wallet } = window.senos
+    const [srcSAddress, srcAAddress, srcBAddress] = await extractSrcAddresses()
+    try {
+      const { txId } = await swap.addLiquidity(
+        deltaS,
+        deltaA,
+        deltaB,
+        poolAddress,
+        srcSAddress,
+        srcAAddress,
+        srcBAddress,
+        wallet,
+      )
+      onClose()
+      return notify({
+        type: 'success',
+        description: 'Deposit liquidity successfully. Click to view details.',
+        onClick: () => window.open(util.explorer(txId), '_blank'),
+      })
+    } catch (er) {
+      return notify({
+        type: 'error',
+        description: er.message,
+      })
+    }
   }
 
   useEffect(() => {
-    ;(async () => {
-      const { splt } = window.senos
-      const associatedAddress = await account.deriveAssociatedAddress(
-        walletAddress,
-        activeMintAddress,
-        splt.spltProgramId.toBase58(),
-        splt.splataProgramId.toBase58(),
-      )
-      const accountData = await splt.getAccountData(associatedAddress)
-      const mintData = await splt.getMintData(activeMintAddress)
-      const tokenInfo = await tokenProvider.findByAddress(activeMintAddress)
-      setAccountData(accountData)
-      setMintData(mintData)
-      setTokenInfo(tokenInfo)
-    })()
-  }, [activeMintAddress, tokenProvider])
+    fetchData()
+  }, [fetchData])
+  useEffect(() => {
+    estimateLPT()
+  }, [estimateLPT])
 
   return (
     <Row gutter={[8, 8]}>
@@ -154,9 +253,12 @@ const SingleSide = ({ poolAddress }: { poolAddress: string }) => {
           </Col>
         </Row>
       </Col>
+      <Col span={24}>
+        <LPT value={lpt} />
+      </Col>
       <Col span={24} style={{ height: 8 }} />
       <Col span={24}>
-        <Button type="primary" onClick={onDeposit} disabled={!amount} block>
+        <Button type="primary" onClick={onDeposit} disabled={!lpt} block>
           Deposit
         </Button>
       </Col>

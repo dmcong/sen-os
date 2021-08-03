@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { account, utils } from '@senswap/sen-js'
 import numeral from 'numeral'
@@ -26,6 +26,7 @@ const Ask = () => {
   const dispatch = useDispatch<AppDispatch>()
   const accounts = useSelector((state: AppState) => state.accounts)
   const askData = useSelector((state: AppState) => state.ask)
+  const settings = useSelector((state: AppState) => state.settings)
 
   // Compoute selection info
   const selectionInfo: SelectionInfo = useMemo(
@@ -65,6 +66,10 @@ const Ask = () => {
     )
     dispatch(updateAskData({ accountAddress, ...selectionInfo }))
   }
+
+  useEffect(() => {
+    if (!settings.advanced) dispatch(updateAskData({ poolAddress: undefined }))
+  }, [settings, dispatch])
 
   return (
     <Row gutter={[4, 4]}>

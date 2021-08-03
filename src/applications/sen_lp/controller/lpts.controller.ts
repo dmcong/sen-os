@@ -36,7 +36,7 @@ export const getLPTs = createAsyncThunk(
     })
     // Get the corresponding mint list
     const mintAddresses = accounts.map(({ mint: mintAddress }) => mintAddress)
-    let mintPublicKeys = mintAddresses.map(
+    const mintPublicKeys = mintAddresses.map(
       (mintAddress) => account.fromAddress(mintAddress) as PublicKey,
     )
     // Validate whether lp mint or normal mint
