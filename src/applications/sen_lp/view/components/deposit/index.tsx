@@ -1,4 +1,5 @@
 import { Row, Col, Typography, Tabs } from '@senswap/sen-ui'
+import FullSide from './fullSide'
 import SingleSide from './singleSide'
 
 const Deposit = ({
@@ -37,7 +38,7 @@ const Deposit = ({
             <SingleSide poolAddress={poolAddress} onClose={onClose} />
           </Tabs.TabPane>
           <Tabs.TabPane key="full-side" tab="Full Side">
-            asd
+            <FullSide poolAddress={poolAddress} onClose={onClose} />
           </Tabs.TabPane>
         </Tabs>
       </Col>

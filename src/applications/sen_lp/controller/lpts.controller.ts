@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { PublicKey } from '@solana/web3.js'
-import { account, AccountData } from '@senswap/sen-js'
+import { account, AccountData, utils } from '@senswap/sen-js'
 
 import util from 'helpers/util'
 import { appName } from '../package.json'
@@ -41,8 +41,11 @@ export const getLPTs = createAsyncThunk(
     )
     // Validate whether lp mint or normal mint
     const mintData = (
-      await splt.connection.getMultipleAccountsInfo(mintPublicKeys)
-    )?.map(({ data }) => splt.parseMintData(data))
+      await utils.wrappedGetMultipleAccountsInfo(
+        splt.connection,
+        mintPublicKeys,
+      )
+    ).map(({ data }) => splt.parseMintData(data))
     if (!mintData?.length) return {}
     const poolAddresses = await Promise.all(
       mintData.map(async ({ mint_authority, freeze_authority }) => {
@@ -71,7 +74,7 @@ export const getLPT = createAsyncThunk<
 >(`${NAME}/getLPT`, async ({ address }, { getState }) => {
   if (!account.isAddress(address)) throw new Error('Invalid account address')
   const {
-    accounts: { [address]: data },
+    lpts: { [address]: data },
   } = getState()
   if (data) return { [address]: data }
   const { swap } = window.senos
@@ -87,7 +90,7 @@ export const upsetLPT = createAsyncThunk<
   if (!account.isAddress(address)) throw new Error('Invalid address')
   if (!data) throw new Error('Data is empty')
   const {
-    accounts: {
+    lpts: {
       [address]: { pool },
     },
   } = getState()

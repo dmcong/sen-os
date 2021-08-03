@@ -83,20 +83,28 @@ const SingleSide = ({
 
   const fetchData = useCallback(async () => {
     const { splt } = window.senos
-    const associatedAddress = await account.deriveAssociatedAddress(
-      walletAddress,
-      activeMintAddress,
-      splt.spltProgramId.toBase58(),
-      splt.splataProgramId.toBase58(),
-    )
-    const accountData = await splt.getAccountData(associatedAddress)
-    const mintData = await splt.getMintData(activeMintAddress)
-    const tokenInfo = await tokenProvider.findByAddress(activeMintAddress)
-    const mintLPTData = await splt.getMintData(mint_lpt)
-    setAccountData(accountData)
-    setMintData(mintData)
-    setTokenInfo(tokenInfo)
-    setMintLPTData(mintLPTData)
+    try {
+      const associatedAddress = await account.deriveAssociatedAddress(
+        walletAddress,
+        activeMintAddress,
+        splt.spltProgramId.toBase58(),
+        splt.splataProgramId.toBase58(),
+      )
+      const accountData = await splt.getAccountData(associatedAddress)
+      setAccountData(accountData)
+    } catch (er) {}
+    try {
+      const mintData = await splt.getMintData(activeMintAddress)
+      setMintData(mintData)
+    } catch (er) {}
+    try {
+      const tokenInfo = await tokenProvider.findByAddress(activeMintAddress)
+      setTokenInfo(tokenInfo)
+    } catch (er) {}
+    try {
+      const mintLPTData = await splt.getMintData(mint_lpt)
+      setMintLPTData(mintLPTData)
+    } catch (er) {}
   }, [activeMintAddress, tokenProvider, mint_lpt, walletAddress])
 
   const extractDeltas = useCallback(() => {
@@ -127,7 +135,7 @@ const SingleSide = ({
     )
   }, [mint_s, mint_a, mint_b, walletAddress])
 
-  const estimateLPT = useCallback(async () => {
+  const estimateLPT = useCallback(() => {
     if (!amount || !decimals || !reserve_lpt) return setLPT('')
     const [deltaS, deltaA, deltaB] = extractDeltas()
     const { lpt } = Swap.oracle.rake(
@@ -215,6 +223,7 @@ const SingleSide = ({
                   value={activeMintAddress}
                   bordered={false}
                   suffixIcon={<Icon name="chevron-down-outline" />}
+                  size="small"
                 >
                   <Select.Option value={mint_s}>
                     <MintAvatar mintAddress={mint_s} />
@@ -244,12 +253,10 @@ const SingleSide = ({
       <Col span={24}>
         <Row gutter={[16, 16]} justify="end">
           <Col>
-            <Space style={{ fontSize: 11 }}>
-              <Typography.Text type="secondary">Available:</Typography.Text>
-              <Typography.Text>
-                {numeral(balance).format('0,0.[0000]')} {symbol || 'TOKEN'}
-              </Typography.Text>
-            </Space>
+            <Typography.Text type="secondary" style={{ fontSize: 11 }}>
+              Available: {numeral(balance).format('0,0.[0000]')}{' '}
+              {symbol || 'TOKEN'}
+            </Typography.Text>
           </Col>
         </Row>
       </Col>

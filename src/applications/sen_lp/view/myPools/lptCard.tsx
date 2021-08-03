@@ -27,11 +27,11 @@ const LPTCard = ({ data, onClick }: { data: LPTData; onClick: () => void }) => {
       <Row gutter={[12, 12]} align="middle" wrap={false}>
         <Col flex="auto">
           <Space direction="vertical" size={0}>
-            <Space style={{ whiteSpace: 'nowrap' }}>
+            <Space style={{ whiteSpace: 'nowrap' }} size="middle">
               <PoolAvatar poolAddress={poolAddress} size={24} />
-              <Space>
+              <Space size={4}>
                 <Typography.Text type="secondary" style={{ fontSize: 11 }}>
-                  Your LP:
+                  My LPT:
                 </Typography.Text>
                 <Typography.Text>
                   {numeral(lp).format('0,0.[00]')}
