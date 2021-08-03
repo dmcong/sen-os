@@ -121,20 +121,6 @@ const SingleSide = ({
     return [deltaS, deltaA, deltaB]
   }, [mint_s, mint_a, mint_b, activeMintAddress, amount, decimals])
 
-  const extractSrcAddresses = useCallback(async () => {
-    const { splt } = window.senos
-    return await Promise.all(
-      [mint_s, mint_a, mint_b].map((mintAddress) =>
-        account.deriveAssociatedAddress(
-          walletAddress,
-          mintAddress,
-          splt.spltProgramId.toBase58(),
-          splt.splataProgramId.toBase58(),
-        ),
-      ),
-    )
-  }, [mint_s, mint_a, mint_b, walletAddress])
-
   const estimateLPT = useCallback(() => {
     if (!amount || !decimals || !reserve_lpt) return setLPT('')
     const [deltaS, deltaA, deltaB] = extractDeltas()
@@ -161,17 +147,13 @@ const SingleSide = ({
   const onDeposit = async () => {
     if (!amount || !decimals || !reserve_lpt) return setLPT('')
     const [deltaS, deltaA, deltaB] = extractDeltas()
-    const { swap, wallet } = window.senos
-    const [srcSAddress, srcAAddress, srcBAddress] = await extractSrcAddresses()
+    const { routing, wallet } = window.senos
     try {
-      const { txId } = await swap.addLiquidity(
+      const { txId } = await routing.addLiquidity(
         deltaS,
         deltaA,
         deltaB,
         poolAddress,
-        srcSAddress,
-        srcAAddress,
-        srcBAddress,
         wallet,
       )
       onClose()
@@ -196,74 +178,82 @@ const SingleSide = ({
   }, [estimateLPT])
 
   return (
-    <Row gutter={[8, 8]}>
+    <Row gutter={[16, 16]}>
       <Col span={24}>
-        <Card bodyStyle={{ padding: 8 }} bordered={false}>
-          <Tooltip
-            title={
-              <Space>
-                <Icon name="warning" />
-                {error}
-              </Space>
-            }
-            visible={error}
-          >
-            <Input
-              placeholder="Amount"
-              value={amount}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onAmount(e.target.value || '')
-              }
-              size="small"
-              bordered={false}
-              prefix={
-                <Select
-                  style={{ marginLeft: -16, marginRight: 7, width: 110 }}
-                  onChange={setActiveMintAddress}
-                  value={activeMintAddress}
+        <Row gutter={[8, 8]}>
+          <Col span={24}>
+            <Card bodyStyle={{ padding: 8 }} bordered={false}>
+              <Tooltip
+                title={
+                  <Space>
+                    <Icon name="warning" />
+                    {error}
+                  </Space>
+                }
+                visible={error}
+              >
+                <Input
+                  placeholder={`Amount of ${symbol || 'TOKEN'}`}
+                  value={amount}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    onAmount(e.target.value || '')
+                  }
+                  size="small"
                   bordered={false}
-                  suffixIcon={<Icon name="chevron-down-outline" />}
-                  size="small"
-                >
-                  <Select.Option value={mint_s}>
-                    <MintAvatar mintAddress={mint_s} />
-                  </Select.Option>
-                  <Select.Option value={mint_a}>
-                    <MintAvatar mintAddress={mint_a} />
-                  </Select.Option>
-                  <Select.Option value={mint_b}>
-                    <MintAvatar mintAddress={mint_b} />
-                  </Select.Option>
-                </Select>
-              }
-              suffix={
-                <Button
-                  type="text"
-                  style={{ marginRight: -7 }}
-                  size="small"
-                  onClick={() => onAmount(balance)}
-                >
-                  MAX
-                </Button>
-              }
-            />
-          </Tooltip>
-        </Card>
-      </Col>
-      <Col span={24}>
-        <Row gutter={[16, 16]} justify="end">
-          <Col>
-            <Typography.Text type="secondary" style={{ fontSize: 11 }}>
-              Available: {numeral(balance).format('0,0.[0000]')}{' '}
-              {symbol || 'TOKEN'}
-            </Typography.Text>
+                  prefix={
+                    <Select
+                      style={{
+                        marginLeft: -15,
+                        marginRight: 7,
+                        lineHeight: 1,
+                        width: 110,
+                      }}
+                      onChange={setActiveMintAddress}
+                      value={activeMintAddress}
+                      bordered={false}
+                      suffixIcon={<Icon name="chevron-down-outline" />}
+                      size="small"
+                    >
+                      <Select.Option value={mint_s}>
+                        <MintAvatar mintAddress={mint_s} />
+                      </Select.Option>
+                      <Select.Option value={mint_a}>
+                        <MintAvatar mintAddress={mint_a} />
+                      </Select.Option>
+                      <Select.Option value={mint_b}>
+                        <MintAvatar mintAddress={mint_b} />
+                      </Select.Option>
+                    </Select>
+                  }
+                  suffix={
+                    <Button
+                      type="text"
+                      style={{ marginRight: -7 }}
+                      size="small"
+                      onClick={() => onAmount(balance)}
+                    >
+                      MAX
+                    </Button>
+                  }
+                />
+              </Tooltip>
+            </Card>
+          </Col>
+          <Col span={24}>
+            <Row gutter={[16, 16]} justify="end">
+              <Col>
+                <Typography.Text type="secondary" style={{ fontSize: 11 }}>
+                  Available: {numeral(balance).format('0,0.[0000]')}{' '}
+                  {symbol || 'TOKEN'}
+                </Typography.Text>
+              </Col>
+            </Row>
           </Col>
         </Row>
       </Col>
       <Col span={24}>
         <LPT value={lpt} />
       </Col>
-      <Col span={24} style={{ height: 8 }} />
       <Col span={24}>
         <Button type="primary" onClick={onDeposit} disabled={!lpt} block>
           Deposit

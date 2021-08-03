@@ -13,6 +13,7 @@ type Config = {
   cluster: 'devnet' | 'testnet' | 'mainnet'
   chainId: 101 | 102 | 103
   swapAddress: string
+  routingAddress: string
 } & typeof SOLVARS
 
 const configs: Record<Env, Config> = {
@@ -25,6 +26,7 @@ const configs: Record<Env, Config> = {
     cluster: 'devnet',
     ...SOLVARS,
     swapAddress: 'D8UuF1jPr5gtxHvnVz3HpxP2UkgtxLs9vwz7ecaTkrGy',
+    routingAddress: 'jwGVStpKdSmUgj7FXEo5awvwE6JkB1WrKm5oATTfHKx',
   },
 
   /**
@@ -36,6 +38,7 @@ const configs: Record<Env, Config> = {
     chainId: 103,
     ...SOLVARS,
     swapAddress: 'D8UuF1jPr5gtxHvnVz3HpxP2UkgtxLs9vwz7ecaTkrGy',
+    routingAddress: 'jwGVStpKdSmUgj7FXEo5awvwE6JkB1WrKm5oATTfHKx',
   },
 
   /**
@@ -47,6 +50,7 @@ const configs: Record<Env, Config> = {
     chainId: 101,
     ...SOLVARS,
     swapAddress: 'SSW7ooZ1EbEognq5GosbygA3uWW1Hq1NsFq6TsftCFV',
+    routingAddress: '',
   },
 }
 

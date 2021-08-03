@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { TokenInfo } from '@solana/spl-token-registry'
-import { Routing, utils } from '@senswap/sen-js'
+import { utils } from '@senswap/sen-js'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Row, Col, Modal, Icon, Typography, Button } from '@senswap/sen-ui'
@@ -8,7 +8,6 @@ import Hop, { HopData } from './hop'
 
 import { useSenOs } from 'helpers/senos'
 import util from 'helpers/util'
-import configs from '@/sen_swap/config'
 import { AppDispatch, AppState } from '@/sen_swap/model'
 import { curve, DECIMALS, inverseCurve } from '@/sen_swap/helper/oracle'
 import { updateAskData } from '@/sen_swap/controller/ask.controller'
@@ -111,17 +110,7 @@ const Review = ({
    * Swap function
    */
   const swapOrRoute = useCallback(async () => {
-    const {
-      sol: { routingAddress, swapAddress, spltAddress, splataAddress, node },
-    } = configs
-    const routing = new Routing(
-      routingAddress,
-      swapAddress,
-      spltAddress,
-      splataAddress,
-      node,
-    )
-    const { wallet } = window.senos
+    const { routing, wallet } = window.senos
     const {
       dstMintInfo: { decimals: bidDecimals },
     } = hops[0]

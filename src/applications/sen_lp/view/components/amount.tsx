@@ -13,11 +13,11 @@ import {
   Space,
   Icon,
   Button,
-  Avatar,
   Divider,
 } from '@senswap/sen-ui'
 
 import { useSenOs } from 'helpers/senos'
+import MintAvatar from './mintAvatar'
 
 let timeoutId: ReturnType<typeof setTimeout>
 
@@ -45,7 +45,7 @@ const Amount = ({
   } = useSenOs()
 
   const { decimals } = mintData || {}
-  const { logoURI, symbol } = tokenInfo || {}
+  const { symbol } = tokenInfo || {}
 
   const balance = useMemo(() => {
     const { amount } = accountData || {}
@@ -112,7 +112,7 @@ const Amount = ({
             visible={error}
           >
             <Input
-              placeholder="Amount"
+              placeholder={`Amount of ${symbol || 'TOKEN'}`}
               value={amount}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 onAmount(e.target.value || '')
@@ -120,11 +120,10 @@ const Amount = ({
               size="small"
               bordered={false}
               prefix={
-                <Space style={{ marginLeft: -7, marginRight: 7 }}>
-                  <Avatar src={logoURI || '#'} size={20}>
-                    <Icon name="diamond-outline" />
-                  </Avatar>
-                  <Typography.Text>{symbol || 'TOKEN'} </Typography.Text>
+                <Space
+                  style={{ marginLeft: -7, marginRight: 7, lineHeight: 1 }}
+                >
+                  <MintAvatar mintAddress={mintAddress} />
                   <Divider type="vertical" style={{ margin: 0 }} />
                 </Space>
               }

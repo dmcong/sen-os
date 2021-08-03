@@ -56,15 +56,9 @@ const FullSide = ({
   }, [amounts])
 
   const extractSrcAddresses = useCallback(async () => {
-    const { splt } = window.senos
     return await Promise.all(
       [mint_s, mint_a, mint_b].map((mintAddress) =>
-        account.deriveAssociatedAddress(
-          walletAddress,
-          mintAddress,
-          splt.spltProgramId.toBase58(),
-          splt.splataProgramId.toBase58(),
-        ),
+        account.deriveAssociatedAddress(walletAddress, mintAddress),
       ),
     )
   }, [mint_s, mint_a, mint_b, walletAddress])
@@ -105,10 +99,7 @@ const FullSide = ({
         onClick: () => window.open(util.explorer(txId), '_blank'),
       })
     } catch (er) {
-      return notify({
-        type: 'error',
-        description: er.message,
-      })
+      return notify({ type: 'error', description: er.message })
     }
   }
 

@@ -90,10 +90,9 @@ export const upsetLPT = createAsyncThunk<
   if (!account.isAddress(address)) throw new Error('Invalid address')
   if (!data) throw new Error('Data is empty')
   const {
-    lpts: {
-      [address]: { pool },
-    },
+    lpts: { [address]: lptData },
   } = getState()
+  const { pool } = lptData || {}
   if (account.isAddress(pool)) return { [address]: { ...data, pool } }
   // To make sure the new account is an lpt account
   const { swap } = window.senos

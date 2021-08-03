@@ -18,7 +18,15 @@ import PoolName from '../components/poolName'
 import { LPTData } from '../../controller/lpts.controller'
 import PoolTVL from '../components/poolTVL'
 
-const LPTCard = ({ data, onClick }: { data: LPTData; onClick: () => void }) => {
+const LPTCard = ({
+  data,
+  onDeposit,
+  onWithdraw,
+}: {
+  data: LPTData
+  onDeposit: () => void
+  onWithdraw: () => void
+}) => {
   const { pool: poolAddress, amount } = data
   const lp = utils.undecimalize(amount, 9)
 
@@ -58,7 +66,20 @@ const LPTCard = ({ data, onClick }: { data: LPTData; onClick: () => void }) => {
           </Space>
         </Col>
         <Col>
-          <Button type="text" onClick={onClick} icon={<Icon name="open" />} />
+          <Space direction="vertical" size={0}>
+            <Button
+              type="text"
+              size="small"
+              onClick={onDeposit}
+              icon={<Icon name="add-circle-outline" />}
+            />
+            <Button
+              type="text"
+              size="small"
+              onClick={onWithdraw}
+              icon={<Icon name="remove-circle-outline" />}
+            />
+          </Space>
         </Col>
       </Row>
     </Card>
