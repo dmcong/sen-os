@@ -18,7 +18,7 @@ import { togglePreset } from 'store/ui.reducer'
 import { loadApps, updateApps } from 'store/babysitter.reducer'
 import { DynamicLogo } from 'helpers/loader'
 
-const PRESET = ['Sen Wallet', 'Sen Swap', 'Pokemon Deck']
+const PRESET = ['Sen Wallet', 'Sen Swap', 'Sen LP']
 
 const Preset = () => {
   const { address } = useSelector((state: RootState) => state.wallet)
