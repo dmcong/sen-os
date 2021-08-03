@@ -70,12 +70,12 @@ const FullSide = ({
       amounts[1] || BigInt(0),
       amounts[2] || BigInt(0),
       reserve_s,
-      reserve_b,
       reserve_a,
+      reserve_b,
       reserve_lpt,
     )
     return setLPT(utils.undecimalize(lpt, 9))
-  }, [isValid, amounts, reserve_s, reserve_b, reserve_a, reserve_lpt])
+  }, [isValid, amounts, reserve_s, reserve_a, reserve_b, reserve_lpt])
 
   const onDeposit = async () => {
     if (!isValid) return setLPT('')

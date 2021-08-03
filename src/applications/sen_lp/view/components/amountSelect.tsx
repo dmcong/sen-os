@@ -146,12 +146,7 @@ const AmountSelect = ({
               bordered={false}
               prefix={
                 <Select
-                  style={{
-                    marginLeft: -15,
-                    marginRight: 7,
-                    lineHeight: 1,
-                    width: 110,
-                  }}
+                  style={{ marginLeft: -15, marginRight: 7, width: 110 }}
                   onChange={onSelect}
                   value={activeMintAddress}
                   bordered={false}
@@ -159,7 +154,7 @@ const AmountSelect = ({
                   size="small"
                 >
                   {mintAddresses.map((mintAddress, i) => (
-                    <Select.Option key={mintAddress + i} value={mintAddress}>
+                    <Select.Option key={mintAddress + i} value={mintAddress} >
                       <MintAvatar mintAddress={mintAddress} />
                     </Select.Option>
                   ))}

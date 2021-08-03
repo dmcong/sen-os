@@ -78,8 +78,8 @@ const SingleSide = ({
       deltaA,
       deltaB,
       reserve_s,
-      reserve_b,
       reserve_a,
+      reserve_b,
       reserve_lpt,
     )
     return setLPT(utils.undecimalize(lpt, 9))
@@ -87,8 +87,8 @@ const SingleSide = ({
     amount,
     decimals,
     reserve_s,
-    reserve_b,
     reserve_a,
+    reserve_b,
     reserve_lpt,
     extractDeltas,
   ])
