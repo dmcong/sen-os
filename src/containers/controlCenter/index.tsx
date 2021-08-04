@@ -52,7 +52,7 @@ const ControlCenter = () => {
             <Col>
               <Card hoverable>
                 <Space>
-                  <Badge status="success">
+                  <Badge status="success" dot>
                     <Button
                       type="text"
                       className="contained"

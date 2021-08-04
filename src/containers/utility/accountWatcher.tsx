@@ -34,19 +34,19 @@ const AccountWatcher = () => {
     if (!account.isAddress(walletAddress))
       return console.warn('Wallet is not connected')
     if (watchId) return console.warn('Already watched')
-    const callback = (er: string | null, re: any) => {
+    const { splt } = window.senos || {}
+    const filters = [{ memcmp: { bytes: walletAddress, offset: 32 } }]
+    watchId = splt?.watch((er: string | null, re: any) => {
       if (er) return console.error(er)
       const { address, data } = re
       return dispatch(upsetAccount({ address, data }))
-    }
-    const filters = [{ memcmp: { bytes: walletAddress, offset: 32 } }]
-    watchId = window.senos?.splt?.watch(callback, filters)
+    }, filters)
   }, [dispatch, walletAddress])
 
   useEffect(() => {
     fetchData()
     watchData()
-    // Cancel socket
+    // Unwatch (cancel socket)
     return () => {
       ;(async () => {
         try {
