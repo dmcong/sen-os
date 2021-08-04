@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useLocation, useHistory } from 'react-router-dom'
 
@@ -10,6 +10,7 @@ import FooterAction from './footerAction'
 import { DynamicApp } from 'helpers/loader'
 import { RootState, RootDispatch } from 'store'
 import { updateApps } from 'store/babysitter.reducer'
+import { account } from '@senswap/sen-js'
 
 const Home = () => {
   const [editable, setEditable] = useState<boolean>(false)
@@ -18,6 +19,9 @@ const Home = () => {
   const history = useHistory()
   const { search } = useLocation()
   const { apps } = useSelector((state: RootState) => state.babysitter)
+  const { address: walletAddress } = useSelector(
+    (state: RootState) => state.wallet,
+  )
 
   const params = new URLSearchParams(search)
   const total = apps.length
@@ -30,6 +34,10 @@ const Home = () => {
     dispatch(updateApps(newApps))
   }
   const onEdit = (editable: boolean) => setEditable(editable)
+
+  useEffect(() => {
+    if (!account.isAddress(walletAddress)) return history.push('/welcome')
+  }, [walletAddress, history])
 
   return (
     <Row gutter={[16, 16]}>

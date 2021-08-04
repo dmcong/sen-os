@@ -72,8 +72,8 @@ const Preset = () => {
             Welcome to Sen!
           </Typography.Title>
           <Typography.Paragraph type="secondary" align="center">
-            It seems the first time the account has been used one this device.
-            We offer a preset to quickly get started.
+            If this is the first time you're using SenSwap, you can quickly get
+            started with a preset.
           </Typography.Paragraph>
         </Col>
         <Col span={24}>
