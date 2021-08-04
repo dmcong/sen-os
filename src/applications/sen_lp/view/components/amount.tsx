@@ -121,7 +121,7 @@ const Amount = ({
               bordered={false}
               prefix={
                 <Space
-                  style={{ marginLeft: -7, marginRight: 7, lineHeight: 1 }}
+                  style={{ marginLeft: -4, marginRight: 7, lineHeight: 1 }}
                 >
                   <MintAvatar mintAddress={mintAddress} />
                   <Divider type="vertical" style={{ margin: 0 }} />

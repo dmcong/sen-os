@@ -13,10 +13,10 @@ import {
   Typography,
   Icon,
   Tooltip,
+  Divider,
 } from '@senswap/sen-ui'
 import MintAvatar from '@/sen_lp/view/components/mintAvatar'
 
-import config from '@/sen_lp/config'
 import { account, AccountData, MintData, utils } from '@senswap/sen-js'
 import { useSenOs } from 'helpers/senos'
 
@@ -25,6 +25,7 @@ let timeoutId: ReturnType<typeof setTimeout>
 const AmountSelect = ({
   mintAddresses,
   onChange,
+  defaultMintAddress,
 }: {
   mintAddresses: string[]
   onChange: ({
@@ -34,13 +35,13 @@ const AmountSelect = ({
     amount: bigint
     mintAddress: string
   }) => void
+  defaultMintAddress?: string
 }) => {
-  const {
-    sol: { senAddress },
-  } = config
   const [amount, setAmount] = useState('')
   const [error, setError] = useState('')
-  const [activeMintAddress, setActiveMintAddress] = useState(senAddress)
+  const [activeMintAddress, setActiveMintAddress] = useState<string>(
+    defaultMintAddress || 'Select',
+  )
   const [accountData, setAccountData] = useState<AccountData>()
   const [mintData, setMintData] = useState<MintData>()
   const [tokenInfo, setTokenInfo] = useState<TokenInfo>()
@@ -73,6 +74,7 @@ const AmountSelect = ({
         return onError('Not enough balance')
       await setAmount(val)
       // Return amount
+      if (!activeMintAddress || !account.isAddress(activeMintAddress)) return
       if (!decimals || !parseFloat(val))
         return onChange({ amount: BigInt(0), mintAddress: activeMintAddress })
       return onChange({
@@ -99,6 +101,7 @@ const AmountSelect = ({
 
   const fetchData = useCallback(async () => {
     const { splt } = window.senos
+    if (!activeMintAddress || !account.isAddress(activeMintAddress)) return
     try {
       const associatedAddress = await account.deriveAssociatedAddress(
         walletAddress,
@@ -127,51 +130,61 @@ const AmountSelect = ({
     <Row gutter={[8, 8]}>
       <Col span={24}>
         <Card bodyStyle={{ padding: 8 }} bordered={false}>
-          <Tooltip
-            title={
-              <Space>
-                <Icon name="warning" />
-                {error}
-              </Space>
-            }
-            visible={error}
-          >
-            <Input
-              placeholder={`Amount of ${symbol || 'TOKEN'}`}
-              value={amount}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                onAmount(e.target.value || '')
-              }
-              size="small"
-              bordered={false}
-              prefix={
-                <Select
-                  style={{ marginLeft: -15, marginRight: 7, width: 110 }}
-                  onChange={onSelect}
-                  value={activeMintAddress}
+          <Row gutter={[0, 0]} wrap={false}>
+            <Col>
+              <Select
+                onChange={onSelect}
+                value={activeMintAddress || ''}
+                bordered={false}
+                suffixIcon={<Divider type="vertical" style={{ margin: 0 }} />}
+                size="small"
+                style={{ marginLeft: -4, marginRight: -12 }}
+              >
+                <Select.Option value={'Select'}>
+                  <MintAvatar
+                    mintAddress={'Select'}
+                    icon={<Icon name="help-outline" />}
+                  />
+                </Select.Option>
+                {mintAddresses.map((mintAddress, i) => (
+                  <Select.Option key={mintAddress + i} value={mintAddress}>
+                    <MintAvatar mintAddress={mintAddress} />
+                  </Select.Option>
+                ))}
+              </Select>
+            </Col>
+            <Col flex="auto">
+              <Tooltip
+                title={
+                  <Space>
+                    <Icon name="warning" />
+                    {error}
+                  </Space>
+                }
+                visible={error}
+              >
+                <Input
+                  placeholder={`Amount of ${symbol || 'TOKEN'}`}
+                  value={amount}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    onAmount(e.target.value || '')
+                  }
+                  size="small"
                   bordered={false}
-                  suffixIcon={<Icon name="chevron-down-outline" />}
-                  size="small"
-                >
-                  {mintAddresses.map((mintAddress, i) => (
-                    <Select.Option key={mintAddress + i} value={mintAddress} >
-                      <MintAvatar mintAddress={mintAddress} />
-                    </Select.Option>
-                  ))}
-                </Select>
-              }
-              suffix={
-                <Button
-                  type="text"
-                  style={{ marginRight: -7 }}
-                  size="small"
-                  onClick={() => onAmount(balance)}
-                >
-                  MAX
-                </Button>
-              }
-            />
-          </Tooltip>
+                  suffix={
+                    <Button
+                      type="text"
+                      style={{ marginRight: -7 }}
+                      size="small"
+                      onClick={() => onAmount(balance)}
+                    >
+                      MAX
+                    </Button>
+                  }
+                />
+              </Tooltip>
+            </Col>
+          </Row>
         </Card>
       </Col>
       <Col span={24}>

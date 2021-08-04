@@ -132,6 +132,7 @@ const SingleSide = ({
         <AmountSelect
           mintAddresses={[mint_s, mint_a, mint_b]}
           onChange={onData}
+          defaultMintAddress={senAddress}
         />
       </Col>
       <Col span={24}>
