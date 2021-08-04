@@ -1,0 +1,20 @@
+{
+  "name": "micodb",
+  "appName": "micodb",
+  "version": "1.0.0",
+  "description": "The application default template",
+  "main": "index.js",
+  "keywords": [
+    "template"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": {
+    "name": "CongDM",
+    "email": "congduong@descartes.network"
+  },
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {}
+}
