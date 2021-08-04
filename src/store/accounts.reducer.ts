@@ -2,15 +2,17 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import { PublicKey } from '@solana/web3.js'
 import { account, AccountData } from '@senswap/sen-js'
 
-import util from 'helpers/util'
-import { appName } from '../package.json'
+/**
+ * Interface & Utility
+ */
+
+export type State = Record<string, AccountData>
 
 /**
  * Store constructor
  */
-export type State = Record<string, AccountData>
 
-const NAME = util.normalizeAppName(appName)
+const NAME = 'accounts'
 const initialState: State = {}
 
 /**

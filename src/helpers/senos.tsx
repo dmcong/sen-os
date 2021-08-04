@@ -14,15 +14,18 @@ import { account } from '@senswap/sen-js'
 import PDB from 'helpers/pdb'
 import TokenProvider from 'helpers/tokenProvider'
 import { RootState, RootDispatch } from 'store'
-import { notify } from 'store/ui.reducer'
+import { notify, State as UIState } from 'store/ui.reducer'
+import { State as AccountsState } from 'store/accounts.reducer'
+import { State as WalletState } from 'store/wallet.reducer'
 
 const Context = createContext<SenOs>({} as SenOs)
 
 export type SenOs = {
   senos: {
-    ui: any
+    ui: UIState
     notify: any
-    wallet: any
+    wallet: WalletState
+    accounts: AccountsState
     db: any
     tokenProvider: TokenProvider
   }
@@ -44,6 +47,8 @@ const SenOsProvider = ({
   )
   // Wallet instance
   const wallet = useSelector((state: RootState) => state.wallet)
+  // Accounts instance
+  const accounts = useSelector((state: RootState) => state.accounts)
   // DB instance
   const db = useMemo(() => {
     const address = wallet.address
@@ -54,7 +59,7 @@ const SenOsProvider = ({
   // Token Provider
   const tokenProvider = new TokenProvider()
   // SenOS
-  const senos = { ui, notify: ntf, wallet, db, tokenProvider }
+  const senos = { ui, notify: ntf, wallet, accounts, db, tokenProvider }
   // Context provider
   return (
     <Context.Provider value={{ senos } as SenOs}>{children}</Context.Provider>

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { useSelector } from 'react-redux'
 import { DEFAULT_EMPTY_ADDRESS, DEFAULT_WSOL } from '@senswap/sen-js'
 
 import { Row, Col, Icon, Modal, Tabs } from '@senswap/sen-ui'
@@ -17,11 +16,12 @@ const Actions = ({ visible, onClose }) => {
   const {
     senos: {
       wallet: { address, lamports },
+      accounts,
       tokenProvider,
     },
   } = useSenOs()
 
-  const accountData = useSelector((state) => state.accounts[wsolAccountAddress])
+  const accountData = accounts[wsolAccountAddress]
   const solData = {
     mint: DEFAULT_EMPTY_ADDRESS,
     extensions: { coingeckoId: 'solana' },

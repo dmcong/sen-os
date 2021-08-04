@@ -3,7 +3,6 @@ import middleware from 'store/middleware'
 import devTools from 'store/devTools'
 
 import { appName } from '../package.json'
-import accounts from '../controller/accounts.controller'
 import pools from '../controller/pools.controller'
 import settings from '../controller/settings.controller'
 import bid from '../controller/bid.controller'
@@ -16,7 +15,6 @@ const model = configureStore({
   middleware,
   devTools: devTools(appName),
   reducer: {
-    accounts,
     pools,
     settings,
     bid,

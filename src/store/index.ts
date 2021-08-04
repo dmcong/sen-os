@@ -5,6 +5,7 @@ import devTools from './devTools'
 import ui from './ui.reducer'
 import wallet from './wallet.reducer'
 import babysitter from './babysitter.reducer'
+import accounts from './accounts.reducer'
 
 const store = configureStore({
   middleware,
@@ -13,6 +14,7 @@ const store = configureStore({
     ui,
     wallet,
     babysitter,
+    accounts,
   },
 })
 

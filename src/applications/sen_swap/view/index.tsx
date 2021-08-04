@@ -4,7 +4,6 @@ import { account, PoolData } from '@senswap/sen-js'
 
 import { Row, Col, Button, Icon, Divider } from '@senswap/sen-ui'
 import { SenTradeMark } from 'components/trademark'
-import AccountWatcher from './accountWatcher'
 import PoolWatcher from './poolWatcher'
 import Settings from './settings'
 import Bid from './bid'
@@ -155,7 +154,6 @@ const View = () => {
           onClose={() => setVisibleReview(false)}
         />
       </Col>
-      <AccountWatcher />
       <PoolWatcher />
     </Row>
   )

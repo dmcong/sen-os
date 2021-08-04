@@ -4,7 +4,6 @@ import devTools from 'store/devTools'
 
 import { appName } from '../package.json'
 import mints from '../controller/mints.controller'
-import accounts from '../controller/accounts.controller'
 import cgk from '../controller/cgk.controller'
 
 /**
@@ -15,7 +14,6 @@ const model = configureStore({
   devTools: devTools(appName),
   reducer: {
     mints,
-    accounts,
     cgk,
   },
 })

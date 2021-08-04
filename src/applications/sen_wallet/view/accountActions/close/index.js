@@ -1,4 +1,3 @@
-import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 
 import {
@@ -12,10 +11,8 @@ import {
 } from '@senswap/sen-ui'
 import { useSenOs } from 'helpers/senos'
 import util from 'helpers/util'
-import { deleteAccount } from '@/sen_wallet/controller/accounts.controller'
 
 const Close = ({ data, onChange }) => {
-  const dispatch = useDispatch()
   const {
     senos: { notify },
   } = useSenOs()
@@ -34,7 +31,7 @@ const Close = ({ data, onChange }) => {
         } successfully. Click to view details.`,
         onClick: () => window.open(util.explorer(txId), '_blank'),
       })
-      await dispatch(deleteAccount({ address }))
+      // await dispatch(deleteAccount({ address }))
       return onChange(txId)
     } catch (er) {
       return notify({ type: 'error', description: er.message })

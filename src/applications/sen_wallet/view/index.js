@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 
 import { Row, Col } from '@senswap/sen-ui'
 import LazyLoad from 'react-lazyload'
-import AccountWatcher from './accountWatcher'
 import WalletInfo from './walletInfo'
 import Search from './search'
 import AccountCard from './accountCard'
@@ -19,9 +17,8 @@ const View = () => {
   const [settings, setSettings] = useState({ hiddenZeros: false })
   const [accountIndex, setAccountIndex] = useState(-1)
   const {
-    senos: { tokenProvider },
+    senos: { tokenProvider, accounts },
   } = useSenOs()
-  const accounts = useSelector((state) => state.accounts)
 
   const sort = useCallback(async () => {
     const priority = []
@@ -46,7 +43,6 @@ const View = () => {
   const renderedAccounts = searchedAccounts ? searchedAccounts : orderedAccounts
   return (
     <Row gutter={[16, 16]}>
-      <AccountWatcher />
       <Col span={24}>
         <WalletInfo />
       </Col>

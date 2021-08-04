@@ -17,7 +17,6 @@ import {
 import util from 'helpers/util'
 import { useSenOs } from 'helpers/senos'
 import { getMint } from '@/sen_wallet/controller/mints.controller'
-import { deleteAccount } from '@/sen_wallet/controller/accounts.controller'
 
 const Unwrap = ({ data, onChange }) => {
   const [decimals, setDecimals] = useState(0)
@@ -33,7 +32,7 @@ const Unwrap = ({ data, onChange }) => {
     try {
       const { splt, wallet } = window.senos
       const { txId } = await splt.unwrap(wallet)
-      await dispatch(deleteAccount({ address }))
+      // await dispatch(deleteAccount({ address }))
       await notify({
         type: 'success',
         description: `Unwrap ${wsol} ${symbol} successfully. Click to view details.`,

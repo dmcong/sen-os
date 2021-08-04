@@ -18,15 +18,19 @@ import Selection from '@/sen_swap/view/selection'
 import { AppDispatch, AppState } from '@/sen_swap/model'
 import { SelectionInfo } from '../selection/mintSelection'
 import { updateAskData } from '@/sen_swap/controller/ask.controller'
+import { useSenOs } from 'helpers/senos'
 
 let timeoutId: ReturnType<typeof setTimeout>
 
 const Ask = () => {
   const [error, setError] = useState('')
   const dispatch = useDispatch<AppDispatch>()
-  const accounts = useSelector((state: AppState) => state.accounts)
   const askData = useSelector((state: AppState) => state.ask)
   const settings = useSelector((state: AppState) => state.settings)
+
+  const {
+    senos: { accounts },
+  } = useSenOs()
 
   // Compoute selection info
   const selectionInfo: SelectionInfo = useMemo(

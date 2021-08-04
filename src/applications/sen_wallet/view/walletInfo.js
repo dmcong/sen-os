@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { account, utils } from '@senswap/sen-js'
 import numeral from 'numeral'
 
@@ -80,11 +80,11 @@ const Balance = ({ value }) => {
 
 const WalletInfo = () => {
   const [value, setValue] = useState(0)
-  const accounts = useSelector((state) => state.accounts)
   const dispatch = useDispatch()
   const {
     senos: {
       tokenProvider,
+      accounts,
       wallet: { address, lamports },
     },
   } = useSenOs()
