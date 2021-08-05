@@ -44,7 +44,7 @@
     "build": "craco build",
     "serve": "serve -s build -l 80",
     "analyze": "npm run prod && source-map-explorer 'build/static/js/*.js'",
-    "postinstall": "find ./src/applications/* -name package.json -maxdepth 1 -execdir npm install \\;",
+    "postinstall": "pwd && ls && find ./src/applications/* -name package.json -maxdepth 1 -execdir npm install \\;",
     "new": "node ./scripts/templateGenerator.js",
     "test": "craco test"
   },
