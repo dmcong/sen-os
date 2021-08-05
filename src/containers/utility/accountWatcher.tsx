@@ -1,10 +1,10 @@
 import { Fragment, useCallback, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { account } from '@senswap/sen-js'
 
 import { RootDispatch, RootState } from 'store'
 import { notify } from 'store/ui.reducer'
 import { getAccounts, upsetAccount } from 'store/accounts.reducer'
-import { account } from '@senswap/sen-js'
 
 // Watch id
 let watchId = 0
