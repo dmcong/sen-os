@@ -4,7 +4,8 @@ import devTools from 'store/devTools'
 
 import { appName } from '../package.json'
 import main from '../controller/main.controller'
-
+import gmodal from '../controller/gmodal.controller'
+import collection from '../controller/collection.controller'
 /**
  * Isolated store
  */
@@ -13,6 +14,8 @@ const model = configureStore({
   devTools: devTools(appName),
   reducer: {
     main,
+    gmodal,
+    collection
   },
 })
 

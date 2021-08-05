@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react'
+import { forwardRef } from 'react'
 import { Provider } from 'react-redux'
 
 import { Widget } from '@senswap/sen-ui'
@@ -9,6 +9,7 @@ import ErrorBoundary from 'components/errorBoundary'
 import metadata from './package.json'
 import View from './view'
 import model from './model'
+import GModal from './components/gmodal'
 
 const Main = forwardRef(({ appName, ...rest }, ref) => {
   const {
@@ -20,6 +21,7 @@ const Main = forwardRef(({ appName, ...rest }, ref) => {
       <SenOsProvider appName={appName}>
         <Provider store={model}>
           <Widget {...rest} type="glass" size="small" ref={ref}>
+            <GModal></GModal>
             <View />
           </Widget>
         </Provider>
