@@ -25,9 +25,9 @@ jobs:
       - name: Run docker
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_HOST_MAINNET }}
+          host: ${{ secrets.SSH_HOST_PRODUCTION }}
           username: ubuntu
-          key: ${{ secrets.SSH_PRIVATEKEY_MAINNET }}
+          key: ${{ secrets.SSH_PRIVATEKEY_PRODUCTION }}
           script: |
             sudo docker stop senos
             sudo docker rm senos

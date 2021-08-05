@@ -99,7 +99,7 @@ const Amount = ({
   }, [fetchData])
 
   return (
-    <Row gutter={[8, 8]} justify="end">
+    <Row gutter={[4, 4]} justify="end">
       <Col span={24}>
         <Card bodyStyle={{ padding: 8 }} bordered={false}>
           <Tooltip
