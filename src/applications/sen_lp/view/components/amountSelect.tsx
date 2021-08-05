@@ -101,25 +101,30 @@ const AmountSelect = ({
 
   const fetchData = useCallback(async () => {
     const { splt } = window.senos
-    if (!activeMintAddress || !account.isAddress(activeMintAddress)) return
-    try {
-      const associatedAddress = await account.deriveAssociatedAddress(
-        walletAddress,
-        activeMintAddress,
-        splt.spltProgramId.toBase58(),
-        splt.splataProgramId.toBase58(),
-      )
-      const accountData = await splt.getAccountData(associatedAddress)
-      setAccountData(accountData)
-    } catch (er) {}
-    try {
-      const mintData = await splt.getMintData(activeMintAddress)
-      setMintData(mintData)
-    } catch (er) {}
-    try {
-      const tokenInfo = await tokenProvider.findByAddress(activeMintAddress)
-      setTokenInfo(tokenInfo)
-    } catch (er) {}
+    if (!activeMintAddress || !account.isAddress(activeMintAddress)) {
+      setAccountData(undefined)
+      setMintData(undefined)
+      setTokenInfo(undefined)
+    } else {
+      try {
+        const associatedAddress = await account.deriveAssociatedAddress(
+          walletAddress,
+          activeMintAddress,
+          splt.spltProgramId.toBase58(),
+          splt.splataProgramId.toBase58(),
+        )
+        const accountData = await splt.getAccountData(associatedAddress)
+        setAccountData(accountData)
+      } catch (er) {}
+      try {
+        const mintData = await splt.getMintData(activeMintAddress)
+        setMintData(mintData)
+      } catch (er) {}
+      try {
+        const tokenInfo = await tokenProvider.findByAddress(activeMintAddress)
+        setTokenInfo(tokenInfo)
+      } catch (er) {}
+    }
   }, [activeMintAddress, tokenProvider, walletAddress])
 
   useEffect(() => {
@@ -127,7 +132,7 @@ const AmountSelect = ({
   }, [fetchData])
 
   return (
-    <Row gutter={[8, 8]}>
+    <Row gutter={[4, 4]}>
       <Col span={24}>
         <Card bodyStyle={{ padding: 8 }} bordered={false}>
           <Row gutter={[0, 0]} wrap={false}>
@@ -188,7 +193,7 @@ const AmountSelect = ({
         </Card>
       </Col>
       <Col span={24}>
-        <Row gutter={[16, 16]} justify="end">
+        <Row gutter={[4, 4]} justify="end">
           <Col>
             <Typography.Text type="secondary" style={{ fontSize: 11 }}>
               Available: {numeral(balance).format('0,0.[0000]')}{' '}
