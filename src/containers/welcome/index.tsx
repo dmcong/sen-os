@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useHistory } from 'react-router-dom'
 import { account } from '@senswap/sen-js'
 
-import { Row, Col, Typography, Button, Icon } from '@senswap/sen-ui'
+import { Row, Col, Typography, Button, Icon, Tooltip } from '@senswap/sen-ui'
 
 import { RootDispatch, RootState } from 'store'
 import { openWallet } from 'store/wallet.reducer'
@@ -54,44 +54,52 @@ const Welcome = () => {
       <Col span={24}>
         <Row gutter={[16, 16]} justify="center">
           <Col>
-            <Button
-              type="text"
-              className="contained"
-              size="large"
-              icon={<Icon name="paper-plane" />}
-              href="https://t.me/SenSwap"
-              target="_blank"
-            />
+            <Tooltip title="Telegram">
+              <Button
+                type="text"
+                className="contained"
+                size="large"
+                icon={<Icon name="paper-plane" />}
+                href="https://t.me/SenSwap"
+                target="_blank"
+              />
+            </Tooltip>
           </Col>
           <Col>
-            <Button
-              type="text"
-              className="contained"
-              size="large"
-              icon={<Icon name="logo-twitter" />}
-              href="https://twitter.com/SenSwap"
-              target="_blank"
-            />
+            <Tooltip title="Twitter">
+              <Button
+                type="text"
+                className="contained"
+                size="large"
+                icon={<Icon name="logo-twitter" />}
+                href="https://twitter.com/SenSwap"
+                target="_blank"
+              />
+            </Tooltip>
           </Col>
           <Col>
-            <Button
-              type="text"
-              className="contained"
-              size="large"
-              icon={<Icon name="logo-medium" />}
-              href="https://blogs.senswap.com"
-              target="_blank"
-            />
+            <Tooltip title="Medium">
+              <Button
+                type="text"
+                className="contained"
+                size="large"
+                icon={<Icon name="logo-medium" />}
+                href="https://blogs.senswap.com"
+                target="_blank"
+              />
+            </Tooltip>
           </Col>
           <Col>
-            <Button
-              type="text"
-              className="contained"
-              size="large"
-              icon={<Icon name="document" />}
-              href="/static/media/senswap_whitepaper.663e0af6.pdf"
-              target="_blank"
-            />
+            <Tooltip title="Whitepaper">
+              <Button
+                type="text"
+                className="contained"
+                size="large"
+                icon={<Icon name="document" />}
+                href="/static/media/senswap_whitepaper.663e0af6.pdf"
+                target="_blank"
+              />
+            </Tooltip>
           </Col>
         </Row>
       </Col>
