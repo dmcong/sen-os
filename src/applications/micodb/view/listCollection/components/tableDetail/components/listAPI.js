@@ -9,6 +9,7 @@ import {
   Typography,
   Divider,
 } from '@senswap/sen-ui'
+import { API_URL } from '@/micodb/config/config'
 
 function ApiViewer(props) {
   const { api } = props
@@ -66,12 +67,12 @@ export default function ListAPI(props) {
   const listAPI = useSelector(
     (state) => state.collection[collectionName].listAPI,
   )
+  const deployID = useSelector((state) => state.main.deployID)
   return (
     <React.Fragment>
       <Col span={24}>
         <Typography.Paragraph type="secondary">
-          <strong style={{ color: 'white' }}>Base API:</strong>{' '}
-          http://heroku.xzy.com/micodb/6512783123123909213981231231236718231239
+          <strong style={{ color: 'white' }}>Base API:</strong> {`${API_URL}/${deployID}/`}
         </Typography.Paragraph>
       </Col>
       {listAPI.map((api) => (

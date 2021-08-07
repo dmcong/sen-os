@@ -13,6 +13,7 @@ import {
   Divider,
   Space,
   Icon,
+  Spin,
   Typography,
 } from '@senswap/sen-ui'
 import PriceChange from '@/sen_wallet/view/components/priceChange'
@@ -20,22 +21,31 @@ import Actions from '@/sen_wallet/view/solCard/actions'
 
 import { useSenOs } from 'helpers/senos'
 import { getCGK } from '@/sen_wallet/controller/cgk.controller'
-import { TableDetail } from '../../components'
+import { TableDetail } from '..'
 import { openGModal } from '@/micodb/controller/gmodal.controller'
 import { loadCollection } from '@/micodb/controller/collection.controller'
 
 export default function SheetCard(props) {
   const { name } = props
   const dispatch = useDispatch()
+  const [isLoading, setIsLoading] = useState(true)
 
+  useEffect(() => {
+    async function fetchData() {
+      await dispatch(loadCollection({ collectionName: name }))
+      setIsLoading(false)
+    }
+    fetchData()
+  }, [])
+
+  async function handelLoadCollection() {
+    dispatch(openGModal({ dom: <TableDetail {...props}></TableDetail> }))
+  }
   return (
     <Fragment>
       <Card
         bodyStyle={{ padding: '8px 12px', cursor: 'pointer' }}
-        onClick={() => {
-          dispatch(loadCollection({ collectionName: name }))
-          dispatch(openGModal({ dom: <TableDetail {...props}></TableDetail> }))
-        }}
+        onClick={() => handelLoadCollection()}
         bordered={false}
         hoverable
       >
@@ -54,8 +64,13 @@ export default function SheetCard(props) {
               </Tooltip>
             </Space>
           </Col>
+
           <Col>
-            <Icon name="arrow-forward-outline" />
+            {isLoading ? (
+              <Spin size="small" />
+            ) : (
+              <Icon name="arrow-forward-outline" />
+            )}
           </Col>
         </Row>
       </Card>

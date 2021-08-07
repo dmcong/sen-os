@@ -12,10 +12,26 @@ import {
 import { SenTradeMark } from 'components/trademark'
 import { useDispatch } from 'react-redux'
 import { connectDatabase } from '@/micodb/controller/main.controller'
+import { useSenOs } from 'helpers/senos'
 
 const Login = () => {
-  const [deployID, setDeployID] = useState('')
+  const [deployID, setDeployID] = useState(
+    'AKfycbyTQ3PULGgYaBRJRw5rcJ_jS1ntwsVA-JlJaGbzDch-nyahxvFgRBXaCwb-ofJR2Mug',
+  )
+  const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch()
+  const {
+    senos: { notify },
+  } = useSenOs()
+
+  async function handleConnect() {
+    setIsLoading(true)
+    const response = await dispatch(connectDatabase({ deployID }))
+    if (!response.payload)
+      notify({ type: 'error', description: 'Invalid Deploy ID' })
+    setIsLoading(false)
+  }
+
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
@@ -24,7 +40,7 @@ const Login = () => {
       <Col span={24}>
         <Typography.Text>
           Cloud-hosted MicoDB service on Google Sheet and Google Script. Deploy,
-          operate, and scale a MicoDB in just a few clicks
+          operate, and scale a MicoDB in just a few clicks.
         </Typography.Text>
       </Col>
       <Col span={24}>
@@ -47,6 +63,7 @@ const Login = () => {
                 }
                 suffix={<SenTradeMark style={{ marginRight: -7 }} />}
                 onChange={(e) => setDeployID(e.target.value)}
+                disabled={isLoading}
               />
             </Card>
           </Col>
@@ -56,9 +73,11 @@ const Login = () => {
           type="primary"
           icon={<Icon name="send" />}
           block
-          onClick={() => dispatch(connectDatabase({deployID}))}
+          onClick={() => handleConnect()}
+          loading={isLoading}
+          disabled={!deployID}
         >
-          Connect
+          {isLoading ? 'Connecting' : 'Connect'}
         </Button>
       </Col>
     </Row>

@@ -2,11 +2,14 @@ import React, { useState } from 'react'
 import { Modal, Icon, Typography, Row, Col, Button } from '@senswap/sen-ui'
 import CollectionName from './components/collectionName'
 import NewSchema from './components/newSchema'
+import { useDispatch } from 'react-redux'
+import { createCollection } from '@/micodb/controller/main.controller'
 
 export default function NewCollection(props) {
   const { isOpen, onClose } = props
   const [name, setName] = useState('')
   const [schema, setSchema] = useState([])
+  const dispatch = useDispatch()
 
   function onChangeCol(newColSchema) {
     for (const idx in schema) {
@@ -42,9 +45,23 @@ export default function NewCollection(props) {
     ])
   }
 
-  function handleCreate() {
-    console.log('Create ne')
+  async function handleCreate() {
+    const bodySchema = {}
+    for (const s of schema) {
+      bodySchema[s.key] = s.type
+    }
+
+    const result = await dispatch(
+      createCollection({ collection: name, schema: bodySchema }),
+    )
+    const { payload } = result
+    if (payload !== undefined) {
+      setName('')
+      setSchema([])
+      onClose()
+    }
   }
+
   return (
     <Modal
       visible={isOpen}
@@ -79,7 +96,12 @@ export default function NewCollection(props) {
         <Col span={24}>
           <Row gutter={[4, 4]} justify="end">
             <Col span={24}>
-              <Button type="primary" onClick={() => handleCreate()} block>
+              <Button
+                type="primary"
+                onClick={() => handleCreate()}
+                block
+                disabled={!name || !schema.length}
+              >
                 New Collection
               </Button>
             </Col>

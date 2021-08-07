@@ -1,64 +1,12 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import axios from 'axios'
 
 import util from 'helpers/util'
+import { API_URL } from '../config/config'
 import { appName } from '../package.json'
 
 const NAME = util.normalizeAppName(appName)
-const initialState = {
-  'daily-report': {
-    documents: [
-      {
-        _id: 1,
-        address: 'AFEq7oc7zcrJHTnca2UrDiShfoSCr7izZaXjZRw5hQ1S',
-        mintLPT: '6PrcHojqeewhJwZphSzo2srSJLkhhSVPYyoNbQ3DSNfM',
-        createdAt: 20210712,
-        updatedAt: 20210712,
-      },
-      {
-        _id: 2,
-        address: 'AFEq7oc7zcrJHTnca2UrDiShfoSCr7izZaXjZRw5hQ1S',
-        mintLPT: '6PrcHojqeewhJwZphSzo2srSJLkhhSVPYyoNbQ3DSNfM',
-        createdAt: 20210712,
-        updatedAt: 20210712,
-      },
-      {
-        _id: 3,
-        address: 'AFEq7oc7zcrJHTnca2UrDiShfoSCr7izZaXjZRw5hQ1S',
-        mintLPT: '6PrcHojqeewhJwZphSzo2srSJLkhhSVPYyoNbQ3DSNfM',
-        createdAt: 20210712,
-        updatedAt: 20210712,
-      },
-    ],
-    schema: {
-      address: 'string',
-      mintLPT: 'string',
-      createdAt: 'number',
-      updatedAt: 'number',
-    },
-    api: {
-      create: {
-        method: 'POST',
-        url: '/daily-report',
-      },
-      update: {
-        method: 'PUT',
-        url: '/daily-report/:id',
-      },
-      delete: {
-        method: 'DELETE',
-        url: '/daily-report/:id',
-      },
-      find: {
-        method: 'GET',
-        url: '/daily-report/:id',
-      },
-      findAll: {
-        method: 'GET',
-        url: '/daily-report',
-      },
-    },
-  },
-}
+const initialState = {}
 
 /**
  * Actions
@@ -66,66 +14,19 @@ const initialState = {
 
 export const loadCollection = createAsyncThunk(
   `${NAME}/documents`,
-  async (data, state) => {
+  async (data, { getState }) => {
     const { collectionName } = data
-    const collectionData = {
-      documents: [
-        {
-          _id: 1,
-          address: 'AFEq7oc7zcrJHTnca2UrDiShfoSCr7izZaXjZRw5hQ1S',
-          mintLPT: '6PrcHojqeewhJwZphSzo2srSJLkhhSVPYyoNbQ3DSNfM',
-          createdAt: 20210712,
-          updatedAt: 20210712,
-        },
-        {
-          _id: 2,
-          address: 'AFEq7oc7zcrJHTnca2UrDiShfoSCr7izZaXjZRw5hQ1S',
-          mintLPT: '6PrcHojqeewhJwZphSzo2srSJLkhhSVPYyoNbQ3DSNfM',
-          createdAt: 20210712,
-          updatedAt: 20210712,
-        },
-        {
-          _id: 3,
-          address: 'AFEq7oc7zcrJHTnca2UrDiShfoSCr7izZaXjZRw5hQ1S',
-          mintLPT: '6PrcHojqeewhJwZphSzo2srSJLkhhSVPYyoNbQ3DSNfM',
-          createdAt: 20210712,
-          updatedAt: 20210712,
-        },
-      ],
-      schema: {
-        address: 'string',
-        mintLPT: 'string',
-        createdAt: 'number',
-        updatedAt: 'number',
-      },
-      listAPI: [
-        {
-          method: 'POST',
-          url: `/${collectionName}`,
-          title: `Create one`,
-        },
-        {
-          method: 'PUT',
-          url: `/${collectionName}/:id`,
-          title: `Update one with _id`,
-        },
-        {
-          method: 'DELETE',
-          url: `/${collectionName}/:id`,
-          title: `Delete one with _id`,
-        },
-        {
-          method: 'GET',
-          url: `/${collectionName}/:id`,
-          title: `Find one with _id`,
-        },
-        {
-          method: 'GET',
-          url: `/${collectionName}`,
-          title: `Find all`,
-        },
-      ],
-    }
+    const state = getState()
+
+    if (state.collection[collectionName]) return {}
+    const response = await axios({
+      method: 'get',
+      url: `${API_URL}/system/${state.main.deployID}/collection/${collectionName}`,
+      data: data,
+      headers: {},
+    })
+
+    const collectionData = response.data.data
     return { [collectionName]: collectionData }
   },
 )

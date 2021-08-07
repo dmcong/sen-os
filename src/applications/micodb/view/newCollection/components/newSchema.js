@@ -64,78 +64,79 @@ export default function NewSchema(props) {
       tabBarExtraContent={<Header onNew={onNew}></Header>}
     >
       <Tabs.TabPane key="schema" tab="Schema">
-        <Card bordered={false}>
-          {!schema.length && <Typography.Text>-- Empty --</Typography.Text>}
-          {schema.map((colSchema, idx) => {
-            return (
-              <Card
-                bodyStyle={{ padding: 8 }}
-                bordered={true}
-                style={{ marginBottom: idx === schema.length - 1 ? 0 : 16 }}
-                key={colSchema.id}
-              >
-                <Row gutter={[0, 0]} wrap={false}>
-                  <Col>
-                    <Select
-                      onChange={(e) => {
-                        handleChangeType(e, colSchema)
-                      }}
-                      value={colSchema.type}
-                      bordered={false}
-                      suffixIcon={
-                        <Divider type="vertical" style={{ margin: 0 }} />
-                      }
-                      size="small"
-                      style={{ marginLeft: -4, marginRight: -12, width: 120 }}
-                    >
-                      {TYPES.map((type, i) => (
-                        <Select.Option key={type.value} value={type.value}>
-                          <Space style={{ lineHeight: 1 }}>
-                            <Avatar src={''} size={20}>
-                              {type.icon}
-                            </Avatar>
-                            <Typography.Text type="secondary">
-                              {type.value}
-                            </Typography.Text>
-                          </Space>
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  </Col>
-                  <Col flex="auto">
-                    <Tooltip
-                      title={
-                        <Space>
-                          <Icon name="warning" />
-                          {'error'}
-                        </Space>
-                      }
-                      visible={false}
-                    >
-                      <Input
-                        placeholder={`Key`}
-                        value={colSchema.key}
-                        size="small"
+        {schema.length ? (
+          <Card bordered={false}>
+            {schema.map((colSchema, idx) => {
+              return (
+                <Card
+                  bodyStyle={{ padding: 8 }}
+                  bordered={true}
+                  style={{ marginBottom: idx === schema.length - 1 ? 0 : 16 }}
+                  key={colSchema.id}
+                >
+                  <Row gutter={[0, 0]} wrap={false}>
+                    <Col>
+                      <Select
+                        onChange={(e) => {
+                          handleChangeType(e, colSchema)
+                        }}
+                        value={colSchema.type}
                         bordered={false}
-                        onChange={(e) => handleChangeKey(e, colSchema)}
-                        suffix={
-                          <Button
-                            type="text"
-                            style={{ marginRight: -7 }}
-                            size="small"
-                            onClick={() => onRemove(colSchema.id)}
-                            Icon
-                            icon={<Icon name="trash-outline" />}
-                          />
+                        suffixIcon={
+                          <Divider type="vertical" style={{ margin: 0 }} />
                         }
-                      />
-                    </Tooltip>
-                  </Col>
-                </Row>
-              </Card>
-            )
-          })}
-        </Card>
+                        size="small"
+                        style={{ marginLeft: -4, marginRight: -12, width: 120 }}
+                      >
+                        {TYPES.map((type, i) => (
+                          <Select.Option key={type.value} value={type.value}>
+                            <Space style={{ lineHeight: 1 }}>
+                              <Avatar src={''} size={20}>
+                                {type.icon}
+                              </Avatar>
+                              <Typography.Text type="secondary">
+                                {type.value}
+                              </Typography.Text>
+                            </Space>
+                          </Select.Option>
+                        ))}
+                      </Select>
+                    </Col>
+                    <Col flex="auto">
+                      <Tooltip
+                        title={
+                          <Space>
+                            <Icon name="warning" />
+                            {'error'}
+                          </Space>
+                        }
+                        visible={false}
+                      >
+                        <Input
+                          placeholder={`Key`}
+                          value={colSchema.key}
+                          size="small"
+                          bordered={false}
+                          onChange={(e) => handleChangeKey(e, colSchema)}
+                          suffix={
+                            <Button
+                              type="text"
+                              style={{ marginRight: -7 }}
+                              size="small"
+                              onClick={() => onRemove(colSchema.id)}
+                              Icon
+                              icon={<Icon name="trash-outline" />}
+                            />
+                          }
+                        />
+                      </Tooltip>
+                    </Col>
+                  </Row>
+                </Card>
+              )
+            })}
+          </Card>
+        ) : null}
       </Tabs.TabPane>
     </Tabs>
   )

@@ -11,6 +11,7 @@ import View from './view'
 import model from './model'
 import GModal from './components/gmodal'
 
+
 const Main = forwardRef(({ appName, ...rest }, ref) => {
   const {
     version,
