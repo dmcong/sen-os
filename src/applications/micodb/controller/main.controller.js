@@ -28,10 +28,10 @@ export const connectDatabase = createAsyncThunk(
     })
 
     const {
-      data: { status, data: listCollection },
+      data: { status, error, data: listCollection },
     } = response
-    console.log('response', response)
-    if (status !== true) return
+
+    if (status !== true) return { error }
 
     return { deployID: deployID, listCollection }
   },
@@ -41,23 +41,27 @@ export const createCollection = createAsyncThunk(
   `${NAME}/createCollection`,
   async (data, { getState }) => {
     const state = getState()
+    console.log('Create ne')
     const response = await axios({
       method: 'post',
       url: `${API_URL}/system/${state.main.deployID}/collection`,
       data: data,
       headers: {},
-    })
-    const { status } = response.data
-    if (!status) return
+    }).then((data) => data.data)
+    console.log('response', response)
+    const { status, error } = response
+    if (!status) return { error }
+
     const listCollection = [data.collection, ...state.main.listCollection]
     return { listCollection }
   },
 )
 
+
 export const disconnectDatabase = createAsyncThunk(
   `${NAME}/disconnect`,
   async () => {
-    return { deployID: '' }
+    return { deployID: '', listCollection: [] }
   },
 )
 

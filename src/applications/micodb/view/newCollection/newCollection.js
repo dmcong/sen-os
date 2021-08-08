@@ -4,12 +4,18 @@ import CollectionName from './components/collectionName'
 import NewSchema from './components/newSchema'
 import { useDispatch } from 'react-redux'
 import { createCollection } from '@/micodb/controller/main.controller'
+import { useSenOs } from 'helpers/senos'
 
 export default function NewCollection(props) {
   const { isOpen, onClose } = props
   const [name, setName] = useState('')
   const [schema, setSchema] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch()
+
+  const {
+    senos: { notify },
+  } = useSenOs()
 
   function onChangeCol(newColSchema) {
     for (const idx in schema) {
@@ -46,6 +52,7 @@ export default function NewCollection(props) {
   }
 
   async function handleCreate() {
+    setIsLoading(true)
     const bodySchema = {}
     for (const s of schema) {
       bodySchema[s.key] = s.type
@@ -54,12 +61,16 @@ export default function NewCollection(props) {
     const result = await dispatch(
       createCollection({ collection: name, schema: bodySchema }),
     )
-    const { payload } = result
-    if (payload !== undefined) {
-      setName('')
-      setSchema([])
-      onClose()
-    }
+    setIsLoading(false)
+
+    const {
+      payload: { error },
+    } = result
+    if (error) return notify({ type: 'error', description: error })
+    setName('')
+    setSchema([])
+    notify({ type: 'success', description: "Create collection successfully!" })
+    onClose()
   }
 
   return (
@@ -101,6 +112,8 @@ export default function NewCollection(props) {
                 onClick={() => handleCreate()}
                 block
                 disabled={!name || !schema.length}
+                icon={<Icon name="add-outline" />}
+                loading={isLoading}
               >
                 New Collection
               </Button>

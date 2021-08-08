@@ -1,11 +1,23 @@
-import React from 'react'
-import { Row, Col, Icon, Button, Tabs } from '@senswap/sen-ui'
+import { useState } from 'react'
+import { Row, Col, Icon, Button, Tabs, Spin } from '@senswap/sen-ui'
 import Header from './components/header'
 import Documents from './components/documents'
 import Schema from './components/schema'
 import ListAPI from './components/listAPI'
+import { loadCollection } from '@/micodb/controller/collection.controller'
+import { useDispatch } from 'react-redux'
 
-function HeaderAction() {
+function HeaderAction(props) {
+  const dispatch = useDispatch()
+  const { collection } = props
+  const [isLoading, setIsLoading] = useState(false)
+
+  async function handleReload() {
+    setIsLoading(true)
+    await dispatch(loadCollection({ collectionName: collection, force: true }))
+    setIsLoading(false)
+  }
+  
   return (
     <Row gutter={[8, 8]} justify="end" align="middle" wrap={false}>
       <Col>
@@ -13,8 +25,8 @@ function HeaderAction() {
           type="text"
           shape="circle"
           size="small"
-          icon={<Icon name="reload" />}
-          onClick={() => {}}
+          icon={isLoading ? <Spin size="small" /> : <Icon name="reload" />}
+          onClick={() => handleReload()}
         />
       </Col>
     </Row>
@@ -28,7 +40,9 @@ export default function TableDetail(prop) {
         <Header name={name} />
       </Col>
       <Col span={24}>
-        <Tabs tabBarExtraContent={<HeaderAction></HeaderAction>}>
+        <Tabs
+          tabBarExtraContent={<HeaderAction collection={name}></HeaderAction>}
+        >
           <Tabs.TabPane key="documents" tab="Documents">
             <Documents collectionName={name}></Documents>
           </Tabs.TabPane>

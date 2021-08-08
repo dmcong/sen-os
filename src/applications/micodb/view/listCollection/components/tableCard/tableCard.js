@@ -36,7 +36,7 @@ export default function SheetCard(props) {
       setIsLoading(false)
     }
     fetchData()
-  }, [])
+  }, [dispatch, name])
 
   async function handelLoadCollection() {
     dispatch(openGModal({ dom: <TableDetail {...props}></TableDetail> }))

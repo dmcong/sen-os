@@ -16,7 +16,7 @@ import { useSenOs } from 'helpers/senos'
 
 const Login = () => {
   const [deployID, setDeployID] = useState(
-    'AKfycbyTQ3PULGgYaBRJRw5rcJ_jS1ntwsVA-JlJaGbzDch-nyahxvFgRBXaCwb-ofJR2Mug',
+    'AKfycbz0QSjy5znar5xzCaJNDmJ99lTQLibmWvJlK8Y2JThzUYy4Z2-wja-IwdVoWrk-pe2m',
   )
   const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch()
@@ -34,7 +34,7 @@ const Login = () => {
 
   return (
     <Row gutter={[16, 16]}>
-      <Col span={24}>
+      <Col span={24} style={{ marginTop: 16 }}>
         <Typography.Title level={1}>MicoDB</Typography.Title>
       </Col>
       <Col span={24}>

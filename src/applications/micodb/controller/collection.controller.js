@@ -15,19 +15,35 @@ const initialState = {}
 export const loadCollection = createAsyncThunk(
   `${NAME}/documents`,
   async (data, { getState }) => {
-    const { collectionName } = data
-    const state = getState()
+    const { collectionName, force } = data
+    const { main, collection } = getState()
 
-    if (state.collection[collectionName]) return {}
-    const response = await axios({
+    if (collection[collectionName] && force !== true)
+      return collection[collectionName]
+
+    //Load Config Collection
+    const configFetch = axios({
       method: 'get',
-      url: `${API_URL}/system/${state.main.deployID}/collection/${collectionName}`,
+      url: `${API_URL}/system/${main.deployID}/collection/${collectionName}`,
       data: data,
       headers: {},
-    })
+    }).then((data) => data.data.data)
 
-    const collectionData = response.data.data
-    return { [collectionName]: collectionData }
+    //Load All Documents in Collection
+    const docsFetch = axios({
+      method: 'post',
+      url: `${API_URL}/micodb/${main.deployID}/${collectionName}/search`,
+      data: data,
+      headers: {},
+    }).then((data) => data.data.data)
+    const collectionData = await Promise.all([configFetch, docsFetch])
+
+    return {
+      [collectionName]: {
+        ...collectionData[0],
+        documents: collectionData[1],
+      },
+    }
   },
 )
 

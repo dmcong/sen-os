@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Row, Col, Card, Input, Button, Icon } from '@senswap/sen-ui'
 import { SenTradeMark } from 'components/trademark'
 import { useSelector } from 'react-redux'
@@ -10,7 +10,11 @@ export default function Documents(props) {
   const documents = useSelector(
     (state) => state.collection[collectionName]?.documents || [],
   )
-  const [docFilter, setDocFilter] = useState([...documents])
+  const [docFilter, setDocFilter] = useState([])
+
+  useEffect(() => {
+    setDocFilter([...documents])
+  }, [documents])
 
   function handleKeyPress(event) {
     if (event.key === 'Enter') {
