@@ -16,7 +16,7 @@ import { useSenOs } from 'helpers/senos'
 
 const Login = () => {
   const [deployID, setDeployID] = useState(
-    'AKfycbz0QSjy5znar5xzCaJNDmJ99lTQLibmWvJlK8Y2JThzUYy4Z2-wja-IwdVoWrk-pe2m',
+    'AKfycbzj3BGSt7tkKpC36tl8yn2QfJiYHdAR1CDl2EW9cqkLpiyKzOBYd0FCAiv7jpgOM94G',
   )
   const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch()

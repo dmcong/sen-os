@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { createCollection } from '@/micodb/controller/main.controller'
 import { useSenOs } from 'helpers/senos'
 
+//
 export default function NewCollection(props) {
   const { isOpen, onClose } = props
   const [name, setName] = useState('')

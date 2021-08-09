@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Icon,
   Typography,
@@ -15,6 +14,7 @@ import {
   Tooltip,
 } from '@senswap/sen-ui'
 
+//
 const TYPES = [
   {
     value: 'string',
@@ -29,6 +29,8 @@ const TYPES = [
     icon: '{..}',
   },
 ]
+
+//
 function Header(props) {
   return (
     <Row gutter={[8, 8]} justify="end" align="middle" wrap={false}>
@@ -46,6 +48,7 @@ function Header(props) {
   )
 }
 
+//
 export default function NewSchema(props) {
   const { onNew, onRemove, onChange, schema } = props
   function handleChangeType(newType, colSchema) {

@@ -1,8 +1,5 @@
-import React from 'react'
 import { Fragment, useState, useEffect } from 'react'
 import { useDispatch } from 'react-redux'
-import { utils } from '@senswap/sen-js'
-import numeral from 'numeral'
 
 import {
   Row,
@@ -10,21 +7,17 @@ import {
   Card,
   Avatar,
   Tooltip,
-  Divider,
   Space,
   Icon,
   Spin,
   Typography,
 } from '@senswap/sen-ui'
-import PriceChange from '@/sen_wallet/view/components/priceChange'
-import Actions from '@/sen_wallet/view/solCard/actions'
 
-import { useSenOs } from 'helpers/senos'
-import { getCGK } from '@/sen_wallet/controller/cgk.controller'
 import { TableDetail } from '..'
 import { openGModal } from '@/micodb/controller/gmodal.controller'
 import { loadCollection } from '@/micodb/controller/collection.controller'
 
+//
 export default function SheetCard(props) {
   const { name } = props
   const dispatch = useDispatch()

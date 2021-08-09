@@ -3,6 +3,7 @@ import Login from './login'
 import ListCollection from './listCollection'
 import React from 'react'
 
+//
 const View = () => {
   const deployID = useSelector((state) => state.main.deployID)
   return (
@@ -17,16 +18,8 @@ const View = () => {
       >
         <ListCollection />
       </div>
-      <div
-        style={{
-          opacity: deployID ? 0 : 1,
-          transition: deployID ? undefined : 'opacity 1s',
-          WebkitTransition: deployID ? undefined : 'opacity 1s',
-          height: deployID ? 0 : undefined,
-        }}
-      >
-        <Login></Login>
-      </div>
+
+      {!deployID && <Login></Login>}
     </React.Fragment>
   )
 }

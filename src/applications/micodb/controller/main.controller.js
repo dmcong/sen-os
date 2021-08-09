@@ -28,10 +28,10 @@ export const connectDatabase = createAsyncThunk(
     })
 
     const {
-      data: { status, error, data: listCollection },
+      data: { status, data: listCollection },
     } = response
 
-    if (status !== true) return { error }
+    if (status !== true) return
 
     return { deployID: deployID, listCollection }
   },
@@ -56,7 +56,6 @@ export const createCollection = createAsyncThunk(
     return { listCollection }
   },
 )
-
 
 export const disconnectDatabase = createAsyncThunk(
   `${NAME}/disconnect`,

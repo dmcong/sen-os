@@ -1,6 +1,4 @@
-import React from 'react'
-
-import { Row, Col, Icon, Modal, Tabs } from '@senswap/sen-ui'
+import { Icon, Modal } from '@senswap/sen-ui'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeGModal } from '@/micodb/controller/gmodal.controller'
 

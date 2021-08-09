@@ -6,10 +6,10 @@ import NewCollection from '@/micodb/view/newCollection'
 
 import { disconnectDatabase } from '@/micodb/controller/main.controller'
 
-
 export default function Header() {
   const dispatch = useDispatch()
   const [isOpen, setIsOpen] = useState(false)
+
   return (
     <Row gutter={[8, 8]} justify="end" align="middle" wrap={false}>
       <NewCollection isOpen={isOpen} onClose={() => setIsOpen(false)} />

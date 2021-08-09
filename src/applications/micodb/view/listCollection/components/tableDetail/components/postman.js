@@ -58,7 +58,7 @@ export default function Postman(props) {
       body,
       url,
     })
-  }, [collection, api])
+  }, [api, collectionConfig, mainConfig])
 
   async function fetchAPI() {
     setIsLoading(true)
@@ -78,7 +78,7 @@ export default function Postman(props) {
         <React.Fragment>
           <Row gutter={[8, 8]}>
             <Col span={24}>
-              <Typography.Title level={5}>Quick Test API</Typography.Title>
+              <Typography.Title level={5}>Quick Test API </Typography.Title>
             </Col>
           </Row>
           <Row gutter={[8, 8]} style={{ overflow: 'auto', maxHeight: '80vh' }}>
@@ -96,6 +96,14 @@ export default function Postman(props) {
                     onChange={(e) => {
                       setApiTest({ ...apiTest, url: e.target.value })
                     }}
+                    prefix={
+                      <React.Fragment>
+                        <Typography.Text type="secondary">
+                          {api.method}
+                        </Typography.Text>
+                        <Divider type="vertical" style={{ marginRight: 12 }} />
+                      </React.Fragment>
+                    }
                   />
                 </Col>
                 <Col>
